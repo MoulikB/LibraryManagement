@@ -12,7 +12,7 @@ interface MediaInterface {
 
     MediaGenres getMediaGenre();
 
-    boolean borrowMedia();
+    boolean borrowMedia():
 
     void returnMedia();
 
