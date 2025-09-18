@@ -26,7 +26,7 @@ class Media{
     - String : author
     - String : publisher
     - String : genre
-    - COMP2450.model.Shelf : location
+    - Shelf : location
     - int : copies
     - int : availableCopies
     - int : yearOfRelease
@@ -36,7 +36,7 @@ class Media{
     + leaveFeedback(Review review) void
 }
 
-class COMP2450.model.Shelf{
+class Shelf{
     - int : shelfNo
     + showOnMap() : Map
     }
@@ -83,13 +83,22 @@ class Map{
     + showMap(): Map
 }
 
-COMP2450.model.Shelf --> Media : contains
+class Library {
+    -String : name
+    -int : libraryID
+    -Shelf : shelves and media accessible
+    +search(Media) : Shelf
+    +search(String) : Shelf
+    
+}
+
+Shelf --> Media : contains
 Media --> Borrowing : is borrowed via
 User --> Review : makes
 Borrowing --> Waitlist : waitlisted by
 BookingSpace --> Waitlist : may have
 User --> Waitlist : can join
-Map --> COMP2450.model.Shelf : shows
+Map --> Shelf : shows
 Map --> BookingSpace : shows
 
 ```

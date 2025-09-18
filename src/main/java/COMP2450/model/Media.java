@@ -1,10 +1,13 @@
 package COMP2450.model;
 
+import java.util.ArrayList;
+
 public class Media {
 
     private String title;
     private String mediaType;
     private String author;
+    public ArrayList<Review> reviews = new ArrayList<>();
     private String publisher;
     private String genre;
     private Shelf location;
@@ -22,6 +25,16 @@ public class Media {
         this.availableCopies++;
     }
 
+    public String getMediaType() {
+        return mediaType;
+    }
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
 
     public boolean borrowMedia() {
         if (availableCopies > 0) {
@@ -38,6 +51,7 @@ public class Media {
     }
 
     public String getTitle() {
+
         return title;
     }
 
@@ -45,9 +59,23 @@ public class Media {
         return availableCopies;
     }
 
+    public void addReview(Review review) {
+        reviews.add(review);
+    }
+
+    public ArrayList<Review> getReviews() {
+        return reviews;
+    }
+
+
+
+
+
+
+
 }
 
-public class MediaManagement {
+class MediaManagement {
 
 }
  
