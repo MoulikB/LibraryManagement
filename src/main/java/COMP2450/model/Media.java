@@ -8,6 +8,7 @@ public class Media {
     private String mediaType;
     private String author;
     public ArrayList<Review> reviews = new ArrayList<>();
+    public static Library library;
     private String publisher;
     private String genre;
     private Shelf location;
@@ -17,12 +18,14 @@ public class Media {
     private double versionOrVolume;
     private String format;
 
-    public Media(String title, String mediaType, String author) {
+    public Media(String title, String mediaType, String author, Library library) {
         this.title = title;
         this.mediaType = mediaType;
         this.author = author;
         this.copies++;
         this.availableCopies++;
+        this.library = library;
+        library.addMedia(this);
     }
 
     public String getMediaType() {

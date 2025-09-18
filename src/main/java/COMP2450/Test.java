@@ -1,5 +1,6 @@
 package COMP2450;
 
+import COMP2450.model.Library;
 import COMP2450.model.Media;
 import COMP2450.model.Review;
 import COMP2450.model.User;
@@ -13,7 +14,8 @@ public class Test {
         System.out.println(showMember("Moulik"));
         removeMember(123);
         User.getStringOutput();
-        Media nef = new Media("1984","Book","George Orwell");
+        Library lib = addLibrary("moulik's library");
+        Media nef = new Media("1984","Book","George Orwell", lib);
         AddReview(m,nef,"amazing",10);
         showReviews(m,nef);
 
@@ -44,6 +46,16 @@ public class Test {
                 System.out.println(review);
             }
         }
+    }
+
+    static Library addLibrary(String name) {
+        Library library = new Library(name);
+        System.out.println("Adding library " + name);
+        return library;
+    }
+
+    static void showLibrary(Library library) {
+        System.out.println(library);
     }
 
 
