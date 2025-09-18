@@ -4,19 +4,19 @@ import java.util.ArrayList;
 
 public class Media {
 
-    private String title;
-    private String mediaType;
-    private String author;
-    public ArrayList<Review> reviews = new ArrayList<>();
-    public static Library library;
-    private String publisher;
-    private String genre;
-    private Shelf location;
-    private int copies;
-    private int availableCopies = 0;
-    private int yearOfRelease;
-    private double versionOrVolume;
-    private String format;
+    String title;
+    String mediaType;
+    String author;
+    ArrayList<Review> reviews = new ArrayList<>();
+    static Library library;
+    String publisher;
+    String genre;
+    Shelf location;
+    int copies;
+    int availableCopies = 0;
+    int yearOfRelease;
+    double versionOrVolume;
+    String format;
 
     public Media(String title, String mediaType, String author, Library library) {
         this.title = title;

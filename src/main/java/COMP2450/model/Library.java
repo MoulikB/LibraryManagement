@@ -6,7 +6,7 @@ public class Library {
 
     String name;
     ArrayList<Shelf> shelves;
-    ArrayList<Media> mediaAvailable;
+    ArrayList<MediaInterface> mediaAvailable;
 
 
     public Library(String name) {
@@ -19,7 +19,7 @@ public class Library {
         this.shelves.add(shelf);
     }
 
-    public void addMedia(Media media) {
+    public void addMedia(MediaInterface media) {
         this.mediaAvailable.add(media);
     }
 
@@ -27,7 +27,7 @@ public class Library {
         return shelves;
     }
 
-    public ArrayList<Media> getMediaAvailable() {
+    public ArrayList<MediaInterface> getMediaAvailable() {
         return mediaAvailable;
     }
 
