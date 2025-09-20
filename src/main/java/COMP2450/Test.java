@@ -1,9 +1,6 @@
 package COMP2450;
 
-import COMP2450.model.Library;
-import COMP2450.model.Media;
-import COMP2450.model.Review;
-import COMP2450.model.User;
+import COMP2450.model.*;
 
 import java.util.ArrayList;
 
@@ -15,9 +12,9 @@ public class Test {
         removeMember(123);
         User.getStringOutput();
         Library lib = addLibrary("moulik's library");
-        Media nef = new Media("1984","Book","George Orwell", lib);
-        AddReview(m,nef,"amazing",10);
-        showReviews(m,nef);
+        Book nef = new Book("1984","George Orwell" , "Penguin" , MediaGenres.FICTION,234,lib);
+        nef.addReview(new Review(m,nef,"Amazing" , 10));
+
 
 
 
@@ -35,11 +32,11 @@ public class Test {
         User.userDB.removeUser(id);
     }
 
-    static void AddReview(User user, Media media, String comment, int stars) {
+    static void AddReview(User user, MediaInterface media, String comment, int stars) {
         media.addReview(new Review(user,media,comment,stars));
     }
 
-    static void showReviews(User user, Media media) {
+    static void showReviews(User user, MediaInterface media) {
         ArrayList<Review> reviews = media.getReviews();
         for (Review review : reviews) {
             if (review.user() == user) {
@@ -58,5 +55,8 @@ public class Test {
         System.out.println(library);
     }
 
+    public void addMedia(MediaInterface media) {
+
+    }
 
 }

@@ -1,6 +1,6 @@
 package COMP2450.model;
 
-public record Review(User user, Media media,String comment, int stars) {
+public record Review(User user, MediaInterface media,String comment, int stars) {
 
     @Override
     public String toString() {

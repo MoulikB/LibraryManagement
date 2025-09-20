@@ -2,7 +2,7 @@ package COMP2450.model;
 
 import java.util.ArrayList;
 
-interface MediaInterface {
+public interface MediaInterface {
 
     ArrayList<Review> reviews = new ArrayList<>();
 
@@ -12,7 +12,7 @@ interface MediaInterface {
 
     MediaGenres getMediaGenre();
 
-    boolean borrowMedia():
+    boolean borrowMedia();
 
     void returnMedia();
 
