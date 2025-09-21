@@ -8,7 +8,7 @@ public interface MediaInterface {
 
     String getMediaType();
 
-    String getAuthor();
+    String getCreator();
 
     MediaGenres getMediaGenre();
 

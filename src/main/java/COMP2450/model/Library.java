@@ -6,21 +6,18 @@ public class Library {
 
     String name;
     String description;
-    ArrayList<Shelf> shelves;
     ArrayList<MediaInterface> mediaAvailable;
 
 
     public Library(String name) {
         this.name = name;
         this.description = "";
-        this.shelves = new ArrayList<>();
         this.mediaAvailable = new ArrayList<>();
     }
 
     public Library(String name,String description) {
         this.name = name;
         this.description = description;
-        this.shelves = new ArrayList<>();
         this.mediaAvailable = new ArrayList<>();
     }
 
@@ -28,16 +25,9 @@ public class Library {
         this.description = description;
     }
 
-    public void addShelf(Shelf shelf) {
-        this.shelves.add(shelf);
-    }
 
     public void addMedia(MediaInterface media) {
         this.mediaAvailable.add(media);
-    }
-
-    public ArrayList<Shelf> getShelves() {
-        return shelves;
     }
 
     public ArrayList<MediaInterface> getMediaAvailable() {

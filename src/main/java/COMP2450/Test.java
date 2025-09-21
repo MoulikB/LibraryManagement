@@ -55,8 +55,13 @@ public class Test {
         System.out.println(library);
     }
 
-    public void addMedia(MediaInterface media) {
+    public void addMovie(String title, String director, int mediaID, Library library, MediaGenres genre) {
+        Movie mov = new Movie( title, director, mediaID, library, genre);
+    }
 
+    public void addBook(String title, String author, String publisher,
+                        MediaGenres genre, int isbn, Library library) {
+        Book book = new Book(title,author,publisher,genre,isbn,library);
     }
 
 }

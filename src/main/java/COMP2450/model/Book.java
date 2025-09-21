@@ -28,7 +28,7 @@ public class Book implements MediaInterface {
             return "Book";
         }
 
-        public String getAuthor () {
+        public String getCreator () {
             return author;
         }
 
