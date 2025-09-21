@@ -7,12 +7,14 @@ public class Library {
     String name;
     String description;
     ArrayList<MediaInterface> mediaAvailable;
-
+    Map map;
 
     public Library(String name) {
         this.name = name;
         this.description = "";
         this.mediaAvailable = new ArrayList<>();
+        map = new Map(this);
+
     }
 
     public Library(String name,String description) {
@@ -47,6 +49,14 @@ public class Library {
     }
     public String getDescription() {
         return description;
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public void printMap() {
+        map.printMap();
     }
 
 
