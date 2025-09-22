@@ -19,6 +19,7 @@ public class Movie implements MediaInterface {
 
     }
 
+
     public String getMediaType() {
         return "Movie";
     }
@@ -66,5 +67,10 @@ public class Movie implements MediaInterface {
     @Override
     public void addCopies() {
         this.totalCopies++;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie [title=" + title + ", director=" + director + ", mediaID=" + mediaID +" , genre= " + genre;
     }
 }

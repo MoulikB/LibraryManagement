@@ -62,4 +62,5 @@ public interface MediaInterface {
     default ArrayList<Review> getReviews() {
         return reviews;
     }
+
 }

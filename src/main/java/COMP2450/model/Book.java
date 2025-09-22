@@ -72,5 +72,9 @@ public class Book implements MediaInterface {
         public void addCopies() {
             totalCopies++;
         }
+
+        public String toString () {
+        return "Book [title=" + title + ", author=" + author + ", publisher=" + publisher + ", Genre : " + genre;
+        }
 }
 

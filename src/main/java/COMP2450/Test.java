@@ -15,6 +15,7 @@ public class Test {
         Library lib = addLibrary("moulik's library");
         Book nef = new Book("1984","George Orwell" , "Penguin" , MediaGenres.FICTION,234,lib);
         nef.addReview(new Review(m,nef,"Amazing" , 10));
+        showMap(lib);
 
 
 
@@ -65,5 +66,17 @@ public class Test {
         Book book = new Book(title,author,publisher,genre,isbn,library);
     }
 
+    public void showMedia(MediaInterface media) {
+        System.out.println(media);
+    }
+
+    public void removeMedia(MediaInterface media, Library library) {
+        library.getMediaAvailable().remove(media);
+    }
+
+    public static void showMap(Library library) {
+        System.out.println("Showing Map");
+        library.printMap();
+    }
 
 }
