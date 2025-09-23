@@ -1,5 +1,6 @@
 package COMP2450.model;
 
+import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 
 public class Library {
@@ -75,5 +76,33 @@ public class Library {
                 System.out.println(resource);
             }
         }
+    }
+
+    public void removeMedia(int mediaId) {
+        boolean removed = false;
+        for (MediaInterface media : mediaAvailable) {
+            if (media.getMediaID() == mediaId) {
+                mediaAvailable.remove(media);
+                removed = true;
+            }
+        }
+        if (!removed) {
+            System.out.println("Resource not found");
+        }
+
+    }
+
+    public MediaInterface showMedia(int mediaId) {
+        MediaInterface media = null;
+        boolean removed = false;
+        for (MediaInterface mediaSearch : mediaAvailable) {
+            if (mediaSearch.getMediaID() == mediaId) {
+                media = mediaSearch;
+                removed = true;
+            }
+        }  if (!removed) {
+            System.out.println("Resource not found");
+        }
+        return media;
     }
 }

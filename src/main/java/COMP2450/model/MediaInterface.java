@@ -36,7 +36,7 @@ public interface MediaInterface {
         return false;
     }
 
-    default MediaInterface getMedia(MediaInterface media) {
+    static MediaInterface getMedia(MediaInterface media) {
         Library library = media.getLibrary();
         for (MediaInterface mediaAvailable : library.getMediaAvailable()) {
             if (mediaAvailable.getMediaID() == media.getMediaID()) {
@@ -45,6 +45,7 @@ public interface MediaInterface {
         }
         return null;
     }
+
 
     default void addToLibrary(MediaInterface media) {
         if (!mediaExists(media)) {
