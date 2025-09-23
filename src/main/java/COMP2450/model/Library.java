@@ -8,6 +8,7 @@ public class Library {
     String description;
     ArrayList<MediaInterface> mediaAvailable;
     Map map;
+    ArrayList<Resource> resources = new ArrayList<>();
 
     public Library(String name) {
         this.name = name;
@@ -60,4 +61,19 @@ public class Library {
     }
 
 
+    public ArrayList<Resource> getResources() {
+        return resources;
+    }
+
+    public void addResource(Resource resource) {
+        resources.add(resource);
+    }
+
+    public void showResource(String resourceName) {
+        for (Resource resource : resources) {
+            if(resource.getResourceName().equals(resourceName)) {
+                System.out.println(resource);
+            }
+        }
+    }
 }
