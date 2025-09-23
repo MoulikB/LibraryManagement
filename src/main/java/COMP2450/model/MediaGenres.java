@@ -8,4 +8,7 @@ public enum MediaGenres {
     THRILLER,
     FICTION,
     NONFICTION
+
 }
+
+

@@ -1,6 +1,5 @@
 import COMP2450.model.*;
 
-import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -71,6 +70,10 @@ public class Main {
         scnr.close();
     }
 
+    public static void reset(){
+
+    }
+
     public static void printOptions(){
         System.out.println("1. ADD MEMBER");
         System.out.println("2. REMOVE MEMBER");
@@ -134,7 +137,7 @@ public class Main {
         media.addReview(new Review(user,media,comment,stars));
     }
 
-    static void ShowReviews(Scanner scnr) {
+    static void showReviews(Scanner scnr) {
         System.out.print("Enter UserName: ");
         User user = User.userDB.getUser(scnr.next());
 
@@ -144,7 +147,7 @@ public class Main {
         System.out.print("Enter mediaID: ");
         MediaInterface media = library.showMedia(scnr.nextInt());
 
-        System.out.print(showReviews(user,media);
+        showReviews(user,media);
     }
 
     static void showReviews(User user, MediaInterface media) {
@@ -195,6 +198,22 @@ public class Main {
         Library library = showLibrary(scnr);
 
         Movie mov = new Movie( title, director, mediaID, library, genre);
+    }
+
+    final  static MediaGenres findGenre(String genreString){
+        boolean found = false;
+        MediaGenres genre = null;
+        for (MediaGenres genres : MediaGenres.values()) {
+            if (genres.name().toLowerCase().equals(genreString.toLowerCase())) {
+                genre = genres;
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("Genre " + genreString + " not found");
+        }
+        return genre;
+
     }
 
     public static void addBook(Scanner scnr) {
@@ -248,8 +267,9 @@ public class Main {
         library.removeMedia(mediaID);
     }
 
-    public static void showMap(Library library) {
+    public static void showMap(Scanner scnr) {
         System.out.println("Showing Map");
+        Library library = showLibrary(scnr);
         library.printMap();
     }
 
