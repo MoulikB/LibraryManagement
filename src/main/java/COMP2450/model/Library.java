@@ -16,7 +16,7 @@ public class Library {
         this.description = "";
         this.mediaAvailable = new ArrayList<>();
         map = new Map(this);
-
+        LibraryManagement.addLIbrary(this);
     }
 
     public Library(String name,String description) {

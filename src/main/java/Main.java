@@ -1,6 +1,7 @@
 import COMP2450.model.*;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -20,14 +21,13 @@ public class Main {
 
     public static void chooseOption(){
         Scanner scnr = new Scanner(System.in);
-        int input = scnr.nextInt();
         printOptions();
+        int input = getIntInput(scnr);
         switch (input) {
             case 1: {
                 addMember(scnr);
                 break;
-            }
-            case 2: {
+            } case 2: {
                 removeMember(scnr);
                 break;
             } case 3 : {
@@ -39,30 +39,34 @@ public class Main {
             } case 5: {
                 showLibrary(scnr);
                 break;
-            } case 6 : {
+            } case 6: {
+                removeLibrary(scnr);
+                break;
+            }
+            case 7 : {
                 addMedia(scnr);
                 break;
-            } case 7: {
+            } case 8: {
                 removeMedia(scnr);
                 break;
-            } case 8: {
-                showMedia(scnr);
-                break;
             } case 9: {
+                showMedia(scnr);
                 break;
             } case 10: {
                 break;
             } case 11: {
-                addReview(scnr);
                 break;
             } case 12: {
-                showReviews(scnr);
+                addReview(scnr);
                 break;
             } case 13: {
-                showMap(scnr);
+                showReviews(scnr);
+                break;
             } case 14: {
-                System.exit(0);
+                showMap(scnr);
             } case 15: {
+                System.exit(0);
+            } case 16: {
                 reset();
             }
 
@@ -78,56 +82,69 @@ public class Main {
         System.out.println("1. ADD MEMBER");
         System.out.println("2. REMOVE MEMBER");
         System.out.println("3. SHOW MEMBER");
-        System.out.println("3. ADD LIBRARY");
-        System.out.println("4. REMOVE LIBRARY");
+        System.out.println("4. ADD LIBRARY");
         System.out.println("5. SHOW LIBRARY");
-        System.out.println("6. ADD MEDIA");
-        System.out.println("7. REMOVE MEDIA");
-        System.out.println("8. SHOW MEDIA");
-        System.out.println("9. ADD RESOURCE");
-        System.out.println("10. SHOW RESOURCE");
-        System.out.println("11. ADD REVIEW");
-        System.out.println("12. SHOW REVIEW");
-        System.out.println("13. SHOW MAP");
-        System.out.println("14. EXIT");
-        System.out.println("15. RESET");
+        System.out.println("6. REMOVE LIBRARY");
+        System.out.println("7. ADD MEDIA");
+        System.out.println("8. REMOVE MEDIA");
+        System.out.println("9. SHOW MEDIA");
+        System.out.println("10. ADD RESOURCE");
+        System.out.println("11. SHOW RESOURCE");
+        System.out.println("12. ADD REVIEW");
+        System.out.println("13. SHOW REVIEW");
+        System.out.println("14. SHOW MAP");
+        System.out.println("15. EXIT");
+        System.out.println("16. RESET");
 
     }
 
     static void addMember(Scanner scnr) {
-        String username = scnr.next();
-        int id = scnr.nextInt();
         System.out.print("Enter member name: ");
+        String username = getStringInput(scnr);
+
         System.out.print("Enter new ID: ");
+        int id = getIntInput(scnr);
+
         new User(username,id);
+        chooseOption();
     }
 
-    static String showMember(Scanner scnr) {
-        String username = scnr.next();
-        return User.userDB.getUser(username).userInfo() ;
+    static void showMember(Scanner scnr) {
+        System.out.print("Enter member name: ");
+        String username = getStringInput(scnr);
+        User userFound = User.userDB.getUser(username);
+        if (userFound == null) {
+            System.out.println("No user found with username: " + username);
+        } else {
+            System.out.println(userFound.userInfo());
+        }
+        chooseOption();
     }
 
     static void removeMember( Scanner scnr) {
-        int id = scnr.nextInt();
+        System.out.print("Enter member ID: ");
+        int id = getIntInput(scnr);
+
         User.userDB.removeUser(id);
+        chooseOption();
     }
 
     static void addReview(Scanner scnr) {
 
         System.out.print("Enter UserName: ");
-        User user = User.userDB.getUser(scnr.next());
+        User user = User.userDB.getUser(getStringInput(scnr));
 
         System.out.print("Enter library name : ");
         Library library = showLibrary(scnr);
 
         System.out.print("Enter mediaID: ");
-        MediaInterface media = library.showMedia(scnr.nextInt());
+        MediaInterface media = library.showMedia(getIntInput(scnr));
 
         System.out.print("Enter your review: ");
-        String comment = scnr.next();
+        String comment = getStringInput(scnr);
 
         System.out.print("Enter total stars out of 10: ");
-        int stars =  scnr.nextInt();
+        int stars =  getIntInput(scnr);
 
 
         addReview(user,media,comment,stars);
@@ -139,13 +156,13 @@ public class Main {
 
     static void showReviews(Scanner scnr) {
         System.out.print("Enter UserName: ");
-        User user = User.userDB.getUser(scnr.next());
+        User user = User.userDB.getUser(getStringInput(scnr));
 
         System.out.print("Enter library name : ");
         Library library = showLibrary(scnr);
 
         System.out.print("Enter mediaID: ");
-        MediaInterface media = library.showMedia(scnr.nextInt());
+        MediaInterface media = library.showMedia(getIntInput(scnr));
 
         showReviews(user,media);
     }
@@ -160,19 +177,34 @@ public class Main {
     }
 
     static Library addLibrary(Scanner scnr) {
-        String name = scnr.next();
+        String name = getStringInput(scnr);
         Library library = new Library(name);
         System.out.println("Adding library " + name);
         return library;
     }
 
     static Library showLibrary(Scanner scnr) {
-        Library library = addLibrary(scnr);
+        String name = getStringInput(scnr);
+        Library library = LibraryManagement.findLibrary(name);
+        if (library == null) {
+            System.out.println("No library found with name: " + name);
+        }
         return library;
     }
 
+    static void removeLibrary(Scanner scnr) {
+        System.out.print("Enter library ID: ");
+        String name = getStringInput(scnr);
+        Library library = showLibrary(scnr);
+        for (Library dbLibrary: LibraryManagement.libraries) {
+            if (dbLibrary.equals(library)) {
+                LibraryManagement.libraries.remove(dbLibrary);
+            }
+        }
+    }
+
     static void addMedia(Scanner scnr) {
-        String mediaType = scnr.next();
+        String mediaType = getStringInput(scnr);
         if (mediaType.toLowerCase().equals("book")) {
             addBook(scnr);
         }  else if (mediaType.toLowerCase().equals("movie")) {
@@ -182,17 +214,17 @@ public class Main {
 
     public static void addMovie(Scanner scnr) {
         System.out.println("Enter the movie title: ");
-        String title = scnr.next();
+        String title = getStringInput(scnr);
 
         System.out.println("Enter the director: ");
-        String director = scnr.next();
+        String director = getStringInput(scnr);
 
 
         System.out.println("Enter the genre: ");
-        MediaGenres genre = findGenre(scnr.next());
+        MediaGenres genre = findGenre(getStringInput(scnr));
 
         System.out.println("Enter the mediaID: ");
-        int mediaID = scnr.nextInt();
+        int mediaID = getIntInput(scnr);
 
         System.out.println("Enter the Library Name: ");
         Library library = showLibrary(scnr);
@@ -219,19 +251,19 @@ public class Main {
     public static void addBook(Scanner scnr) {
 
         System.out.println("Enter the book title: ");
-        String title = scnr.next();
+        String title = getStringInput(scnr);
 
         System.out.println("Enter the author: ");
-        String author = scnr.next();
+        String author = getStringInput(scnr);
 
         System.out.println("Enter the publisher: ");
-        String publisher = scnr.next();
+        String publisher = getStringInput(scnr);
 
         System.out.println("Enter the genre: ");
-        MediaGenres genre = findGenre(scnr.next());
+        MediaGenres genre = findGenre(getStringInput(scnr));
 
         System.out.println("Enter the isbn or mediaID: ");
-        int isbn = scnr.nextInt();
+        int isbn = getIntInput(scnr);
 
         System.out.println("Enter the Library Name: ");
         Library library = showLibrary(scnr);
@@ -245,7 +277,7 @@ public class Main {
         Library library = showLibrary(scnr);
 
         System.out.println("Enter the mediaID: ");
-        int mediaID = scnr.nextInt();
+        int mediaID = getIntInput(scnr);
 
         MediaInterface media = library.showMedia(mediaID);
 
@@ -259,7 +291,7 @@ public class Main {
     public static void removeMedia(Scanner scnr) {
 
         System.out.println("Enter the mediaID: ");
-        int mediaID = scnr.nextInt();
+        int mediaID = getIntInput(scnr);
 
         System.out.println("Enter the Library Name: ");
         Library library = showLibrary(scnr);
@@ -319,5 +351,25 @@ public class Main {
         if (!found) {
             System.out.println("Resource not found: " + resourceName);
         }
+    }
+
+    public static String getStringInput(Scanner scnr) {
+        try {
+            String input = scnr.next();
+            return input;
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input");
+        }
+        return "Invalid Input";
+    }
+
+    public static int getIntInput(Scanner scnr) {
+        try {
+            int input = scnr.nextInt();
+            return input;
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input");
+        }
+        return 0;
     }
 }
