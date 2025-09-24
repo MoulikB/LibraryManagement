@@ -19,10 +19,9 @@ public class LibraryManagement {
     }
 
     public static Library findLibrary(String name) {
-        boolean found = false;
         Library output = null;
         for (Library library : libraries) {
-            if (library.getName().equals(name)) {
+            if  (library.getName().equals(name)) {
                 output = library;
             }
         }

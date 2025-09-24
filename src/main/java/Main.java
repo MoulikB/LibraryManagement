@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import COMP2450.model.Book;
@@ -192,19 +191,23 @@ public class Main {
         System.out.println("Enter library name: ");
         String name = getStringInput(scnr);
 
-        Library library = new Library(name);
+        new Library(name);
         System.out.println("Adding library " + name);
         chooseOption();
     }
 
     static void showLibrary(Scanner scnr) {
+
         System.out.println("Enter library name: ");
         String name = getStringInput(scnr);
+
         Library library = LibraryManagement.findLibrary(name);
         if (library == null) {
             System.out.println("No library found with name: " + name);
         }
-        System.out.println(library);
+        if (library != null) {
+            System.out.println(library);
+        }
         chooseOption();
     }
 
@@ -230,6 +233,7 @@ public class Main {
         }  else if (mediaType.toLowerCase().equals("movie")) {
             addMovie(scnr);
         }
+        chooseOption();
     }
 
     public static void addMovie(Scanner scnr) {
@@ -249,7 +253,7 @@ public class Main {
         System.out.println("Enter the Library Name: ");
         Library library = LibraryManagement.findLibrary(getStringInput(scnr));
 
-        Movie mov = new Movie( title, director, mediaID, library, genre);
+        new Movie( title, director, mediaID, library, genre);
     }
 
     final  static MediaGenres findGenre(String genreString){
@@ -287,8 +291,10 @@ public class Main {
 
         System.out.println("Enter the Library Name: ");
         Library library = LibraryManagement.findLibrary(getStringInput(scnr));
-
-        Book book = new Book(title,author,publisher,genre,isbn,library);
+        
+        if (library !=null) {
+            new Book(title,author,publisher,genre,isbn,library);
+        }
     }
 
     public static void showMedia(Scanner scnr) {
@@ -306,6 +312,7 @@ public class Main {
         } else  {
             System.out.println("Media Not Found");
         }
+        chooseOption();
     }
 
     public static void removeMedia(Scanner scnr) {
@@ -317,12 +324,16 @@ public class Main {
         Library library = LibraryManagement.findLibrary(getStringInput(scnr));
 
         library.removeMedia(mediaID);
+
+        chooseOption();
     }
 
     public static void showMap(Scanner scnr) {
         System.out.println("Showing Map");
         Library library = LibraryManagement.findLibrary(getStringInput(scnr));
         library.printMap();
+
+        chooseOption();
     }
 
     // ---------- ADD RESOURCE ----------
@@ -345,6 +356,8 @@ public class Main {
         } else {
             System.out.println("Unknown resource type.");
         }
+
+        chooseOption();
     }
 
     // ---------- SHOW RESOURCE ----------
@@ -371,25 +384,23 @@ public class Main {
         if (!found) {
             System.out.println("Resource not found: " + resourceName);
         }
+
+        chooseOption();
     }
 
     public static String getStringInput(Scanner scnr) {
-        try {
-            String input = scnr.next();
-            return input;
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input");
-        }
-        return "Invalid Input";
+        return scnr.nextLine();
     }
 
-    public static int getIntInput(Scanner scnr) {
-        try {
-            int input = scnr.nextInt();
-            return input;
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input");
+    static int getIntInput(Scanner scnr) {
+    while (true) {
+        String s = scnr.nextLine().trim();
+        try { 
+            return Integer.parseInt(s); 
         }
-        return 0;
+        catch (NumberFormatException e) { 
+            System.out.print("Enter a valid integer: "); 
+        }
     }
+}
 }

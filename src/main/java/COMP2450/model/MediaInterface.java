@@ -52,7 +52,7 @@ public interface MediaInterface {
             media.getLibrary().addMedia(this);
         } else {
             var existingCopy =  getMedia(this);
-            media.addCopies();
+            existingCopy.addCopies();
         }
     }
 
