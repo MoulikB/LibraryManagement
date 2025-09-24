@@ -1,8 +1,19 @@
-import COMP2450.model.*;
-
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import COMP2450.model.Book;
+import COMP2450.model.Computer;
+import COMP2450.model.Library;
+import COMP2450.model.LibraryManagement;
+import COMP2450.model.MediaGenres;
+import COMP2450.model.MediaInterface;
+import COMP2450.model.Movie;
+import COMP2450.model.Resource;
+import COMP2450.model.Review;
+import COMP2450.model.StudyRoom;
+import COMP2450.model.TimeSlots;
+import COMP2450.model.User;
 
 public class Main {
 
@@ -135,7 +146,7 @@ public class Main {
         User user = User.userDB.getUser(getStringInput(scnr));
 
         System.out.print("Enter library name : ");
-        Library library = showLibrary(scnr);
+        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
 
         System.out.print("Enter mediaID: ");
         MediaInterface media = library.showMedia(getIntInput(scnr));
@@ -159,7 +170,7 @@ public class Main {
         User user = User.userDB.getUser(getStringInput(scnr));
 
         System.out.print("Enter library name : ");
-        Library library = showLibrary(scnr);
+        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
 
         System.out.print("Enter mediaID: ");
         MediaInterface media = library.showMedia(getIntInput(scnr));
@@ -176,34 +187,43 @@ public class Main {
         }
     }
 
-    static Library addLibrary(Scanner scnr) {
+    static void addLibrary(Scanner scnr) {
+
+        System.out.println("Enter library name: ");
         String name = getStringInput(scnr);
+
         Library library = new Library(name);
         System.out.println("Adding library " + name);
-        return library;
+        chooseOption();
     }
 
-    static Library showLibrary(Scanner scnr) {
+    static void showLibrary(Scanner scnr) {
+        System.out.println("Enter library name: ");
         String name = getStringInput(scnr);
         Library library = LibraryManagement.findLibrary(name);
         if (library == null) {
             System.out.println("No library found with name: " + name);
         }
-        return library;
+        System.out.println(library);
+        chooseOption();
     }
 
     static void removeLibrary(Scanner scnr) {
-        System.out.print("Enter library ID: ");
+        System.out.print("Enter library name: ");
         String name = getStringInput(scnr);
-        Library library = showLibrary(scnr);
+        Library library = LibraryManagement.findLibrary(name);
         for (Library dbLibrary: LibraryManagement.libraries) {
             if (dbLibrary.equals(library)) {
                 LibraryManagement.libraries.remove(dbLibrary);
+                System.out.println("Library " + name + " removed.");
+                break;
             }
         }
+        chooseOption();
     }
 
     static void addMedia(Scanner scnr) {
+        System.out.println("Enter media type (book/movie): ");
         String mediaType = getStringInput(scnr);
         if (mediaType.toLowerCase().equals("book")) {
             addBook(scnr);
@@ -227,7 +247,7 @@ public class Main {
         int mediaID = getIntInput(scnr);
 
         System.out.println("Enter the Library Name: ");
-        Library library = showLibrary(scnr);
+        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
 
         Movie mov = new Movie( title, director, mediaID, library, genre);
     }
@@ -266,7 +286,7 @@ public class Main {
         int isbn = getIntInput(scnr);
 
         System.out.println("Enter the Library Name: ");
-        Library library = showLibrary(scnr);
+        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
 
         Book book = new Book(title,author,publisher,genre,isbn,library);
     }
@@ -274,7 +294,7 @@ public class Main {
     public static void showMedia(Scanner scnr) {
 
         System.out.println("Enter the Library Name: ");
-        Library library = showLibrary(scnr);
+        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
 
         System.out.println("Enter the mediaID: ");
         int mediaID = getIntInput(scnr);
@@ -294,14 +314,14 @@ public class Main {
         int mediaID = getIntInput(scnr);
 
         System.out.println("Enter the Library Name: ");
-        Library library = showLibrary(scnr);
+        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
 
         library.removeMedia(mediaID);
     }
 
     public static void showMap(Scanner scnr) {
         System.out.println("Showing Map");
-        Library library = showLibrary(scnr);
+        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
         library.printMap();
     }
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class LibraryManagement {
 
-    public static ArrayList<Library> libraries;
+    public static ArrayList<Library> libraries = new ArrayList<>();
 
     public LibraryManagement() {
         libraries = new ArrayList<>();
