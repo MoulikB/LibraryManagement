@@ -1,14 +1,18 @@
 package COMP2450.model;
 
+import com.google.common.base.Preconditions;
+
 import java.util.ArrayList;
 
 public class StudyRoom implements Resource {
-    private String roomNumber;
+    private String roomName;
     private ArrayList<Booking> bookings;
     Library library;
 
-    public StudyRoom(String roomNumber, Library library) {
-        this.roomNumber = roomNumber;
+    public StudyRoom(String roomName, Library library) {
+        Preconditions.checkArgument( roomName != null && roomName.length()>0, "Room name cannot be null or empty");
+        Preconditions.checkArgument( library != null);
+        this.roomName = roomName;
         this.bookings = new ArrayList<>();
         this.library = library;
         library.addResource(this);
@@ -16,14 +20,16 @@ public class StudyRoom implements Resource {
 
     @Override
     public String getResourceName() {
-        return "Study Room " + roomNumber;
+        return "Study Room " + roomName;
     }
 
     @Override
     public boolean isAvailable(String timeSlot) {
+        Preconditions.checkArgument( timeSlot != null, "Time Slot cannot be null");
+        boolean result = true;
         for (Booking booking : bookings) {
             if (booking.getTimeSlot().equals(timeSlot)) {
-                return false;
+                result = false;
             }
         }
         return true;
@@ -31,6 +37,7 @@ public class StudyRoom implements Resource {
 
     @Override
     public void addBooking(Booking booking) {
+        Preconditions.checkArgument(booking != null);
         bookings.add(booking);
     }
 

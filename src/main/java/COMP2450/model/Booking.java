@@ -1,5 +1,7 @@
 package COMP2450.model;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Represents a booking of a resource for a specific time slot.
  */
@@ -9,6 +11,9 @@ public class Booking {
     private String timeSlot;    // 1-hour time slot string
 
     public Booking(Resource resource, String memberName, String timeSlot) {
+        Preconditions.checkNotNull(resource);
+        Preconditions.checkArgument(memberName  != null && !memberName.isEmpty() , "member name can't be null or empty");
+        Preconditions.checkNotNull(timeSlot);
         this.resource = resource;
         this.memberName = memberName;
         this.timeSlot = timeSlot;

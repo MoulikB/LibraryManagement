@@ -1,5 +1,7 @@
 package COMP2450.model;
 
+import com.google.common.base.Preconditions;
+
 public class Book implements MediaInterface {
     private final String title;
     private final String author;
@@ -12,6 +14,14 @@ public class Book implements MediaInterface {
 
     public Book(String title, String author, String publisher,
                 MediaGenres genre, int isbn, Library library) {
+
+        Preconditions.checkArgument(title != null && !title.isEmpty(), "title can't be null");
+        Preconditions.checkArgument(author != null && !title.isEmpty(), "author can't be null");
+        Preconditions.checkArgument(publisher != null && !publisher.isEmpty(), "publisher can't be null");
+        Preconditions.checkArgument(genre != null, "genre can't be null");
+        Preconditions.checkArgument(isbn >= 0, "isbn can't be negative");
+        Preconditions.checkArgument(library != null, "library can't be null");
+
         this.title = title;
         this.author = author;
         this.publisher = publisher;

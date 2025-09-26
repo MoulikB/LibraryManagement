@@ -1,5 +1,7 @@
 package COMP2450.model;
 
+import com.google.common.base.Preconditions;
+
 import java.util.ArrayList;
 
 public interface MediaInterface {
@@ -27,6 +29,7 @@ public interface MediaInterface {
     void addCopies();
 
     default boolean mediaExists(MediaInterface media) {
+        Preconditions.checkNotNull(media);
         Library library = media.getLibrary();
         for (MediaInterface mediaAvailable : library.getMediaAvailable()) {
             if (mediaAvailable.getMediaID() == media.getMediaID()) {
@@ -37,6 +40,7 @@ public interface MediaInterface {
     }
 
     static MediaInterface getMedia(MediaInterface media) {
+        Preconditions.checkNotNull(media);
         Library library = media.getLibrary();
         for (MediaInterface mediaAvailable : library.getMediaAvailable()) {
             if (mediaAvailable.getMediaID() == media.getMediaID()) {
@@ -48,6 +52,7 @@ public interface MediaInterface {
 
 
     default void addToLibrary(MediaInterface media) {
+        Preconditions.checkNotNull(media);
         if (!mediaExists(media)) {
             media.getLibrary().addMedia(this);
         } else {
@@ -57,6 +62,7 @@ public interface MediaInterface {
     }
 
     default void addReview(Review review) {
+        Preconditions.checkNotNull(review);
         reviews.add(review);
     }
 

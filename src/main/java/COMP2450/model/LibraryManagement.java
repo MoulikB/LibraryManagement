@@ -1,5 +1,7 @@
 package COMP2450.model;
 
+import com.google.common.base.Preconditions;
+
 import java.util.ArrayList;
 
 public class LibraryManagement {
@@ -11,6 +13,7 @@ public class LibraryManagement {
     }
 
     public static void addLIbrary(Library library) {
+        Preconditions.checkNotNull(library);
         libraries.add(library);
     }
 
@@ -19,6 +22,7 @@ public class LibraryManagement {
     }
 
     public static Library findLibrary(String name) {
+        Preconditions.checkArgument(name!=null && !name.isEmpty() , "name is null or empty");
         Library output = null;
         for (Library library : libraries) {
             if  (library.getName().equals(name)) {

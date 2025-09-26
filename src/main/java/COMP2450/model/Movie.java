@@ -1,5 +1,7 @@
 package COMP2450.model;
 
+import com.google.common.base.Preconditions;
+
 public class Movie implements MediaInterface {
     private final String title;
     private final String director;
@@ -10,6 +12,12 @@ public class Movie implements MediaInterface {
 
     public Movie(String title, String director, int mediaID,
                  Library library, MediaGenres genre) {
+        Preconditions.checkNotNull(title);
+        Preconditions.checkNotNull(director);
+        Preconditions.checkNotNull(mediaID);
+        Preconditions.checkNotNull(library);
+        Preconditions.checkNotNull(genre);
+        Preconditions.checkArgument(title.isEmpty());
         this.title = title;
         this.director = director;
         this.mediaID = mediaID;
