@@ -1,5 +1,7 @@
 package COMP2450.model;
 
+import com.google.common.base.Preconditions;
+
 import java.util.ArrayList;
 public class User {
    
@@ -12,10 +14,13 @@ public class User {
 
 
     public User(String username,int id)  {
+        Preconditions.checkArgument(!username.isEmpty(), "Username cannot be empty");
+        Preconditions.checkArgument(id > 0, "ID cannot be less than 1");
         this.username = username;
         this.id = id;
         userDB.addUser(this);
     }
+
 
     public int getID() {
         return this.id;
@@ -30,6 +35,7 @@ public class User {
     }
 
     public void removeUser(int id) {
+        Preconditions.checkArgument(id > 0, "ID cannot be less than 1");
         userDB.removeUser(id);
     }
 

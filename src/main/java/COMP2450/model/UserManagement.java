@@ -1,5 +1,7 @@
 package COMP2450.model;
 
+import com.google.common.base.Preconditions;
+
 import java.util.ArrayList;
 
 public class UserManagement {
@@ -10,23 +12,35 @@ public class UserManagement {
     }
 
     public void addUser(User user) {
-        if (userExists(user.getID()) == null) {
+        if (userExistsBoolean(user.getID())) {
             users.add(user);
         } else {
-            System.out.println("duplicate");
+            System.out.println("This user is duplicate");
         }
     }
 
-    public User getUser(String username) {
+    public User getUser(int id) {
+        Preconditions.checkArgument(id > 0, "Invalid ID");
         for (User user : users) {
-            if (user.getUsername().equals(username)) {
+            if (user.getID() == id) {
                 return user;
             }
         }
         return null;
     }
 
+    public boolean userExistsBoolean(int id) {
+        Preconditions.checkArgument(id > 0, "Invalid ID");
+        boolean userExists = false;
+        for (int i = 0; i < users.size() && !userExists; i++) {
+            if ( (users.get(i)).getID() == (id) ) {
+                userExists = true;
+            }
+        }
+        return userExists;
+    }
     public User userExists(int id) {
+        Preconditions.checkArgument(id > 0, "Invalid ID");
         User userAlreadyExists = null;
         for (int i = 0; i < users.size() && (userAlreadyExists == null); i++) {
             if ( (users.get(i)).getID() == (id) ) {
@@ -37,6 +51,7 @@ public class UserManagement {
     }
 
     public void removeUser(int id) {
+        Preconditions.checkArgument(id > 0, "Invalid ID");
         User userExists = userExists(id);
         if (userExists!=null) {
             users.remove(userExists);

@@ -126,11 +126,11 @@ public class Main {
     }
 
     static void showMember(Scanner scnr) {
-        System.out.print("Enter member name: ");
-        String username = getStringInput(scnr);
-        User userFound = User.userDB.getUser(username);
+        System.out.print("Enter member id: ");
+        int id = getIntInput(scnr);
+        User userFound = User.userDB.getUser(id);
         if (userFound == null) {
-            System.out.println("No user found with username: " + username);
+            System.out.println("No user found with that id");
         } else {
             System.out.println(userFound.userInfo());
         }
@@ -147,8 +147,8 @@ public class Main {
 
     static void addReview(Scanner scnr) {
 
-        System.out.print("Enter UserName: ");
-        User user = User.userDB.getUser(getStringInput(scnr));
+        System.out.print("Enter UserID: ");
+        User user = User.userDB.getUser(getIntInput(scnr));
 
         System.out.print("Enter library name : ");
         Library library = LibraryManagement.findLibrary(getStringInput(scnr));
@@ -171,8 +171,8 @@ public class Main {
     }
 
     static void showReviews(Scanner scnr) {
-        System.out.print("Enter UserName: ");
-        User user = User.userDB.getUser(getStringInput(scnr));
+        System.out.print("Enter UserID: ");
+        User user = User.userDB.getUser(getIntInput(scnr));
 
         System.out.print("Enter library name : ");
         Library library = LibraryManagement.findLibrary(getStringInput(scnr));
@@ -234,9 +234,9 @@ public class Main {
     static void addMedia(Scanner scnr) {
         System.out.println("Enter media type (book/movie): ");
         String mediaType = getStringInput(scnr);
-        if (mediaType.toLowerCase().equals("book")) {
+        if (mediaType.equalsIgnoreCase("book")) {
             addBook(scnr);
-        }  else if (mediaType.toLowerCase().equals("movie")) {
+        }  else if (mediaType.equalsIgnoreCase("movie")) {
             addMovie(scnr);
         }
         chooseOption(scnr);
@@ -262,11 +262,11 @@ public class Main {
         new Movie( title, director, mediaID, library, genre);
     }
 
-    final  static MediaGenres findGenre(String genreString){
+    static MediaGenres findGenre(String genreString){
         boolean found = false;
         MediaGenres genre = null;
         for (MediaGenres genres : MediaGenres.values()) {
-            if (genres.name().toLowerCase().equals(genreString.toLowerCase())) {
+            if (genres.name().equalsIgnoreCase(genreString)) {
                 genre = genres;
                 found = true;
             }

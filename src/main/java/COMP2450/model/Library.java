@@ -1,36 +1,27 @@
 package COMP2450.model;
 
+import com.google.common.base.Preconditions;
+
 import java.util.ArrayList;
 
 public class Library {
 
     String name;
-    String description;
     ArrayList<MediaInterface> mediaAvailable;
     Map map;
     ArrayList<Resource> resources = new ArrayList<>();
 
     public Library(String name) {
         this.name = name;
-        // Preconditions.checkArgument(value >= 0.0, "negative value: %s", value);
-        this.description = "";
+        Preconditions.checkArgument(name!=null, "Library name cannot be null");
         this.mediaAvailable = new ArrayList<>();
         map = new Map(this);
         LibraryManagement.addLIbrary(this);
     }
 
-    public Library(String name,String description) {
-        this.name = name;
-        this.description = description;
-        this.mediaAvailable = new ArrayList<>();
-    }
-
-    public void addDescription(String description) {
-        this.description = description;
-    }
-
 
     public void addMedia(MediaInterface media) {
+        Preconditions.checkArgument(media!=null, "Media object cannot be null");
         this.mediaAvailable.add(media);
     }
 
@@ -41,7 +32,6 @@ public class Library {
     @Override
     public String toString() {
         String output = "Library :" + this.name;
-        output += "\nDescription: " + this.description;
         return output;    
     }
 
@@ -50,9 +40,6 @@ public class Library {
     }
     public void setName(String name) {
         this.name = name;
-    }
-    public String getDescription() {
-        return description;
     }
 
     public Map getMap() {
@@ -69,6 +56,7 @@ public class Library {
     }
 
     public void addResource(Resource resource) {
+        Preconditions.checkArgument(resource!=null, "Resource object cannot be null");
         resources.add(resource);
     }
 
@@ -81,6 +69,7 @@ public class Library {
     }
 
     public void removeMedia(int mediaId) {
+        Preconditions.checkArgument(mediaId>0, "Media ID cannot be less than 1");
         boolean removed = false;
         for (MediaInterface media : mediaAvailable) {
             if (media.getMediaID() == mediaId) {
@@ -95,6 +84,7 @@ public class Library {
     }
 
     public MediaInterface showMedia(int mediaId) {
+        Preconditions.checkArgument(mediaId>0, "Media ID cannot be less than 1");
         MediaInterface media = null;
         boolean removed = false;
         for (MediaInterface mediaSearch : mediaAvailable) {
