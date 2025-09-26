@@ -30,4 +30,8 @@ public class LibraryManagement {
         }
         return output;
     }
+
+    public static void reset() {
+       libraries = new ArrayList<>();
+    }
 }

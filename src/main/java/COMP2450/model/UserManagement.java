@@ -3,7 +3,7 @@ package COMP2450.model;
 import java.util.ArrayList;
 
 public class UserManagement {
-    private ArrayList<User> users;
+    private static ArrayList<User> users;
 
     public UserManagement() {
         users = new ArrayList<>();
@@ -51,5 +51,9 @@ public class UserManagement {
             output += user.getUsername() + ", ";
         }
         return output;
+    }
+
+    public static void reset() {
+        users = new ArrayList<>();
     }
 }

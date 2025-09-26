@@ -13,24 +13,25 @@ import COMP2450.model.Review;
 import COMP2450.model.StudyRoom;
 import COMP2450.model.TimeSlots;
 import COMP2450.model.User;
+import COMP2450.model.UserManagement;
 
 public class Main {
 
     public static void main(String[] args) {
 
-
-        mainMenu();
-
-
-    }
-
-    public static void mainMenu(){
-        System.out.println("Welcome to the library database management system");
-        chooseOption();
-    }
-
-    public static void chooseOption(){
         Scanner scnr = new Scanner(System.in);
+        mainMenu(scnr);
+        scnr.close();
+
+    }
+
+    public static void mainMenu(Scanner scnr){
+        System.out.println("Welcome to the library database management system");
+        chooseOption(scnr);
+    }
+
+    public static void chooseOption(Scanner scnr){
+        
         printOptions();
         int input = getIntInput(scnr);
         switch (input) {
@@ -63,8 +64,10 @@ public class Main {
                 showMedia(scnr);
                 break;
             } case 10: {
+                addResource(scnr);
                 break;
             } case 11: {
+                showResource(scnr);
                 break;
             } case 12: {
                 addReview(scnr);
@@ -74,18 +77,21 @@ public class Main {
                 break;
             } case 14: {
                 showMap(scnr);
+                break;
             } case 15: {
                 System.exit(0);
+                break;
             } case 16: {
                 reset();
+                break;
             }
 
         }
-        scnr.close();
     }
 
     public static void reset(){
-
+        UserManagement.reset();
+        LibraryManagement.reset();
     }
 
     public static void printOptions(){
@@ -116,7 +122,7 @@ public class Main {
         int id = getIntInput(scnr);
 
         new User(username,id);
-        chooseOption();
+        chooseOption(scnr);
     }
 
     static void showMember(Scanner scnr) {
@@ -128,7 +134,7 @@ public class Main {
         } else {
             System.out.println(userFound.userInfo());
         }
-        chooseOption();
+        chooseOption(scnr);
     }
 
     static void removeMember( Scanner scnr) {
@@ -136,7 +142,7 @@ public class Main {
         int id = getIntInput(scnr);
 
         User.userDB.removeUser(id);
-        chooseOption();
+        chooseOption(scnr);
     }
 
     static void addReview(Scanner scnr) {
@@ -193,7 +199,7 @@ public class Main {
 
         new Library(name);
         System.out.println("Adding library " + name);
-        chooseOption();
+        chooseOption(scnr);
     }
 
     static void showLibrary(Scanner scnr) {
@@ -208,7 +214,7 @@ public class Main {
         if (library != null) {
             System.out.println(library);
         }
-        chooseOption();
+        chooseOption(scnr);
     }
 
     static void removeLibrary(Scanner scnr) {
@@ -222,7 +228,7 @@ public class Main {
                 break;
             }
         }
-        chooseOption();
+        chooseOption(scnr);
     }
 
     static void addMedia(Scanner scnr) {
@@ -233,7 +239,7 @@ public class Main {
         }  else if (mediaType.toLowerCase().equals("movie")) {
             addMovie(scnr);
         }
-        chooseOption();
+        chooseOption(scnr);
     }
 
     public static void addMovie(Scanner scnr) {
@@ -312,7 +318,7 @@ public class Main {
         } else  {
             System.out.println("Media Not Found");
         }
-        chooseOption();
+        chooseOption(scnr);
     }
 
     public static void removeMedia(Scanner scnr) {
@@ -325,7 +331,7 @@ public class Main {
 
         library.removeMedia(mediaID);
 
-        chooseOption();
+        chooseOption(scnr);
     }
 
     public static void showMap(Scanner scnr) {
@@ -333,23 +339,28 @@ public class Main {
         Library library = LibraryManagement.findLibrary(getStringInput(scnr));
         library.printMap();
 
-        chooseOption();
+        chooseOption(scnr);
     }
 
     // ---------- ADD RESOURCE ----------
-    public static void addResource(Scanner sc, Library library) {
+    public static void addResource(Scanner scnr) {
+
+        System.out.print("Enter the name of the library to which the resource is to be added : ");
+        String name = getStringInput(scnr);
+
+        Library library = LibraryManagement.findLibrary(name);
         System.out.print("Enter type of resource (computer/studyroom): ");
-        String type = sc.nextLine().trim().toLowerCase();
+        String type = getStringInput(scnr).toLowerCase();
 
         if (type.equals("computer")) {
             System.out.print("Enter computer ID: ");
-            String compId = sc.nextLine();
+            String compId = getStringInput(scnr);
             Computer comp = new Computer(compId,library);
             library.addResource(comp);
             System.out.println("Added new Computer: " + comp.getResourceName());
         } else if (type.equals("studyroom")) {
             System.out.print("Enter room number: ");
-            String roomNum = sc.nextLine();
+            String roomNum = getStringInput(scnr);
             StudyRoom room = new StudyRoom(roomNum,library);
             library.addResource(room);
             System.out.println("Added new Study Room: " + room.getResourceName());
@@ -357,13 +368,16 @@ public class Main {
             System.out.println("Unknown resource type.");
         }
 
-        chooseOption();
+        chooseOption(scnr);
     }
 
     // ---------- SHOW RESOURCE ----------
-    public static void showResource(Scanner sc, Library library) {
+    public static void showResource(Scanner scnr) {
+        System.out.print("Enter the name of the library to which the resource is to be added : ");
+        String name = getStringInput(scnr);
+        Library library = LibraryManagement.findLibrary(name);
         System.out.print("Enter the name of the resource to show (e.g. Computer C1 or Study Room R1): ");
-        String resourceName = sc.nextLine().trim();
+        String resourceName = getStringInput(scnr);
 
         boolean found = false;
         for (Resource resource : library.getResources()) {
@@ -385,7 +399,7 @@ public class Main {
             System.out.println("Resource not found: " + resourceName);
         }
 
-        chooseOption();
+        chooseOption(scnr);
     }
 
     public static String getStringInput(Scanner scnr) {
