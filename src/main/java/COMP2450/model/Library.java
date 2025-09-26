@@ -12,6 +12,7 @@ public class Library {
 
     public Library(String name) {
         this.name = name;
+        // Preconditions.checkArgument(value >= 0.0, "negative value: %s", value);
         this.description = "";
         this.mediaAvailable = new ArrayList<>();
         map = new Map(this);
