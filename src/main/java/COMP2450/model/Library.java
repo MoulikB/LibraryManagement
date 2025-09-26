@@ -37,10 +37,12 @@ public class Library {
         return mediaAvailable;
     }
 
+    @Override
     public String toString() {
         String output = "Library :" + this.name;
         output += "\nDescription: " + this.description;
-        return output;    }
+        return output;    
+    }
 
     public String getName() {
         return name;

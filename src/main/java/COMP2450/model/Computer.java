@@ -40,4 +40,8 @@ public class Computer implements Resource {
     public ArrayList<Booking> getBookings() {
         return bookings;
     }
+
+    public Library getLibrary() {
+        return library;
+    }
 }

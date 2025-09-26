@@ -6,7 +6,7 @@ public class User {
     private final String username;
     private final int id;
     private double finesDue;
-    private ArrayList<Integer> itemsIssued = new ArrayList<Integer>();
+    private ArrayList<Integer> itemsIssued = new ArrayList<>();
 
     public static UserManagement userDB = new UserManagement();
 
@@ -37,10 +37,14 @@ public class User {
          System.out.println(userDB.getUsers());
     }
 
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        return this.id == ((User)other).id;
+    public boolean equals(User other) {
+        boolean output = false;
+        if (this == other) {
+            output = true;
+        } else {
+            output =  this.id == ((User)other).id;
+        }
+        return output;
     }
 
 }

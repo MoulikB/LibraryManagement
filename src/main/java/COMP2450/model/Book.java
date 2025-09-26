@@ -1,12 +1,12 @@
 package COMP2450.model;
 
 public class Book implements MediaInterface {
-    private String title;
-    private String author;
-    private String publisher;
-    private int mediaID;
+    private final String title;
+    private final String author;
+    private final String publisher;
+    private final int mediaID;
     private Library library;
-    private MediaGenres genre;
+    private final MediaGenres genre;
     int totalCopies = 0;
 
 
@@ -24,57 +24,60 @@ public class Book implements MediaInterface {
 
 
 
-        public String getMediaType () {
-            return "Book";
-        }
+    public String getMediaType () {
+        return "Book";
+    }
 
-        public String getCreator () {
-            return author;
-        }
+    public String getCreator () {
+        return author;
+    }
 
-        public MediaGenres getMediaGenre () {
-            return genre;
-        }
+    public MediaGenres getMediaGenre () {
+        return genre;
+    }
 
-        public boolean borrowMedia () {
-            if (this.totalCopies > 0) {
-                this.totalCopies--;
-                return true;
-            } else
-                return false;
-        }
+    public boolean borrowMedia () {
+        if (this.totalCopies > 0) {
+            this.totalCopies--;
+            return true;
+        } else
+            return false;
+    }
 
+    public void returnMedia () {
+        totalCopies++;
+    }
 
-        public void returnMedia () {
-            totalCopies++;
-        }
+    public String getTitle () {
+        return title;
+    }
 
-        public String getTitle () {
-            return title;
-        }
+    public int getAvailableCopies () {
+        return totalCopies;
+    }
+    
+    public String getPublisher () {
+        return publisher;
+    }
 
-        public int getAvailableCopies () {
-            return totalCopies;
-        }
+    public Library getLibrary () {
+        return library;
+    }
 
-        public String getPublisher () {
-            return publisher;
-        }
+    public int getMediaID () {
+        return mediaID;
+    }
 
-        public Library getLibrary () {
-            return library;
-        }
+    public void addCopies() {
+        totalCopies++;
+    }
 
-        public int getMediaID () {
-            return mediaID;
-        }
-
-        public void addCopies() {
-            totalCopies++;
-        }
-
-        public String toString () {
+    public String toString () {
         return "Book [title=" + title + ", author=" + author + ", publisher=" + publisher + ", Genre : " + genre;
-        }
+    }
+
+    public void setLibrary(Library library) {
+        this.library = library;
+    }
 }
 

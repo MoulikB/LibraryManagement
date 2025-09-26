@@ -2,6 +2,7 @@ package COMP2450.model;
 
 
 public class Map {
+    @SuppressWarnings("FieldMayBeFinal")
     private char[][] map;
     public Library library;
 
