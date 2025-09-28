@@ -4,10 +4,12 @@ package COMP2450.model;
 import com.google.common.base.Preconditions;
 
 public class Map {
-    @SuppressWarnings("FieldMayBeFinal")
     private char[][] map;
     public Library library;
 
+    /*
+    Creates map, for phase 1 we are using a default map
+     */
     public Map(Library library) {
         Preconditions.checkNotNull(library);
         this.library = library;
@@ -37,6 +39,9 @@ public class Map {
         };
     }
 
+    /*
+    Prints out map
+     */
     public void printMap() {
         for (char[] chars : map) {
             for (char c : chars) {
