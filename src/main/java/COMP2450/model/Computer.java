@@ -12,6 +12,12 @@ public class Computer implements Resource {
     private ArrayList<Booking> bookings;
     Library library;
 
+    /*
+     * Make a new Computer and add it to the library.
+     * Checks:
+     *  - computerId is not null/empty
+     *  - library is not null
+     */
     public Computer(String computerId, Library library) {
         Preconditions.checkArgument(computerId != null && !computerId.isEmpty(),"computerId cannot be null or empty");
         Preconditions.checkNotNull(library);
@@ -21,32 +27,41 @@ public class Computer implements Resource {
         library.addResource(this);
     }
 
-    @Override
+    // The display name of this resource.
     public String getResourceName() {
         return "Computer " + computerId;
     }
 
-    @Override
+    /*
+     * Is this time slot free?
+     * Returns false if any existing booking has the same timeSlot.
+     */
     public boolean isAvailable(String timeSlot) {
+        boolean result = true;
         Preconditions.checkNotNull(timeSlot);
         for (Booking booking : bookings) {
-            if (booking.getTimeSlot().equals(timeSlot)) {
-                return false;
+            if ((booking.getTimeSlot().equals(timeSlot))) {
+                result = false;
+                break;
             }
         }
-        return true;
+        return result;
     }
 
-    @Override
+    /*
+     * Add a booking to this computer.
+     */
     public void addBooking(Booking booking) {
         Preconditions.checkNotNull(booking);
         bookings.add(booking);
     }
 
+    // Get all bookings for this computer.
     public ArrayList<Booking> getBookings() {
         return bookings;
     }
 
+    // Which library this computer belongs to
     public Library getLibrary() {
         return library;
     }

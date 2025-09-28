@@ -8,19 +8,36 @@ public class LibraryManagement {
 
     public static ArrayList<Library> libraries = new ArrayList<>();
 
+    /*
+     * LibraryManagement: keeps track of all Library objects in the program.
+     *
+     * Notes:
+     *  - 'libraries' is static, so it is shared by the whole program.
+     *  - This class is a simple registry (add, find, list, reset).
+     */
     public LibraryManagement() {
         libraries = new ArrayList<>();
     }
 
-    public static void addLIbrary(Library library) {
+    /*
+     * Add a library to the list.
+     * Precondition: library is not null.
+     */
+    public static void addLibrary(Library library) {
         Preconditions.checkNotNull(library);
         libraries.add(library);
     }
 
+    // Shared list of all libraries in the system.
     public static ArrayList<Library> getLibraries() {
         return libraries;
     }
 
+    /*
+     * Find a library by its name.
+     * - name must not be null or empty.
+     * - returns the Library if found, otherwise prints a message and returns null.
+     */
     public static Library findLibrary(String name) {
         Preconditions.checkArgument(name!=null && !name.isEmpty() , "name is null or empty");
         Library output = null;
@@ -35,6 +52,10 @@ public class LibraryManagement {
         return output;
     }
 
+    /*
+     * Reset the list to empty.
+     * This clears all libraries from the registry.
+     */
     public static void reset() {
        libraries = new ArrayList<>();
     }

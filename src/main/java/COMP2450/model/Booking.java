@@ -10,6 +10,17 @@ public class Booking {
     private String memberName;  // Who booked it
     private String timeSlot;    // 1-hour time slot string
 
+    /*
+     * Make a new Booking.
+     *
+     * Checks (Preconditions):
+     *  - resource is not null
+     *  - memberName is not null/empty
+     *  - timeSlot is not null
+     *
+     * Note: we do not check here if the timeSlot is valid or available.
+     *       The caller should ask the Resource (isAvailable) before creating/adding a Booking.
+     */
     public Booking(Resource resource, String memberName, String timeSlot) {
         Preconditions.checkNotNull(resource);
         Preconditions.checkArgument(memberName  != null && !memberName.isEmpty() , "member name can't be null or empty");
@@ -19,18 +30,22 @@ public class Booking {
         this.timeSlot = timeSlot;
     }
 
+    // Get the booked resource
     public Resource getResource() {
         return resource;
     }
 
+    // Get the name of the member who booked it.
     public String getMemberName() {
         return memberName;
     }
 
+    // Get the 1-hour time slot string.
     public String getTimeSlot() {
         return timeSlot;
     }
 
+    // A simple text summary of the booking.
     @Override
     public String toString() {
         return "Booking for " + resource.getResourceName() + " by " + memberName +

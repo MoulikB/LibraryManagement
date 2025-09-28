@@ -153,17 +153,25 @@ public class Main {
         System.out.print("Enter library name : ");
         Library library = LibraryManagement.findLibrary(getStringInput(scnr));
 
-        System.out.print("Enter mediaID: ");
-        MediaInterface media = library.showMedia(getIntInput(scnr));
+        if (library!=null) {
+            System.out.print("Enter mediaID: ");
+            MediaInterface media = library.showMedia(getIntInput(scnr));
 
-        System.out.print("Enter your review: ");
-        String comment = getStringInput(scnr);
+            System.out.print("Enter your review: ");
+            String comment = getStringInput(scnr);
 
-        System.out.print("Enter total stars out of 10: ");
-        int stars =  getIntInput(scnr);
+            System.out.print("Enter total stars out of 10: ");
+            int stars = getIntInput(scnr);
 
-
-        addReview(user,media,comment,stars);
+            if (stars <=10 && stars >= 1) {
+                addReview(user, media, comment, stars);
+            } else {
+                System.out.println("Invalid input for starts, must be between 1 and 10");
+            }
+        } else {
+            System.out.println("No library found with that name");
+        }
+        chooseOption(scnr);
     }
 
     static void addReview(User user, MediaInterface media, String comment, int stars) {
@@ -177,10 +185,15 @@ public class Main {
         System.out.print("Enter library name : ");
         Library library = LibraryManagement.findLibrary(getStringInput(scnr));
 
-        System.out.print("Enter mediaID: ");
-        MediaInterface media = library.showMedia(getIntInput(scnr));
+        if (library!=null) {
+            System.out.print("Enter mediaID: ");
+            MediaInterface media = library.showMedia(getIntInput(scnr));
 
-        showReviews(user,media);
+            showReviews(user, media);
+        }   else {
+            System.out.println("No library found with that name");
+        }
+        chooseOption(scnr);
     }
 
     static void showReviews(User user, MediaInterface media) {
@@ -199,6 +212,7 @@ public class Main {
 
         new Library(name);
         System.out.println("Adding library " + name);
+
         chooseOption(scnr);
     }
 
@@ -214,6 +228,7 @@ public class Main {
         if (library != null) {
             System.out.println(library);
         }
+
         chooseOption(scnr);
     }
 
@@ -221,13 +236,18 @@ public class Main {
         System.out.print("Enter library name: ");
         String name = getStringInput(scnr);
         Library library = LibraryManagement.findLibrary(name);
-        for (Library dbLibrary: LibraryManagement.libraries) {
-            if (dbLibrary.equals(library)) {
-                LibraryManagement.libraries.remove(dbLibrary);
-                System.out.println("Library " + name + " removed.");
-                break;
+        if (library!=null){
+            for (Library dbLibrary : LibraryManagement.libraries) {
+                if (dbLibrary.equals(library)) {
+                    LibraryManagement.libraries.remove(dbLibrary);
+                    System.out.println("Library " + name + " removed.");
+                    break;
+                }
             }
+        } else {
+            System.out.println("Library " + name + " not found.");
         }
+
         chooseOption(scnr);
     }
 
@@ -239,6 +259,7 @@ public class Main {
         }  else if (mediaType.equalsIgnoreCase("movie")) {
             addMovie(scnr);
         }
+
         chooseOption(scnr);
     }
 
@@ -308,16 +329,21 @@ public class Main {
         System.out.println("Enter the Library Name: ");
         Library library = LibraryManagement.findLibrary(getStringInput(scnr));
 
-        System.out.println("Enter the mediaID: ");
-        int mediaID = getIntInput(scnr);
+        if (library!=null) {
+            System.out.println("Enter the mediaID: ");
+            int mediaID = getIntInput(scnr);
 
-        MediaInterface media = library.showMedia(mediaID);
+            MediaInterface media = library.showMedia(mediaID);
 
-        if (media != null) {
-            System.out.println(media);
-        } else  {
-            System.out.println("Media Not Found");
+            if (media != null) {
+                System.out.println(media);
+            } else {
+                System.out.println("Media Not Found");
+            }
+        } else {
+            System.out.println("Library Not Found");
         }
+
         chooseOption(scnr);
     }
 
@@ -328,17 +354,25 @@ public class Main {
 
         System.out.println("Enter the Library Name: ");
         Library library = LibraryManagement.findLibrary(getStringInput(scnr));
-
-        library.removeMedia(mediaID);
+        if (library!=null) {
+            library.removeMedia(mediaID);
+        } else
+            System.out.println("Library Not Found");
 
         chooseOption(scnr);
     }
 
     public static void showMap(Scanner scnr) {
-        System.out.println("Showing Map");
-        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
-        library.printMap();
 
+        System.out.println("Enter library name: ");
+        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
+
+        System.out.println("Showing Map");
+        if (library!=null) {
+            library.printMap();
+        } else {
+            System.out.println("Library Not Found");
+        }
         chooseOption(scnr);
     }
 
@@ -349,23 +383,27 @@ public class Main {
         String name = getStringInput(scnr);
 
         Library library = LibraryManagement.findLibrary(name);
-        System.out.print("Enter type of resource (computer/studyroom): ");
-        String type = getStringInput(scnr).toLowerCase();
+        if (library!=null) {
+            System.out.print("Enter type of resource (computer/studyroom): ");
+            String type = getStringInput(scnr).toLowerCase();
 
-        if (type.equals("computer")) {
-            System.out.print("Enter computer ID: ");
-            String compId = getStringInput(scnr);
-            Computer comp = new Computer(compId,library);
-            library.addResource(comp);
-            System.out.println("Added new Computer: " + comp.getResourceName());
-        } else if (type.equals("studyroom")) {
-            System.out.print("Enter room number: ");
-            String roomNum = getStringInput(scnr);
-            StudyRoom room = new StudyRoom(roomNum,library);
-            library.addResource(room);
-            System.out.println("Added new Study Room: " + room.getResourceName());
+            if (type.equals("computer")) {
+                System.out.print("Enter computer ID: ");
+                String compId = getStringInput(scnr);
+                Computer comp = new Computer(compId, library);
+                library.addResource(comp);
+                System.out.println("Added new Computer: " + comp.getResourceName());
+            } else if (type.equals("studyroom")) {
+                System.out.print("Enter room number: ");
+                String roomNum = getStringInput(scnr);
+                StudyRoom room = new StudyRoom(roomNum, library);
+                library.addResource(room);
+                System.out.println("Added new Study Room: " + room.getResourceName());
+            } else {
+                System.out.println("Unknown resource type.");
+            }
         } else {
-            System.out.println("Unknown resource type.");
+            System.out.println("Library Not Found");
         }
 
         chooseOption(scnr);
@@ -373,30 +411,36 @@ public class Main {
 
     // ---------- SHOW RESOURCE ----------
     public static void showResource(Scanner scnr) {
+
         System.out.print("Enter the name of the library to which the resource is to be added : ");
         String name = getStringInput(scnr);
+
         Library library = LibraryManagement.findLibrary(name);
-        System.out.print("Enter the name of the resource to show (e.g. Computer C1 or Study Room R1): ");
-        String resourceName = getStringInput(scnr);
+        if (library!=null) {
+            System.out.print("Enter the name of the resource to show (e.g. Computer C1 or Study Room R1): ");
+            String resourceName = getStringInput(scnr);
 
-        boolean found = false;
-        for (Resource resource : library.getResources()) {
-            if (resource.getResourceName().equalsIgnoreCase(resourceName)) {
-                found = true;
-                System.out.println("\n--- Resource Information ---");
-                System.out.println("Name: " + resource.getResourceName());
-                System.out.println("Available Time Slots:");
-                for (String slot : TimeSlots.ONE_HOUR_SLOTS) {
-                    if (resource.isAvailable(slot)) {
-                        System.out.println(" - " + slot);
+            boolean found = false;
+            for (Resource resource : library.getResources()) {
+                if (resource.getResourceName().equalsIgnoreCase(resourceName)) {
+                    found = true;
+                    System.out.println("\n--- Resource Information ---");
+                    System.out.println("Name: " + resource.getResourceName());
+                    System.out.println("Available Time Slots:");
+                    for (String slot : TimeSlots.ONE_HOUR_SLOTS) {
+                        if (resource.isAvailable(slot)) {
+                            System.out.println(" - " + slot);
+                        }
                     }
+                    break;
                 }
-                break;
             }
-        }
 
-        if (!found) {
-            System.out.println("Resource not found: " + resourceName);
+            if (!found) {
+                System.out.println("Resource not found: " + resourceName);
+            }
+        } else {
+            System.out.println("Library Not Found");
         }
 
         chooseOption(scnr);
