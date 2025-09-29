@@ -45,10 +45,9 @@ public class UserManagement {
     public boolean userExistsBoolean(int id) {
         Preconditions.checkArgument(id > 0, "Invalid ID");
         boolean userExists = false;
-        for (User user : users) {
-            if (user.getID() == (id)) {
+        for (int i = 0; i < users.size() && !userExists; i++) {
+            if (users.get(i).getID() == (id)) {
                 userExists = true;
-                break;
             }
         }
         return userExists;

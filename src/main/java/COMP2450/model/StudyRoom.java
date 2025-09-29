@@ -36,10 +36,9 @@ public class StudyRoom implements Resource {
     public boolean isAvailable(String timeSlot) {
         Preconditions.checkArgument( timeSlot != null, "Time Slot cannot be null");
         boolean result = true;
-        for (Booking booking : bookings) {
-            if (booking.getTimeSlot().equals(timeSlot)) {
+        for (int i  = 0; i < this.bookings.size() && result; i++) {
+            if (bookings.get(i).getTimeSlot().equals(timeSlot)) {
                 result = false;
-                break;
             }
         }
         return result;

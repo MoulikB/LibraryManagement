@@ -87,11 +87,10 @@ public class Library {
     public void removeMedia(int mediaId) {
         Preconditions.checkArgument(mediaId > 0, "Media ID cannot be less than 1");
         boolean removed = false;
-        for (MediaInterface media : mediaAvailable) {
-            if (media.getMediaID() == mediaId) {
-                mediaAvailable.remove(media);
+        for (int i = 0 ; i < mediaAvailable.size() && !removed ; i++) {
+            if (mediaAvailable.get(i).getMediaID() == mediaId) {
+                mediaAvailable.remove(i);
                 removed = true;
-                break;
             }
         }
         if (!removed) {

@@ -37,12 +37,11 @@ public class Computer implements Resource {
      * Returns false if any existing booking has the same timeSlot.
      */
     public boolean isAvailable(String timeSlot) {
-        boolean result = true;
         Preconditions.checkNotNull(timeSlot);
-        for (Booking booking : bookings) {
-            if ((booking.getTimeSlot().equals(timeSlot))) {
+        boolean result = true;
+        for (int i = 0; i < bookings.size() && result; i++ ) {
+            if ((bookings.get(i).getTimeSlot().equals(timeSlot))) {
                 result = false;
-                break;
             }
         }
         return result;

@@ -36,16 +36,17 @@ public interface MediaInterface {
      * Returns true if found, false otherwise.
      */
     default boolean mediaExists(MediaInterface media) {
-        boolean exists = false;
+        boolean mediaExists = false;
         Preconditions.checkNotNull(media);
         Library library = media.getLibrary();
-        for (MediaInterface mediaAvailable : library.getMediaAvailable()) {
-            if (mediaAvailable.getMediaID() == media.getMediaID()) {
-                exists = true;
-                break;
+
+        ArrayList<MediaInterface> mediaAvailable = library.getMediaAvailable();
+        for (int i = 0; i < mediaAvailable.size() && !mediaExists; i++) {
+            if (mediaAvailable.get(i).getMediaID() == media.getMediaID()) {
+                mediaExists = true;
             }
         }
-        return exists;
+        return mediaExists;
     }
 
     /*
