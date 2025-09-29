@@ -8,21 +8,22 @@ public class User {
     private final String username;
     private final int id;
     public static UserManagement userDB = new UserManagement();
+
     private double finesDue;  // how much is owed (if any)
     private ArrayList<Integer> itemsIssued = new ArrayList<>(); // media IDs issued
-    // Not using the above
+    // Not using the above two in current implementation, will be added later when waitlist and mediaIssue class is added
 
     /*
      * Create a new User and add it to the shared user database.
      *
      * Checks:
-     *  - username must not be empty
+     *  - username must not be null or empty
      *  - id must be > 0
      *
-     * If checks pass, the user is immediately registered in userDB.
+     * If checks pass, the user is registered in userDB.
      */
     public User(String username,int id)  {
-        Preconditions.checkArgument(!username.isEmpty(), "Username cannot be empty");
+        Preconditions.checkArgument(username!= null && !username.isEmpty(), "Username cannot be empty");
         Preconditions.checkArgument(id > 0, "ID cannot be less than 1");
         this.username = username;
         this.id = id;
@@ -34,22 +35,14 @@ public class User {
         return this.id;
     }
 
-
+    // Get the user's username.
     public String getUsername() {
         return this.username;
     }
 
+    // Get the user's info.
     public String userInfo() {
         return "ID : " + getID() + " , Name :" + getUsername();
-    }
-
-    /*
-     * Remove a user by ID from the shared database.
-     * (This method calls into userDB to do the work.)
-     */
-    public void removeUser(int id) {
-        Preconditions.checkArgument(id > 0, "ID cannot be less than 1");
-        userDB.removeUser(id);
     }
 
     // Print all users in the database as a string (from userDB)
@@ -67,7 +60,7 @@ public class User {
         if (this == other) {
             output = true;
         } else {
-            output =  this.id == ((User)other).id;
+            output =  this.id == other.id;
         }
         return output;
     }

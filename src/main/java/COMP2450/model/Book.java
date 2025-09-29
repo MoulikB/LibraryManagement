@@ -14,10 +14,10 @@ public class Book implements MediaInterface {
     /*
      * Constructor: makes a new Book and adds it to the given library.
      *
-     * The checks (Preconditions) make sure we don’t pass bad data:
+     * Preconditions:
      *  - strings are not null/empty
      *  - genre and library are not null
-     *  - ISBN is not negative
+     *  - ISBN is a positive integer
      */
     public Book(String title, String author, String publisher,
                 MediaGenres genre, int isbn, Library library) {
@@ -34,7 +34,7 @@ public class Book implements MediaInterface {
         this.publisher = publisher;
         this.genre = genre;
         this.mediaID = isbn;
-        this.library = library;
+        setLibrary(library);
         addToLibrary(this);
     }
 
@@ -47,11 +47,16 @@ public class Book implements MediaInterface {
         return "Book";
     }
 
-
+    /**
+     * @return the creator/author of the book.
+     */
     public String getCreator () {
         return author;
     }
 
+    /**
+     * @return the genre of the book.
+     */
     public MediaGenres getMediaGenre () {
         return genre;
     }
@@ -75,27 +80,37 @@ public class Book implements MediaInterface {
         totalCopies++;
     }
 
-    // Get the title.
+    /**
+     * @return the title of the book.
+     */
     public String getTitle () {
         return title;
     }
 
-    // How many copies can be borrowed right now.
+    /**
+     * @return How many copies can be borrowed right now.
+     */
     public int getAvailableCopies () {
         return totalCopies;
     }
 
-    // Get the publisher name.
+    /**
+     * @return Get the publisher name.
+    */
     public String getPublisher () {
         return publisher;
     }
 
-    // Which library this book belongs to.
+    /**
+     * @return Get the library this book belongs to.
+     */
     public Library getLibrary () {
         return library;
     }
 
-    // Get the media ID (here, the ISBN).
+    /**
+     * @return Get the media ID (for books it is the ISBN).
+     */
     public int getMediaID () {
         return mediaID;
     }
@@ -105,9 +120,12 @@ public class Book implements MediaInterface {
         totalCopies++;
     }
 
-    // A simple text summary of the book.
+
+    /**
+     * * @return A simple text summary of the book.
+     */
     public String toString () {
-        return "Book [title=" + title + ", author=" + author + ", publisher=" + publisher + ", Genre : " + genre;
+        return "Book [title=" + getTitle() + ", author=" + getCreator() + ", publisher=" + getPublisher() + ", Genre : " + getMediaGenre() + ", isbn=" + getMediaID() + "]";
     }
 
     // Change which library this book belongs to.

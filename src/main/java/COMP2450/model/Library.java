@@ -40,8 +40,7 @@ public class Library {
     // A simple text summary of the library.
     @Override
     public String toString() {
-        String output = "Library :" + this.name;
-        return output;    
+        return "Library : " + this.name;
     }
 
     // Get/set the library name.
@@ -49,12 +48,11 @@ public class Library {
         return name;
     }
 
-
     public void setName(String name) {
         this.name = name;
     }
 
-    // Access the map object (used to print the ASCII map).
+    // Access the map object
     public Map getMap() {
         return map;
     }
@@ -77,7 +75,7 @@ public class Library {
     // Print info about one resource by name
     public void showResource(String resourceName) {
         for (Resource resource : resources) {
-            if(resource.getResourceName().equals(resourceName)) {
+            if (resource.getResourceName().equals(resourceName)) {
                 System.out.println(resource);
             }
         }
@@ -87,7 +85,7 @@ public class Library {
      * Remove a media item by its ID.
      */
     public void removeMedia(int mediaId) {
-        Preconditions.checkArgument(mediaId>0, "Media ID cannot be less than 1");
+        Preconditions.checkArgument(mediaId > 0, "Media ID cannot be less than 1");
         boolean removed = false;
         for (MediaInterface media : mediaAvailable) {
             if (media.getMediaID() == mediaId) {

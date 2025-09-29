@@ -16,7 +16,7 @@ public class StudyRoom implements Resource {
      *  - library is not null
      */
     public StudyRoom(String roomName, Library library) {
-        Preconditions.checkArgument( roomName != null && roomName.length()>0, "Room name cannot be null or empty");
+        Preconditions.checkArgument( roomName != null && !roomName.isEmpty(), "Room name cannot be null or empty");
         Preconditions.checkArgument( library != null);
         this.roomName = roomName;
         this.bookings = new ArrayList<>();
@@ -39,6 +39,7 @@ public class StudyRoom implements Resource {
         for (Booking booking : bookings) {
             if (booking.getTimeSlot().equals(timeSlot)) {
                 result = false;
+                break;
             }
         }
         return result;

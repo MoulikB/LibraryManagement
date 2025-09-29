@@ -10,10 +10,6 @@ public class LibraryManagement {
 
     /*
      * LibraryManagement: keeps track of all Library objects in the program.
-     *
-     * Notes:
-     *  - 'libraries' is static, so it is shared by the whole program.
-     *  - This class is a simple registry (add, find, list, reset).
      */
     public LibraryManagement() {
         libraries = new ArrayList<>();

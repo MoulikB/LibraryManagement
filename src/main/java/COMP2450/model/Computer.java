@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Represents a computer resource that can be booked.
  */
 public class Computer implements Resource {
-    private String computerId;
+    private final String computerId;
     private ArrayList<Booking> bookings;
     Library library;
 

@@ -13,7 +13,7 @@ public class Movie implements MediaInterface {
     /*
      * Constructor: makes a new Movie and adds it to the given library.
      *
-     * Checks (Preconditions) help catch bad input early:
+     * Preconditions:
      *  - title, director, library, genre are not null
      *  - mediaID is not negative
      */
@@ -94,6 +94,6 @@ public class Movie implements MediaInterface {
 
     // A simple text summary of the movie
     public String toString() {
-        return "Movie [title=" + title + ", director=" + director + ", mediaID=" + mediaID +" , genre= " + genre;
+        return "Movie [title=" + title + ", director=" + director + ", mediaID=" + mediaID +" , genre= " + genre + "]";
     }
 }

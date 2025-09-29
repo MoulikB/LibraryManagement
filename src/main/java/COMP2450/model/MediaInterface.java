@@ -36,14 +36,16 @@ public interface MediaInterface {
      * Returns true if found, false otherwise.
      */
     default boolean mediaExists(MediaInterface media) {
+        boolean exists = false;
         Preconditions.checkNotNull(media);
         Library library = media.getLibrary();
         for (MediaInterface mediaAvailable : library.getMediaAvailable()) {
             if (mediaAvailable.getMediaID() == media.getMediaID()) {
-                return true;
+                exists = true;
+                break;
             }
         }
-        return false;
+        return exists;
     }
 
     /*
@@ -52,13 +54,14 @@ public interface MediaInterface {
      */
     static MediaInterface getMedia(MediaInterface media) {
         Preconditions.checkNotNull(media);
+        MediaInterface mediaFound = null;
         Library library = media.getLibrary();
         for (MediaInterface mediaAvailable : library.getMediaAvailable()) {
             if (mediaAvailable.getMediaID() == media.getMediaID()) {
-                return mediaAvailable;
+                mediaFound = mediaAvailable;
             }
         }
-        return null;
+        return mediaFound;
     }
 
     /*
@@ -68,9 +71,9 @@ public interface MediaInterface {
     default void addToLibrary(MediaInterface media) {
         Preconditions.checkNotNull(media);
         if (!mediaExists(media)) {
-            media.getLibrary().addMedia(this);
+            media.getLibrary().addMedia(media);
         } else {
-            var existingCopy =  getMedia(this);
+            var existingCopy =  getMedia(media);
             existingCopy.addCopies();
         }
     }

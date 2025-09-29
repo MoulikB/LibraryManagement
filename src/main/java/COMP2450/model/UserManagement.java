@@ -29,13 +29,14 @@ public class UserManagement {
      * Get a user by ID. Returns the user or null if not found.
      */
     public User getUser(int id) {
+        User userFound = null;
         Preconditions.checkArgument(id > 0, "Invalid ID");
         for (User user : users) {
             if (user.getID() == id) {
-                return user;
+                userFound = user;
             }
         }
-        return null;
+        return userFound;
     }
 
     /*
@@ -44,9 +45,10 @@ public class UserManagement {
     public boolean userExistsBoolean(int id) {
         Preconditions.checkArgument(id > 0, "Invalid ID");
         boolean userExists = false;
-        for (int i = 0; i < users.size() && !userExists; i++) {
-            if ( (users.get(i)).getID() == (id) ) {
+        for (User user : users) {
+            if (user.getID() == (id)) {
                 userExists = true;
+                break;
             }
         }
         return userExists;

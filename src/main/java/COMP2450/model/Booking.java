@@ -13,13 +13,10 @@ public class Booking {
     /*
      * Make a new Booking.
      *
-     * Checks (Preconditions):
+     * Preconditions:
      *  - resource is not null
      *  - memberName is not null/empty
      *  - timeSlot is not null
-     *
-     * Note: we do not check here if the timeSlot is valid or available.
-     *       The caller should ask the Resource (isAvailable) before creating/adding a Booking.
      */
     public Booking(Resource resource, String memberName, String timeSlot) {
         Preconditions.checkNotNull(resource);
