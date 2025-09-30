@@ -50,8 +50,8 @@ direction LR
     }
 
 Library "1" *-- "1" Map : layout  %% composition (Map exists for one Library)
-Library "1" o-- "0..*" Resource : resources  %% aggregation
-Library "1" o-- "0..*" MediaInterface : catalog  %% aggregation
+Library "1"  --o "0..*" Resource : resources  %% aggregation
+Library "1" --o "0..*" MediaInterface : catalog  %% aggregation
 
 %% ===== Media hierarchy =====
 class MediaInterface {
@@ -233,69 +233,79 @@ Computer "1" --> "0..*" Booking : maintains
 StudyRoom "1" --> "1" Library : located at
 Computer "1" --> "1" Library : located at
 
-%% ===== Invariants (annotated as notes) =====
-note for Library "Class Invariants:
-name != null && !name.isEmpty()
+%% ===== Invariants  =====
+note for Library "Invariant properties:\n<ul>\n    
+<li>name != null</li>\n    
+<li>name.length() > 0</li>\n    
+<li>description != null</li>\n    
+<li>mediaAvailable != null</li>\n    
+<li>resources != null</li>\n    
+<li>map != null</li>\n    
+<li>loop: all mediaAvailable items are unique (no duplicate object references)</li>\n    
+<li>loop: all resources have unique names</li>\n</ul>"
 
-addMedia()
-Precondition: media != null.
-Postcondition: media is added to mediaAvailable.
-Invariant: mediaAvailable contains only unique media objects (no duplicates).
+note for Map "Invariant properties:\n<ul>\n    
+<li>map != null</li>\n    
+<li>library != null</li>\n</ul>"
 
-addResource()
-Precondition: resource != null.
-Postcondition: Resource is added to the resources list.
-Invariant: Each resource in the list has a unique name.
+note for Book "Invariant properties:\n<ul>\n    
+<li>title != null</li>\n   
+<li>author != null</li>\n    
+<li>publisher != null</li>\n    
+<li>library != null</li>\n    
+<li>genre != null</li>\n    
+<li>totalCopies >= 0</li>\n</ul>"
 
-removeMedia()
-Precondition: mediaId > 0
-Postcondition: media is removed from mediaAvailable
-Invariant: Each media in the list has a unique name.
+note for Movie "Invariant properties:\n<ul>\n    
+<li>title != null</li>\n    
+<li>director != null</li>\n    
+<li>library != null</li>\n    
+<li>genre != null</li>\n   
+ <li>totalCopies >= 0</li>\n</ul>"
 
-showMedia()
-Precondition: mediaId > 0
-Postcondition: media is found and returned from mediaAvailable
-Invariant: Each media in the list has a unique name.
-"
+note for Review "Invariant properties:\n<ul>\n    
+<li>user != null</li>\n    
+<li>media != null</li>\n    
+<li>comment != null</li>\n    
+<li>stars >= 1 && stars <= 10</li>\n</ul>"
 
-note for Book "totalCopies >= 0
-borrowMedia() only succeeds when totalCopies > 0 (post: totalCopies decreases by 1)
-returnMedia() increases totalCopies by 1
-"
+note for User "Invariant properties:\n<ul>\n    
+<li>username != null</li>\n    
+<li>username.length() > 0</li>\n    
+<li>id > 0</li>\n   
+<li>finesDue >= 0</li>\n    
+<li>itemsIssued != null</li>\n    
+<li>loop: all issued item IDs are valid</li>\n</ul>"
 
-note for Movie "INV-M1: totalCopies >= 0
-INV-M2: borrowMedia() only succeeds when totalCopies > 0 (post: totalCopies decreases by 1)
-INV-M3: returnMedia() increases totalCopies by 1
-"
+note for UserManagement "Invariant properties:\n<ul>\n    
+<li>users != null</li>\n    
+<li>loop: all user IDs are unique</li>\n</ul>"
 
-note for Review "INV-R1: stars in 1..10
-INV-R2: user != null and media != null
-"
+note for LibraryManagement "Invariant properties:\n<ul>\n    
+<li>libraries != null</li>\n    
+<li>loop: all libraries have unique names</li>\n</ul>"
 
-note for User "INV-U1: id is unique across all users
-INV-U2: finesDue >= 0
-"
+note for StudyRoom "Invariant properties:\n<ul>\n    
+<li>roomNumber != null</li>\n    
+<li>bookings != null</li>\n    
+<li>library != null</li>\n   
+<li>loop: each timeSlot appears at most once in bookings</li>\n</ul>"
 
-note for UserManagement "INV-UM1: addUser only when userExists(id) == null
-"
+note for Computer "Invariant properties:\n<ul>\n    
+<li>computerId != null</li>\n    
+<li>bookings != null</li>\n    
+<li>library != null</li>\n    
+<li>loop: each timeSlot appears at most once in bookings</li>\n</ul>"
 
-note for Resource "INV-RES1: addBooking(b) only if isAvailable(b.timeSlot) == true
-INV-RES1: a timeSlot appears at most once per resource
-"
+note for Booking "Invariant properties:\n<ul>\n    
+<li>resource != null</li>\n    
+<li>memberName != null && memberName.length() > 0</li>\n    
+<li>timeSlot != null</li>\n    
+<li>timeSlot ∈ TimeSlots.ONE_HOUR_SLOTS</li>\n</ul>"
 
-note for StudyRoom "INV-SR1: each timeSlot appears at most once in bookings for this room
-"
-
-note for Computer "INV-C1: each timeSlot appears at most once in bookings for this computer
-"
-
-note for Booking "INV-BK1: timeSlot ∈ TimeSlots.ONE_HOUR_SLOTS
-INV-BK2: memberName is non-empty"
-
-note for Map "Constructor
-Precondition: library is not null.
-Postcondition: A 2D char map is created.
-Invariant: Map contains layout data associated with the library."
+note for TimeSlots "Invariant properties:\n<ul>\n    
+<li>ONE_HOUR_SLOTS != null</li>\n    
+<li>loop: all time slots are valid and unique</li>\n</ul>"
 
 ```
 
