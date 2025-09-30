@@ -19,8 +19,8 @@ public class Library {
      * - registers this library in LibraryManagement
      */
     public Library(String name) {
+        Preconditions.checkArgument(name!=null && !name.isEmpty(), "Library name cannot be null or empty");
         this.name = name;
-        Preconditions.checkArgument(name!=null, "Library name cannot be null");
         this.mediaAvailable = new ArrayList<>();
         map = new Map(this);
         LibraryManagement.addLibrary(this);

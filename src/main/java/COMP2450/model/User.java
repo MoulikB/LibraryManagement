@@ -8,6 +8,7 @@ public class User {
     private final String username;
     private final int id;
     public static UserManagement userDB = new UserManagement();
+    private ArrayList<Review> reviewsWritten;
 
     private double finesDue;  // how much is owed (if any)
     private ArrayList<Integer> itemsIssued = new ArrayList<>(); // media IDs issued
@@ -28,6 +29,7 @@ public class User {
         this.username = username;
         this.id = id;
         userDB.addUser(this);
+        reviewsWritten = new ArrayList<>();
     }
 
     // Get the user's ID.
@@ -48,6 +50,15 @@ public class User {
     // Print all users in the database as a string (from userDB)
     public static void getStringOutput() {
          System.out.println(userDB.getUsers());
+    }
+
+    public void addReview(Review review) {
+        Preconditions.checkNotNull(review);
+        reviewsWritten.add(review);
+    }
+
+    public ArrayList<Review> getReviews() {
+        return reviewsWritten;
     }
 
     /*

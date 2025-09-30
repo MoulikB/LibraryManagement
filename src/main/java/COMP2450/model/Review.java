@@ -1,7 +1,11 @@
 package COMP2450.model;
 
 
-public record Review(User user, MediaInterface media,String comment, int stars) {
+import com.google.common.base.Preconditions;
+
+public record Review(User user, MediaInterface media, String comment, int stars) {
+
+
 
     /*
     Returns the review as a string

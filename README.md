@@ -139,18 +139,20 @@ Book "1" --> "1" Library : belongs to
 Movie "1" --> "1" Library : belongs to
 Book "1" --> "1" MediaGenres
 Movie "1" --> "1" MediaGenres
+User "1" o-- "0..*" Review : writes >
 
-%% ===== Users =====
 %% ===== Users =====
 class User {
     -username: String
     -id: int
     -finesDue: double
     -itemsIssued: ArrayList<int>
+    -reviewsWritten: ArrayList<Review>
     +User(username, id)
+    +addReview(review: Review) void
+    +getReviews(): ArrayList<Review>
     +getUsername() String
     +getID() int
-    +payFine(amount: double) void
     +equals(other: Object) boolean
 }
 
@@ -232,15 +234,33 @@ StudyRoom "1" --> "1" Library : located at
 Computer "1" --> "1" Library : located at
 
 %% ===== Invariants (annotated as notes) =====
-note for Library "INV-L1: name is non-empty
-INV-L2: mediaAvailable items are unique by identity (no duplicate object refs)
-INV-L3: resources are unique per Library (no duplicate resource names)
-INV-L4: has a non-null Map after construction
+note for Library "Class Invariants:
+name != null && !name.isEmpty()
+
+addMedia()
+Precondition: media != null.
+Postcondition: media is added to mediaAvailable.
+Invariant: mediaAvailable contains only unique media objects (no duplicates).
+
+addResource()
+Precondition: resource != null.
+Postcondition: Resource is added to the resources list.
+Invariant: Each resource in the list has a unique name.
+
+removeMedia()
+Precondition: mediaId > 0
+Postcondition: media is removed from mediaAvailable
+Invariant: Each media in the list has a unique name.
+
+showMedia()
+Precondition: mediaId > 0
+Postcondition: media is found and returned from mediaAvailable
+Invariant: Each media in the list has a unique name.
 "
 
-note for Book "INV-B1: totalCopies >= 0
-INV-B2: borrowMedia() only succeeds when totalCopies > 0 (post: totalCopies decreases by 1)
-INV-B3: returnMedia() increases totalCopies by 1
+note for Book "totalCopies >= 0
+borrowMedia() only succeeds when totalCopies > 0 (post: totalCopies decreases by 1)
+returnMedia() increases totalCopies by 1
 "
 
 note for Movie "INV-M1: totalCopies >= 0
@@ -271,6 +291,11 @@ note for Computer "INV-C1: each timeSlot appears at most once in bookings for th
 
 note for Booking "INV-BK1: timeSlot ∈ TimeSlots.ONE_HOUR_SLOTS
 INV-BK2: memberName is non-empty"
+
+note for Map "Constructor
+Precondition: library is not null.
+Postcondition: A 2D char map is created.
+Invariant: Map contains layout data associated with the library."
 
 ```
 
