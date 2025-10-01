@@ -32,7 +32,7 @@ public class Computer implements Resource {
 
     // The display name of this resource.
     public String getResourceName() {
-        return "Computer " + computerId;
+        return computerId;
     }
 
     /*

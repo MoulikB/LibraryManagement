@@ -30,91 +30,107 @@ public class Main {
         chooseOption(scnr);
     }
 
-    public static void chooseOption(Scanner scnr){
-        
+    public static void chooseOption(Scanner scnr) {
         printOptions();
         int input = getIntInput(scnr);
         switch (input) {
             case 1: {
                 addMember(scnr);
                 break;
-            } case 2: {
-                removeMember(scnr);
-                break;
-            } case 3 : {
+            }
+            case 2: {
                 showMember(scnr);
                 break;
-            } case 4: {
+            }
+            case 3: {
                 addLibrary(scnr);
                 break;
-            } case 5: {
+            }
+            case 4: {
                 showLibrary(scnr);
                 break;
-            } case 6: {
+            }
+            case 5: {
+                addMedia(scnr);
+                break;
+            }
+            case 6: {
+                showMedia(scnr);
+                break;
+            }
+            case 7: {
+                addResource(scnr);
+                break;
+            }
+            case 8: {
+                showResource(scnr);
+                break;
+            }
+            case 9: {
+                addReview(scnr);
+                break;
+            }
+            case 10: {
+                showReviews(scnr);
+                break;
+            }
+            case 11: {
+                showMap(scnr);
+                break;
+            }
+            case 12: {
+                removeMedia(scnr);
+                break;
+            }
+            case 13: {
+                removeMember(scnr);
+                break;
+            }
+            case 14: {
                 removeLibrary(scnr);
                 break;
             }
-            case 7 : {
-                addMedia(scnr);
-                break;
-            } case 8: {
-                removeMedia(scnr);
-                break;
-            } case 9: {
-                showMedia(scnr);
-                break;
-            } case 10: {
-                addResource(scnr);
-                break;
-            } case 11: {
-                showResource(scnr);
-                break;
-            } case 12: {
-                addReview(scnr);
-                break;
-            } case 13: {
-                showReviews(scnr);
-                break;
-            } case 14: {
-                showMap(scnr);
-                break;
-            } case 15: {
+            case 15: {
                 reset(scnr);
                 break;
-            } case 16: {
+            }
+            case 16: {
                 System.exit(0);
                 break;
             }
-
+            default: {
+                System.out.println("Invalid choice, please try again.");
+                chooseOption(scnr);
+            }
         }
     }
+
+    public static void printOptions() {
+        System.out.println("1. ADD MEMBER");
+        System.out.println("2. SHOW MEMBER");
+        System.out.println("3. ADD LIBRARY");
+        System.out.println("4. SHOW LIBRARY");
+        System.out.println("5. ADD MEDIA");
+        System.out.println("6. SHOW MEDIA");
+        System.out.println("7. ADD RESOURCE");
+        System.out.println("8. SHOW RESOURCE");
+        System.out.println("9. ADD REVIEW");
+        System.out.println("10. SHOW REVIEWS");
+        System.out.println("11. SHOW MAP");
+        System.out.println("12. REMOVE MEDIA");
+        System.out.println("13. REMOVE MEMBER");
+        System.out.println("14. REMOVE LIBRARY");
+        System.out.println("15. RESET");
+        System.out.println("16. EXIT");
+        System.out.print("Enter the corresponding choice by number: ");
+    }
+
 
     public static void reset(Scanner scnr){
         UserManagement.reset();
         LibraryManagement.reset();
         System.out.println("Reset successful");
         mainMenu(scnr);
-    }
-
-    public static void printOptions(){
-        System.out.println("1. ADD MEMBER");
-        System.out.println("2. REMOVE MEMBER");
-        System.out.println("3. SHOW MEMBER");
-        System.out.println("4. ADD LIBRARY");
-        System.out.println("5. SHOW LIBRARY");
-        System.out.println("6. REMOVE LIBRARY");
-        System.out.println("7. ADD MEDIA");
-        System.out.println("8. REMOVE MEDIA");
-        System.out.println("9. SHOW MEDIA");
-        System.out.println("10. ADD RESOURCE");
-        System.out.println("11. SHOW RESOURCE");
-        System.out.println("12. ADD REVIEW");
-        System.out.println("13. SHOW REVIEW");
-        System.out.println("14. SHOW MAP");
-        System.out.println("15. RESET");
-        System.out.println("16. EXIT");
-        System.out.println("Enter the corresponding choice by using the number along the option : ");
-
     }
 
     static void addMember(Scanner scnr) {
@@ -286,13 +302,15 @@ public class Main {
         String director = getStringInput(scnr);
 
 
-        System.out.println("Enter the genre (input has to be : \nHORROR,\n" +
-                "    COMEDY,\n" +
-                "    ACTION,\n" +
-                "    ROMANCE,\n" +
-                "    THRILLER,\n" +
-                "    FICTION,\n" +
-                "    NONFICTION): ");
+        System.out.println("""
+                Enter the genre (input has to be :\s
+                HORROR,
+                    COMEDY,
+                    ACTION,
+                    ROMANCE,
+                    THRILLER,
+                    FICTION,
+                    NONFICTION):\s""");
         MediaGenres genre = findGenre(getStringInput(scnr));
 
         System.out.println("Enter the mediaID (input has to be an integer greater than 0) : ");
@@ -433,7 +451,7 @@ public class Main {
 
     public static void showResource(Scanner scnr) {
 
-        System.out.print("Enter the name of the library to which the resource is to be added (input can't be null or empty) : ");
+        System.out.print("Enter the name of the library name (input can't be null or empty) : ");
         String name = getStringInput(scnr);
 
         Library library = LibraryManagement.findLibrary(name);

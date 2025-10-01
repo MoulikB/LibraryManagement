@@ -32,7 +32,7 @@ public class StudyRoom implements Resource {
 
     // The display name of this resource.
     public String getResourceName() {
-        return "Study Room " + roomName;
+        return roomName;
     }
 
     /*
