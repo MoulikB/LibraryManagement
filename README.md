@@ -1,11 +1,13 @@
 
 ---
-title: Library Management System
+title: Library Project!
 author: Moulik Bhatia (bhatiam3@myumanitoba.ca)
 date: Fall 2025
 ---
 
 # Domain model
+This repository contains a domain model and an initial implementation of our Library System.
+It maintains a simple library and user database management and manages users, media (books and movies) along with resources (computers and study rooms) and a booking system for said resources.
 
 ## Resources
 
@@ -16,13 +18,11 @@ date: Fall 2025
 
 ## Diagram
 
-Here is the diagram for my domain model
+Our domain model is a UML class diagram drawn using Mermaid.
 
 ```mermaid
 classDiagram
-direction LR
-
-%% ===== Core Library Domain =====
+%% ===== Core Library =====
     class Library {
         -name: String
         -description: String
@@ -118,12 +118,12 @@ class Movie {
     +toString() String
 }
 
-MediaInterface <|.. Book
-MediaInterface <|.. Movie
+MediaInterface <|.. Book : an instance of
+MediaInterface <|.. Movie : an instance of
 Book "1" --> "1" Library : belongs to
 Movie "1" --> "1" Library : belongs to
-Book "1" --> "1" MediaGenres
-Movie "1" --> "1" MediaGenres
+Book "1" --> "1" MediaGenres : describes
+Movie "1" --> "1" MediaGenres : describes
 
 %% ===== Reviews =====
 class Review {
@@ -132,14 +132,10 @@ class Review {
   +media: MediaInterface
   +comment: String
   +stars: int
+  +toString() : String
 }
-MediaInterface <|.. Book
-MediaInterface <|.. Movie
-Book "1" --> "1" Library : belongs to
-Movie "1" --> "1" Library : belongs to
-Book "1" --> "1" MediaGenres
-Movie "1" --> "1" MediaGenres
-User "1" o-- "0..*" Review : writes >
+
+User "1" -- "0.." Review : writes >
 
 %% ===== Users =====
 class User {
@@ -166,7 +162,7 @@ class UserManagement {
     +getUsers() String
     +reset() void
 }
-UserManagement "1" o-- "0..*" User : manages  %% aggregation
+UserManagement "1" --> "0..*" User : manages  %% aggregation
 
 %% ===== Libraries collection =====
 class LibraryManagement {
@@ -177,7 +173,7 @@ class LibraryManagement {
     +reset() void }
         
 
-LibraryManagement "1" o-- "0..*" Library : catalogs
+LibraryManagement "1" --> "0..*" Library : catalogs
 
 %% ===== Bookable Resources =====
 class Resource {
@@ -228,10 +224,10 @@ class TimeSlots {
 Resource <|.. StudyRoom
 Resource <|.. Computer
 Booking "1" --> "1" Resource : books
-StudyRoom "1" --> "0..*" Booking : maintains
-Computer "1" --> "0..*" Booking : maintains
-StudyRoom "1" --> "1" Library : located at
-Computer "1" --> "1" Library : located at
+StudyRoom "1" <-- "0..*" Booking : maintains
+Computer "1" <-- "0..*" Booking : maintains
+StudyRoom "1" <-- "1" Library : located at
+Computer "1" <-- "1" Library : located at
 
 %% ===== Invariants  =====
 note for Library "Invariant properties:\n<ul>\n    
