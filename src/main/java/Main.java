@@ -124,7 +124,13 @@ public class Main {
         System.out.print("Enter new ID (input has to be an integer greater than 0) : ");
         int id = getIntInput(scnr);
 
-        new User(username,id);
+        System.out.print("Enter your email (input can't be null or empty):");
+        String email = getStringInput(scnr);
+
+        System.out.print("Enter your phone number (input has to be an integer greater than 0) :");
+        int phone = getIntInput(scnr);
+
+        new User(username,id , email, phone);
         chooseOption(scnr);
     }
 
@@ -280,7 +286,13 @@ public class Main {
         String director = getStringInput(scnr);
 
 
-        System.out.println("Enter the genre (input can't be null or empty): ");
+        System.out.println("Enter the genre (input has to be : \nHORROR,\n" +
+                "    COMEDY,\n" +
+                "    ACTION,\n" +
+                "    ROMANCE,\n" +
+                "    THRILLER,\n" +
+                "    FICTION,\n" +
+                "    NONFICTION): ");
         MediaGenres genre = findGenre(getStringInput(scnr));
 
         System.out.println("Enter the mediaID (input has to be an integer greater than 0) : ");

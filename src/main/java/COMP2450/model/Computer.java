@@ -5,8 +5,11 @@ import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 
 /**
- * Represents a computer resource that can be booked.
+ * Computer
+ * A computer resource located in a library, identified by computer ID,
+ * and maintaining non-overlapping bookings.
  */
+
 public class Computer implements Resource {
     private final String computerId;
     private ArrayList<Booking> bookings;

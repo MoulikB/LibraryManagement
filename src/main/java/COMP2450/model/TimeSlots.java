@@ -3,9 +3,12 @@ package COMP2450.model;
 import java.util.Arrays;
 import java.util.List;
 
-/*
-A string List of all the available time slots to ease the booking process
+/**
+ * TimeSlots
+ * Utility class defining canonical one-hour booking slots,
+ * used to standardize scheduling across all resources.
  */
+
 public class TimeSlots {
     public static final List<String> ONE_HOUR_SLOTS = Arrays.asList(
             "09:00-10:00",

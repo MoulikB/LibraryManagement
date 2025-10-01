@@ -2,6 +2,12 @@ package COMP2450.model;
 
 import com.google.common.base.Preconditions;
 
+/**
+ * Book
+ * A book stored in a library’s catalog, identified by ISBN,
+ * with data like author and publisher, and tracked by available copies.
+ */
+
 public class Book implements MediaInterface {
     private final String title;
     private final String author;

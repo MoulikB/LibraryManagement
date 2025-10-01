@@ -4,6 +4,12 @@ import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
 
+/**
+ * StudyRoom
+ * A room resource located in a library, identified by room number,
+ * and maintaining non-overlapping bookings.
+ */
+
 public class StudyRoom implements Resource {
     private String roomName;
     private ArrayList<Booking> bookings;

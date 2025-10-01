@@ -2,12 +2,20 @@ package COMP2450.model;
 
 import com.google.common.base.Preconditions;
 
+/**
+ * User
+ * A registered library member with a unique ID, username, fines,
+ * issued items, and a history of written reviews.
+ */
+
 import java.util.ArrayList;
 public class User {
    
     private final String username;
     private final int id;
     public static UserManagement userDB = new UserManagement();
+    private String email;
+    private int phone;
     private ArrayList<Review> reviewsWritten;
 
     private double finesDue;  // how much is owed (if any)
@@ -23,11 +31,15 @@ public class User {
      *
      * If checks pass, the user is registered in userDB.
      */
-    public User(String username,int id)  {
+    public User(String username,int id, String email,int phone)  {
         Preconditions.checkArgument(username!= null && !username.isEmpty(), "Username cannot be empty");
         Preconditions.checkArgument(id > 0, "ID cannot be less than 1");
+        Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cannot be empty");
+        Preconditions.checkArgument(phone > 0, "Phone number cannot be negative has to be in format : (1234567890)");
         this.username = username;
         this.id = id;
+        this.email = email;
+        this.phone = phone;
         userDB.addUser(this);
         reviewsWritten = new ArrayList<>();
     }
@@ -44,7 +56,7 @@ public class User {
 
     // Get the user's info.
     public String userInfo() {
-        return "ID : " + getID() + " , Name :" + getUsername();
+        return "ID : " + this.id + " , Name :" + this.username + ", Email : " + this.email + ", Phone : " + this.phone;
     }
 
     // Print all users in the database as a string (from userDB)
@@ -67,11 +79,11 @@ public class User {
      * - Otherwise, returns true if their IDs are equal.
      */
     public boolean equals(User other) {
-        boolean output = false;
+        boolean output;
         if (this == other) {
             output = true;
         } else {
-            output =  this.id == other.id;
+            output =  (this.id == other.id);
         }
         return output;
     }

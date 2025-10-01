@@ -1,8 +1,8 @@
 
 ---
-title: Library Project!
+title: Library Management System
 author: Moulik Bhatia (bhatiam3@myumanitoba.ca)
-date: Fall 2025
+date: 30 September 2025
 ---
 
 # Domain model

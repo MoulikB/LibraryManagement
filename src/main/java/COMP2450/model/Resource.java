@@ -1,5 +1,11 @@
 package COMP2450.model;
 
+/**
+ * Resource
+ * Interface for in library bookable resources : study rooms or computers,
+ * providing naming and booking availability checks.
+ */
+
 public interface Resource {
     // Each resource should have a name or ID to identify it
     String getResourceName();

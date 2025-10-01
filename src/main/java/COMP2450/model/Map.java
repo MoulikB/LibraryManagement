@@ -3,6 +3,12 @@ package COMP2450.model;
 
 import com.google.common.base.Preconditions;
 
+/**
+ * Map
+ * An ASCII grid map that represents the physical layout of a library,
+ * including spaces, categories, and walkable areas.
+ */
+
 public class Map {
     private char[][] map;
     public Library library;

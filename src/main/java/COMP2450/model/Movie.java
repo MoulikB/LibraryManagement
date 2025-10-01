@@ -2,6 +2,12 @@ package COMP2450.model;
 
 import com.google.common.base.Preconditions;
 
+/**
+ * Movie
+ * A movie stored in a library’s catalog, identified by an ID,
+ * with data like director and genre, and tracked by available copies.
+ */
+
 public class Movie implements MediaInterface {
     private final String title;
     private final String director;
@@ -14,7 +20,7 @@ public class Movie implements MediaInterface {
      * Constructor: makes a new Movie and adds it to the given library.
      *
      * Preconditions:
-     *  - title, director, library, genre are not null
+     *  - title, director, library, genre are not null or empty
      *  - mediaID is not negative
      */
     public Movie(String title, String director, int mediaID,
@@ -39,17 +45,22 @@ public class Movie implements MediaInterface {
         return "Movie";
     }
 
-    // The creator for a movie is the director.
+    /**
+    @return The director of the movie
+     */
     public String getCreator() {
         return this.director;
     }
 
-    // Return the genre of this movie.
+    /**
+     *
+     * @return Return the genre of this movie.
+     */
     public MediaGenres getMediaGenre() {
         return this.genre;
     }
 
-    /*
+    /**
      * Try to borrow one copy.
      * If at least one copy is available, decrease the count and return true.
      */
@@ -62,27 +73,36 @@ public class Movie implements MediaInterface {
         return result;
     }
 
-    // Return one copy (increase the available count by 1).
+    /** Return one copy (increase the available count by 1).
+     */
     public void returnMedia() {
         totalCopies++;
     }
 
-    // Get the title.
+    /** @return Get the title.
+     */
     public String getTitle() {
         return this.title;
     }
 
-    // How many copies can be borrowed right now.
+    /** @return How many copies can be borrowed right now.
+     */
     public int getAvailableCopies() {
         return this.totalCopies;
     }
 
-    // Which library this movie belongs to.
+    /**
+     *
+     * @return Which library this movie belongs to.
+     */
     public Library getLibrary() {
         return this.library;
     }
 
-    // Get the media ID for this movie.
+    /**
+     *
+     * @return Get the media ID for this movie.
+     */
     public int getMediaID() {
         return this.mediaID;
     }
@@ -92,7 +112,10 @@ public class Movie implements MediaInterface {
         this.totalCopies++;
     }
 
-    // A simple text summary of the movie
+    /**
+     *
+     * @return A simple text summary of the movie
+     */
     public String toString() {
         return "Movie [title=" + title + ", director=" + director + ", mediaID=" + mediaID +" , genre= " + genre + "]";
     }

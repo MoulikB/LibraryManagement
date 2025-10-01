@@ -3,6 +3,10 @@ package COMP2450.model;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
+/**
+ * Library
+ * A library branch that holds media items, bookable resources, and a map of its layout.
+ */
 
 public class Library {
 

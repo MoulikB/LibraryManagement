@@ -3,8 +3,11 @@ package COMP2450.model;
 import com.google.common.base.Preconditions;
 
 /**
- * Represents a booking of a resource for a specific time slot.
+ * Booking
+ * A reservation record for a resource at a specific time slot,
+ * storing which member made the booking.
  */
+
 public class Booking {
     private Resource resource;  // Which resource is booked
     private String memberName;  // Who booked it

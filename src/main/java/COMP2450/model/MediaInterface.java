@@ -4,9 +4,12 @@ import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
 
-/*
-Interface implementation for movie and book
+/**
+ * MediaInterface
+ * Common interface for borrowable media such as books and movies,
+ * defining access and borrow/return behavior.
  */
+
 public interface MediaInterface {
 
     ArrayList<Review> reviews = new ArrayList<>();

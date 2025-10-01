@@ -4,6 +4,12 @@ import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
 
+/**
+ * LibraryManagement
+ * Top-level container for all libraries in the system,
+ * supporting addition, lookup, and reset of library records.
+ */
+
 public class LibraryManagement {
 
     public static ArrayList<Library> libraries = new ArrayList<>();

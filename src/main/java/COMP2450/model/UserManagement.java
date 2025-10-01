@@ -4,6 +4,12 @@ import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
 
+/**
+ * UserManagement
+ * Manages the system’s users, allowing creation, removal, lookup,
+ * and listing of all registered members.
+ */
+
 public class UserManagement {
     private static ArrayList<User> users;
 
