@@ -144,7 +144,7 @@ public class Main {
         String email = getStringInput(scnr);
 
         System.out.print("Enter your phone number (input has to be an integer greater than 0) :");
-        String phone = getStringInput(scnr);
+        int phone = getIntInput(scnr);
 
         new User(username,id , email, phone);
         chooseOption(scnr);
