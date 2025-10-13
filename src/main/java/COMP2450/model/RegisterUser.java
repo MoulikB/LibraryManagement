@@ -28,9 +28,8 @@ public class RegisterUser {
         Preconditions.checkArgument(username != null && !username.isEmpty(), "Username cant be null");
         Preconditions.checkArgument(password != null && !password.isEmpty(), "Password cant be null");
         Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cant be null");
-        Preconditions.checkArgument(number != null && !number.isEmpty() && number.length() == 10, "Number must be greater than 0");
+        Preconditions.checkArgument((number != null) && ((!number.isEmpty() )&& (number.length() == 10)), "Number must be greater than 0");
 
-
-
+        new User(username,password,email,number);
     }
 }

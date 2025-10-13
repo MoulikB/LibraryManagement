@@ -32,7 +32,7 @@ public class User {
      *
      * If checks pass, the user is registered in userDB.
      */
-    public User(String username,int id, String email,String phone)  {
+    public User(String username,String password, String email,String phone)  {
         Preconditions.checkArgument(username!= null && !username.isEmpty(), "Username cannot be empty");
         Preconditions.checkArgument(id > 0, "ID cannot be less than 1");
         Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cannot be empty");
