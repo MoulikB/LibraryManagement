@@ -12,10 +12,11 @@ import java.util.ArrayList;
 public class User {
    
     private final String username;
+    String password;
     private final int id;
     public static UserManagement userDB = new UserManagement();
     private String email;
-    private int phone;
+    private String phone;
     private ArrayList<Review> reviewsWritten;
 
     private double finesDue;  // how much is owed (if any)
@@ -31,11 +32,11 @@ public class User {
      *
      * If checks pass, the user is registered in userDB.
      */
-    public User(String username,int id, String email,int phone)  {
+    public User(String username,int id, String email,String phone)  {
         Preconditions.checkArgument(username!= null && !username.isEmpty(), "Username cannot be empty");
         Preconditions.checkArgument(id > 0, "ID cannot be less than 1");
         Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cannot be empty");
-        Preconditions.checkArgument(phone > 0, "Phone number cannot be negative has to be in format : (1234567890)");
+        Preconditions.checkArgument(phone != null && !phone.isEmpty(), "Phone number cannot be negative has to be in format : (1234567890)");
         this.username = username;
         this.id = id;
         this.email = email;
