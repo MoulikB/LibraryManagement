@@ -15,6 +15,7 @@ public class Computer implements Resource {
     private ArrayList<Booking> bookings;
     Library library;
 
+
     /*
      * Make a new Computer and add it to the library.
      * Checks:

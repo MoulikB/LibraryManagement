@@ -13,13 +13,14 @@ public class User {
    
     private final String username;
     private final int id;
+    private final String password;
     public static UserManagement userDB = new UserManagement();
-    private String email;
-    private int phone;
+    private final String email;
+    private final String phone;
     private ArrayList<Review> reviewsWritten;
 
-    private double finesDue;  // how much is owed (if any)
-    private ArrayList<Integer> itemsIssued = new ArrayList<>(); // media IDs issued
+    private int finesDue;  // how much is owed (if any)
+    private ArrayList<MediaInterface> itemsIssued = new ArrayList<>(); // media IDs issued
     // Not using the above two in current implementation, will be added later when waitlist and mediaIssue class is added
 
     /*
@@ -31,13 +32,14 @@ public class User {
      *
      * If checks pass, the user is registered in userDB.
      */
-    public User(String username,int id, String email,int phone)  {
+    public User(String username,String password, String email,String phone , int id)  {
         Preconditions.checkArgument(username!= null && !username.isEmpty(), "Username cannot be empty");
         Preconditions.checkArgument(id > 0, "ID cannot be less than 1");
         Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cannot be empty");
-        Preconditions.checkArgument(phone > 0, "Phone number cannot be negative has to be in format : (1234567890)");
+        Preconditions.checkArgument(phone != null && !phone.isEmpty(), "Phone number cannot be negative has to be in format : 1234567890");
         this.username = username;
         this.id = id;
+        this.password = password;
         this.email = email;
         this.phone = phone;
         userDB.addUser(this);
@@ -52,6 +54,10 @@ public class User {
     // Get the user's username.
     public String getUsername() {
         return this.username;
+    }
+
+    public String getPassword() {
+        return this.password;
     }
 
     // Get the user's info.
@@ -84,6 +90,71 @@ public class User {
             output = true;
         } else {
             output =  (this.id == other.id);
+        }
+        return output;
+    }
+
+    public void issue(MediaInterface media) {
+        this.itemsIssued.add(media);
+    }
+
+    public boolean borrowMedia(MediaInterface media) {
+        boolean output = false;
+        if (media.getAvailableCopies() >= 1) {
+
+            media.issueUser(this);
+            output = true;
+
+        } else {
+            media.addWaitlist(this);
+        }
+        return output;
+    }
+
+    public int calculateFinesDue() {
+        this.finesDue = 0;
+        checkBooksFines();
+        checkMovieFines();
+        return finesDue;
+    }
+
+    public void checkBooksFines() {
+
+        for (MediaInterface media : itemsIssued) {
+            if (media.getMediaType().equals("Book")) {
+                checkBookFines((Book) media);
+            }
+        }
+
+    }
+
+    public void checkMovieFines() {
+
+        for (MediaInterface media : itemsIssued) {
+            if (media.getMediaType().equals("Movie")) {
+                checkMovieFines((Movie) media);
+            }
+        }
+
+    }
+
+    public void checkBookFines(Book book) {
+        if (book.issuedDays > 5) {
+            finesDue += 2;
+        }
+    }
+
+    public void checkMovieFines(Movie movie) {
+        if (movie.issuedDays > 5) {
+            finesDue += 2;
+        }
+    }
+
+    public boolean checkOverDue() {
+        boolean output = false;
+        calculateFinesDue();
+        if (finesDue >= 2) {
+            output = true;
         }
         return output;
     }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
  */
 
 public class UserManagement {
+    static int nextID = 0;
     private static ArrayList<User> users;
 
     /*
@@ -97,10 +98,84 @@ public class UserManagement {
         return output;
     }
 
+
     /*
      * Clear the list of users (reset to empty).
      */
     public static void reset() {
         users = new ArrayList<>();
     }
+
+    /*
+     * Handles the user registration process by taking and validating input
+     */
+    public void registerUser() {
+
+        System.out.print("Welcome to the Registration process ");
+
+        System.out.print("Enter Your Username :");
+        String username = InputValidation.getStringInput();
+
+        System.out.print("Enter Your Password :");
+        String password = InputValidation.getStringInput();
+
+        System.out.print("Enter Your Email Address :");
+        String email = InputValidation.getStringInput();
+
+        System.out.print("Enter Your Number :");
+        String number = InputValidation.getStringInput();
+
+        Preconditions.checkArgument(username != null && !username.isEmpty(), "Username cant be null");
+        Preconditions.checkArgument(password != null && !password.isEmpty(), "Password cant be null");
+        Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cant be null");
+        Preconditions.checkArgument((number != null) && ((number.length() == 10)), "Number must be not null and 10 digits");
+
+        new User(username,password,email,number, UserManagement.nextID);
+
+    }
+
+
+    /*
+     * Handles the user login process by taking and validating input. It retries till the user gives up or gets a valid user
+     */
+    public User loginUser() {
+
+        User userFound = null;
+        boolean flag = true;
+
+        System.out.println("Welcome to the Log In process.");
+
+
+        while (flag && userFound == null) {
+            System.out.print("Enter Your Username :");
+            String username = InputValidation.getStringInput();
+
+            System.out.print("Enter Your Password :");
+            String password = InputValidation.getStringInput();
+
+            Preconditions.checkArgument(username != null && !username.isEmpty(), "Username cant be null");
+            Preconditions.checkArgument(password != null && !password.isEmpty(), "Password cant be null");
+
+            for (var currUser : users) {
+                if (((currUser.getUsername()).equals(username)) && ((currUser.getPassword()).equals(password))) {
+                    userFound = currUser;
+                }
+            }
+
+            if (userFound == null) {
+
+                System.out.println("Invalid Username or password");
+                System.out.println("Try again? [Y/N]");
+
+                if (!InputValidation.getStringInput().equalsIgnoreCase("y")) {
+                    flag = false;
+                }
+            }
+        }
+
+        return userFound;
+
+    }
+
+
 }

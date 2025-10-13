@@ -15,6 +15,7 @@ public class Movie implements MediaInterface {
     private final Library library;
     private final MediaGenres genre;
     int totalCopies = 0;
+    int issuedDays = 1;
 
     /*
      * Constructor: makes a new Movie and adds it to the given library.

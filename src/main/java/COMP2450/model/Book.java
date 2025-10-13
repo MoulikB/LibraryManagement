@@ -16,6 +16,7 @@ public class Book implements MediaInterface {
     private Library library;
     private final MediaGenres genre;
     int totalCopies = 0;
+    int issuedDays = 1;
 
     /*
      * Constructor: makes a new Book and adds it to the given library.

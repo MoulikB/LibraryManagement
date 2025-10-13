@@ -14,6 +14,12 @@ public interface MediaInterface {
 
     ArrayList<Review> reviews = new ArrayList<>();
 
+    ArrayList<User> waitlist = new ArrayList<>();
+
+    ArrayList<User> issuedUsers = new ArrayList<>();
+
+
+
     String getMediaType();
 
     String getCreator();
@@ -93,6 +99,17 @@ public interface MediaInterface {
     // Get all reviews from the shared list.
     default ArrayList<Review> getReviews() {
         return reviews;
+    }
+
+    default ArrayList<User> getWaitlist() {return waitlist;}
+
+    default void addWaitlist(User user) {
+        waitlist.add(user);
+    }
+
+    default void issueUser(User user) {
+        this.issuedUsers.add(user);
+        user.issue(this);
     }
 
 }
