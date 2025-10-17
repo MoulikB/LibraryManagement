@@ -49,12 +49,10 @@ public class Map {
     Prints out map
      */
     public void printMap() {
-        for (char[] chars : map) {
-            for (char c : chars) {
-                System.out.print(c);
+            for (char[] line : map) {
+                System.out.println(new String(line));
             }
-            System.out.println();
-        }
+
         System.out.println("\nLegend:");
         System.out.println("💻 : Computer Lab");
         System.out.println("🚪 : Entrance");
@@ -70,5 +68,9 @@ public class Map {
         System.out.println("|  : Wall of private study spaces");
         System.out.println("D  : Door");
         System.out.println("~  : Boundary of Main Desk");
+    }
+
+    public char[][] getGrid() {
+        return map;
     }
 }

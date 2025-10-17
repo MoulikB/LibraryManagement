@@ -30,6 +30,7 @@ public class RegisterUser {
         Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cant be null");
         Preconditions.checkArgument((number != null) && ((!number.isEmpty() )&& (number.length() == 10)), "Number must be greater than 0");
 
-        new User(username,password,email,number);
+        new User(username,password,email,number,id);
+        id++;
     }
 }
