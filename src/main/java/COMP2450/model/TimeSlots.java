@@ -10,6 +10,11 @@ import java.util.List;
  */
 
 public class TimeSlots {
+    private final String value;
+    public TimeSlots(String value) { this.value = value; }
+
+    public String value() { return value; }
+
     public static final List<String> ONE_HOUR_SLOTS = Arrays.asList(
             "09:00-10:00",
             "10:00-11:00",

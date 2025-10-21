@@ -3,6 +3,7 @@ package COMP2450.model;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
+import java.util.List;
 /**
  * Library
  * A library branch that holds media items, bookable resources, and a map of its layout.
@@ -11,9 +12,11 @@ import java.util.ArrayList;
 public class Library {
 
     String name;
-    ArrayList<MediaInterface> mediaAvailable;
+    List<MediaInterface> mediaAvailable;
     Map map;
-    ArrayList<Resource> resources = new ArrayList<>();
+    List<Resource> resources = new ArrayList<>();
+    public static LibraryManagement libraryManagement = new LibraryManagement();
+
 
     /*
      * Make a new Library.
@@ -30,6 +33,13 @@ public class Library {
         LibraryManagement.addLibrary(this);
     }
 
+    public void checkInvariants(){
+        Preconditions.checkArgument(name!=null && !name.isEmpty(), "Library name cannot be null or empty");
+        Preconditions.checkArgument(mediaAvailable!=null, "Library media cannot be null or empty");
+        Preconditions.checkArgument(resources!=null, "Library resources cannot be null or empty");
+        Preconditions.checkArgument(map!=null, "Library map cannot be null or empty");
+    }
+
     // Add a media item (book/movie) to this library.
     public void addMedia(MediaInterface media) {
         Preconditions.checkArgument(media!=null, "Media object cannot be null");
@@ -37,14 +47,8 @@ public class Library {
     }
 
     // Get all media in this library.
-    public ArrayList<MediaInterface> getMediaAvailable() {
+    public List<MediaInterface> getMediaAvailable() {
         return mediaAvailable;
-    }
-
-    // A simple text summary of the library.
-    @Override
-    public String toString() {
-        return "Library : " + this.name;
     }
 
     // Get/set the library name.
@@ -53,7 +57,9 @@ public class Library {
     }
 
     public void setName(String name) {
+        Preconditions.checkArgument(name != null && !name.isEmpty(), "Library name cannot be null or empty");
         this.name = name;
+        checkInvariants();
     }
 
     // Access the map object
@@ -61,12 +67,8 @@ public class Library {
         return map;
     }
 
-    public void printMap() {
-        map.printMap();
-    }
-
     // Get all resources (computers, study rooms, etc.).
-    public ArrayList<Resource> getResources() {
+    public List<Resource> getResources() {
         return resources;
     }
 
@@ -77,12 +79,15 @@ public class Library {
     }
 
     // Print info about one resource by name
-    public void showResource(String resourceName) {
+    public Resource getResource(String resourceName) {
+        Resource resourceFound = null;
         for (Resource resource : resources) {
             if (resource.getResourceName().equals(resourceName)) {
-                System.out.println(resource);
+                resourceFound = resource;
             }
         }
+        checkInvariants();
+        return resourceFound;
     }
 
     /*
@@ -91,15 +96,18 @@ public class Library {
     public void removeMedia(int mediaId) {
         Preconditions.checkArgument(mediaId > 0, "Media ID cannot be less than 1");
         boolean removed = false;
-        for (int i = 0 ; i < mediaAvailable.size() && !removed ; i++) {
-            if (mediaAvailable.get(i).getMediaID() == mediaId) {
-                mediaAvailable.remove(i);
+        int index = 0;
+        while (index < mediaAvailable.size() && !removed) {
+            if (mediaAvailable.get(index).getMediaID() == mediaId) {
+                mediaAvailable.remove(index);
                 removed = true;
             }
+            index++;
         }
         if (!removed) {
             System.out.println("Resource not found");
         }
+        checkInvariants();
 
     }
 
@@ -110,15 +118,16 @@ public class Library {
     public MediaInterface showMedia(int mediaId) {
         Preconditions.checkArgument(mediaId>0, "Media ID cannot be less than 1");
         MediaInterface media = null;
-        boolean removed = false;
-        for (MediaInterface mediaSearch : mediaAvailable) {
-            if (mediaSearch.getMediaID() == mediaId) {
-                media = mediaSearch;
-                removed = true;
+        int index = 0;
+        while (index < mediaAvailable.size() && media == null) {
+            if (mediaAvailable.get(index).getMediaID() == mediaId) {
+                media = mediaAvailable.get(index);
             }
-        }  if (!removed) {
+        }
+        if (media == null) {
             System.out.println("Resource not found");
         }
+        checkInvariants();
         return media;
     }
 }

@@ -3,6 +3,7 @@ package COMP2450.model;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MediaInterface
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 public interface MediaInterface {
 
-    ArrayList<Review> reviews = new ArrayList<>();
+
 
     String getMediaType();
 
@@ -34,65 +35,11 @@ public interface MediaInterface {
 
     void addCopies();
 
-    /*
-     * Check if this media already exists in its library (same mediaID).
-     * Returns true if found, false otherwise.
-     */
-    default boolean mediaExists(MediaInterface media) {
-        boolean mediaExists = false;
-        Preconditions.checkNotNull(media);
-        Library library = media.getLibrary();
+    void addReview(Review review);
 
-        ArrayList<MediaInterface> mediaAvailable = library.getMediaAvailable();
-        for (int i = 0; i < mediaAvailable.size() && !mediaExists; i++) {
-            if (mediaAvailable.get(i).getMediaID() == media.getMediaID()) {
-                mediaExists = true;
-            }
-        }
-        return mediaExists;
-    }
+    List<Review> getReviews();
 
-    /*
-     * Get the actual media object from the library that matches the given mediaID.
-     * Returns the matching media, or null if not found.
-     */
-    static MediaInterface getMedia(MediaInterface media) {
-        Preconditions.checkNotNull(media);
-        MediaInterface mediaFound = null;
-        Library library = media.getLibrary();
-        for (MediaInterface mediaAvailable : library.getMediaAvailable()) {
-            if (mediaAvailable.getMediaID() == media.getMediaID()) {
-                mediaFound = mediaAvailable;
-            }
-        }
-        return mediaFound;
-    }
+    boolean mediaExists(MediaInterface media);
 
-    /*
-     * Add this media to its library if it does not already exist.
-     * If it exists, increase the copy count instead.
-     */
-    default void addToLibrary(MediaInterface media) {
-        Preconditions.checkNotNull(media);
-        if (!mediaExists(media)) {
-            media.getLibrary().addMedia(media);
-        } else {
-            var existingCopy =  getMedia(media);
-            existingCopy.addCopies();
-        }
-    }
-
-    /*
-     * Add a review to the shared reviews list.
-     */
-    default void addReview(Review review) {
-        Preconditions.checkNotNull(review);
-        reviews.add(review);
-    }
-
-    // Get all reviews from the shared list.
-    default ArrayList<Review> getReviews() {
-        return reviews;
-    }
 
 }

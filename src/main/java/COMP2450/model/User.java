@@ -7,20 +7,20 @@ import com.google.common.base.Preconditions;
  * A registered library member with a unique ID, username, fines,
  * issued items, and a history of written reviews.
  */
-
 import java.util.ArrayList;
+import java.util.List;
+
 public class User {
    
     private final String username;
-    String password;
     private final int id;
     public static UserManagement userDB = new UserManagement();
-    private String email;
-    private String phone;
-    private ArrayList<Review> reviewsWritten;
+    private final String email;
+    private final int phone;
+    private List<Review> reviewsWritten;
 
     private double finesDue;  // how much is owed (if any)
-    private ArrayList<Integer> itemsIssued = new ArrayList<>(); // media IDs issued
+    private List<Integer> itemsIssued = new ArrayList<>(); // media IDs issued
     // Not using the above two in current implementation, will be added later when waitlist and mediaIssue class is added
 
     /*
@@ -32,17 +32,25 @@ public class User {
      *
      * If checks pass, the user is registered in userDB.
      */
-    public User(String username,String password, String email,String phone)  {
+    public User(String username,int id, String email,int phone)  {
         Preconditions.checkArgument(username!= null && !username.isEmpty(), "Username cannot be empty");
         Preconditions.checkArgument(id > 0, "ID cannot be less than 1");
         Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cannot be empty");
-        Preconditions.checkArgument(phone != null && !phone.isEmpty(), "Phone number cannot be negative has to be in format : (1234567890)");
+        Preconditions.checkArgument(phone > 0, "Phone number cannot be negative has to be in format : (1234567890)");
         this.username = username;
         this.id = id;
         this.email = email;
         this.phone = phone;
+        checkInvariants();
         userDB.addUser(this);
         reviewsWritten = new ArrayList<>();
+    }
+
+    public void checkInvariants() {
+        Preconditions.checkArgument(username!= null && !username.isEmpty(), "Username cannot be empty");
+        Preconditions.checkArgument(id > 0, "ID cannot be less than 1");
+        Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cannot be empty");
+        Preconditions.checkArgument(phone > 0, "Phone number cannot be negative has to be in format : (1234567890)");
     }
 
     // Get the user's ID.
@@ -55,22 +63,22 @@ public class User {
         return this.username;
     }
 
-    // Get the user's info.
-    public String userInfo() {
-        return "ID : " + this.id + " , Name :" + this.username + ", Email : " + this.email + ", Phone : " + this.phone;
+    public String getEmail() {
+        return this.email;
     }
 
-    // Print all users in the database as a string (from userDB)
-    public static void getStringOutput() {
-         System.out.println(userDB.getUsers());
+    public int getPhone() {
+        return this.phone;
     }
 
     public void addReview(Review review) {
         Preconditions.checkNotNull(review);
+        checkInvariants();
         reviewsWritten.add(review);
+        checkInvariants();
     }
 
-    public ArrayList<Review> getReviews() {
+    public List<Review> getReviews() {
         return reviewsWritten;
     }
 
@@ -80,6 +88,9 @@ public class User {
      * - Otherwise, returns true if their IDs are equal.
      */
     public boolean equals(User other) {
+        checkInvariants();
+        Preconditions.checkNotNull(other, "User cannot be null");
+        other.checkInvariants();
         boolean output;
         if (this == other) {
             output = true;

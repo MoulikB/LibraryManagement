@@ -3,6 +3,7 @@ package COMP2450.model;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Computer
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 public class Computer implements Resource {
     private final String computerId;
-    private ArrayList<Booking> bookings;
+    private final List<Booking> bookings = new ArrayList<>();
     Library library;
 
     /*
@@ -25,9 +26,14 @@ public class Computer implements Resource {
         Preconditions.checkArgument(computerId != null && !computerId.isEmpty(),"computerId cannot be null or empty");
         Preconditions.checkNotNull(library);
         this.computerId = computerId;
-        this.bookings = new ArrayList<>();
         this.library = library;
+        checkInvariants();
         library.addResource(this);
+    }
+
+    public void checkInvariants(){
+        Preconditions.checkArgument(computerId != null && !computerId.isEmpty(),"computerId cannot be null or empty");
+        Preconditions.checkNotNull(library, "library can't be null");
     }
 
     // The display name of this resource.
@@ -39,14 +45,18 @@ public class Computer implements Resource {
      * Is this time slot free?
      * Returns false if any existing booking has the same timeSlot.
      */
-    public boolean isAvailable(String timeSlot) {
+    public boolean isAvailable(TimeSlots timeSlot) {
         Preconditions.checkNotNull(timeSlot);
+        checkInvariants();
         boolean result = true;
-        for (int i = 0; i < bookings.size() && result; i++ ) {
-            if ((bookings.get(i).getTimeSlot().equals(timeSlot))) {
+        int index =0;
+        while (index < bookings.size() && result){
+            if ((bookings.get(index).timeSlot().equals(timeSlot))) {
                 result = false;
             }
+            index++;
         }
+        checkInvariants();
         return result;
     }
 
@@ -59,7 +69,7 @@ public class Computer implements Resource {
     }
 
     // Get all bookings for this computer.
-    public ArrayList<Booking> getBookings() {
+    public List<Booking> getBookings() {
         return bookings;
     }
 

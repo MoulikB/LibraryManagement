@@ -179,18 +179,18 @@ LibraryManagement "1" --> "0..*" Library : catalogs
 class Resource {
   <<interface>>
   +getResourceName() String
-  +isAvailable(timeSlot: String) boolean
+  +isAvailable(timeSlot: TimeSlots) boolean
   +addBooking(booking: Booking) void
 }
 
 class Booking {
     -resource: Resource
     -memberName: String
-    -timeSlot: String
-    +Booking(resource: Resource, memberName: String, timeSlot: String)
+    -timeSlot: TimeSlots
+    +Booking(resource: Resource, memberName: String, timeSlot: TimeSlots)
     +getResource() Resource
     +getMemberName() String
-    +getTimeSlot() String
+    +getTimeSlot() TimeSlots
     +toString() String
 }
 
@@ -200,7 +200,7 @@ class StudyRoom {
     -library: Library
     +StudyRoom(roomNumber: String, library: Library)
     +getResourceName() String
-    +isAvailable(timeSlot: String) boolean
+    +isAvailable(timeSlot: TimeSlots) boolean
     +addBooking(booking: Booking) void
     +getBookings() ArrayList<Booking>
 }
@@ -211,7 +211,7 @@ class Computer {
     -library: Library
     +Computer(computerId: String, library: Library)
     +getResourceName() String
-    +isAvailable(timeSlot: String) boolean
+    +isAvailable(timeSlot: TimeSlots) boolean
     +addBooking(booking: Booking) void
     +getBookings() ArrayList<Booking>
 }
@@ -228,6 +228,7 @@ StudyRoom "1" <-- "0..*" Booking : maintains
 Computer "1" <-- "0..*" Booking : maintains
 StudyRoom "1" <-- "1" Library : located at
 Computer "1" <-- "1" Library : located at
+Timeslot <-- Resource
 
 %% ===== Invariants  =====
 note for Library "Invariant properties:\n<ul>\n    

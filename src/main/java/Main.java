@@ -1,19 +1,7 @@
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-import COMP2450.model.Book;
-import COMP2450.model.Computer;
-import COMP2450.model.Library;
-import COMP2450.model.LibraryManagement;
-import COMP2450.model.MediaGenres;
-import COMP2450.model.MediaInterface;
-import COMP2450.model.Movie;
-import COMP2450.model.Resource;
-import COMP2450.model.Review;
-import COMP2450.model.StudyRoom;
-import COMP2450.model.TimeSlots;
-import COMP2450.model.User;
-import COMP2450.model.UserManagement;
+import COMP2450.model.*;
 
 public class Main {
 
@@ -144,7 +132,7 @@ public class Main {
         String email = getStringInput(scnr);
 
         System.out.print("Enter your phone number (input has to be an integer greater than 0) :");
-        String phone = getStringInput(scnr);
+        int phone = getIntInput(scnr);
 
         new User(username,id , email, phone);
         chooseOption(scnr);
@@ -157,7 +145,7 @@ public class Main {
         if (userFound == null) {
             System.out.println("No user found with that id");
         } else {
-            System.out.println(userFound.userInfo());
+            PrintUser.userInfo(userFound);
         }
         chooseOption(scnr);
     }
@@ -228,10 +216,10 @@ public class Main {
     }
 
     static void showReviews(User user, MediaInterface media) {
-        ArrayList<Review> reviews = media.getReviews();
+        List<Review> reviews = media.getReviews();
         for (Review review : reviews) {
             if (review.user() == user) {
-                System.out.println(review);
+                PrintReview.printReview(review);
             }
         }
     }
@@ -257,7 +245,7 @@ public class Main {
             System.out.println("No library found with name: " + name);
         }
         if (library != null) {
-            System.out.println(library);
+            PrintLibrary.printLibrary(library);
         }
 
         chooseOption(scnr);
@@ -375,7 +363,11 @@ public class Main {
             MediaInterface media = library.showMedia(mediaID);
 
             if (media != null) {
-                System.out.println(media);
+                if (media instanceof Book) {
+                    PrintMedia.printBook((Book) media);
+                } else  {
+                    PrintMedia.printMovie((Movie) media);
+                }
             } else {
                 System.out.println("Media Not Found");
             }
@@ -409,7 +401,7 @@ public class Main {
 
         if (library!=null) {
             System.out.println("Showing Map");
-            library.printMap();
+            PrintLibrary.printMap(library);
         } else {
             System.out.println("Library Not Found");
         }
@@ -455,6 +447,7 @@ public class Main {
         String name = getStringInput(scnr);
 
         Library library = LibraryManagement.findLibrary(name);
+
         if (library!=null) {
             System.out.print("Enter the name of the resource to show (e.g. Computer C1 or Study Room R1) (input can't be null or empty): ");
             String resourceName = getStringInput(scnr);
@@ -463,14 +456,7 @@ public class Main {
             for (Resource resource : library.getResources()) {
                 if (resource.getResourceName().equalsIgnoreCase(resourceName)) {
                     found = true;
-                    System.out.println("\n--- Resource Information ---");
-                    System.out.println("Name: " + resource.getResourceName());
-                    System.out.println("Available Time Slots:");
-                    for (String slot : TimeSlots.ONE_HOUR_SLOTS) {
-                        if (resource.isAvailable(slot)) {
-                            System.out.println(" - " + slot);
-                        }
-                    }
+                    PrintResource.printResource(resource);
                     break;
                 }
             }

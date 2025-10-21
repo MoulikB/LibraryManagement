@@ -6,13 +6,13 @@ import com.google.common.base.Preconditions;
  * Booking
  * A reservation record for a resource at a specific time slot,
  * storing which member made the booking.
+ *
+ * @param resource   Which resource is booked
+ * @param memberName Who booked it
+ * @param timeSlot   1-hour time slot string
  */
 
-public class Booking {
-    private Resource resource;  // Which resource is booked
-    private String memberName;  // Who booked it
-    private String timeSlot;    // 1-hour time slot string
-
+public record Booking(Resource resource, User memberName, TimeSlots timeSlot) {
     /*
      * Make a new Booking.
      *
@@ -21,33 +21,26 @@ public class Booking {
      *  - memberName is not null/empty
      *  - timeSlot is not null
      */
-    public Booking(Resource resource, String memberName, String timeSlot) {
-        Preconditions.checkNotNull(resource);
-        Preconditions.checkArgument(memberName  != null && !memberName.isEmpty() , "member name can't be null or empty");
-        Preconditions.checkNotNull(timeSlot);
+    public Booking(Resource resource, User memberName, TimeSlots timeSlot) {
+        Preconditions.checkNotNull(resource, "Resource can't be null");
+        Preconditions.checkArgument(memberName != null, "member name can't be null or empty");
+        Preconditions.checkNotNull(timeSlot, "TimeSlots can't be null");
         this.resource = resource;
         this.memberName = memberName;
         this.timeSlot = timeSlot;
+        checkInvariants();
     }
 
-    // Get the booked resource
-    public Resource getResource() {
-        return resource;
+    public void checkInvariants() {
+        Preconditions.checkNotNull(resource, "resource can't be null");
+        Preconditions.checkArgument(memberName != null, "member name can't be null or empty");
+        Preconditions.checkNotNull(timeSlot, "TimeSlots can't be null");
     }
 
-    // Get the name of the member who booked it.
-    public String getMemberName() {
-        return memberName;
-    }
-
-    // Get the 1-hour time slot string.
-    public String getTimeSlot() {
-        return timeSlot;
-    }
-
-    // A simple text summary of the booking.
+    // A simple text summary of the booking for debugging purposes.
     @Override
     public String toString() {
+        checkInvariants();
         return "Booking for " + resource.getResourceName() + " by " + memberName +
                 " at " + timeSlot;
     }

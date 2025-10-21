@@ -11,7 +11,7 @@ public interface Resource {
     String getResourceName();
 
     // Each resource should have a way to check availability
-    boolean isAvailable(String timeSlot);
+    boolean isAvailable(TimeSlots timeSlot);
 
     // Each resource should be able to add a booking
     void addBooking(Booking booking);

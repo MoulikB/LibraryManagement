@@ -17,7 +17,7 @@ public class Map {
     Creates map, for phase 1 we are using a default map
      */
     public Map(Library library) {
-        Preconditions.checkNotNull(library);
+        Preconditions.checkNotNull(library, "library cannot be null");
         this.library = library;
         map = new char[][]{
                 "+--------------------------------------------------------+".toCharArray(),

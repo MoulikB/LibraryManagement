@@ -3,6 +3,7 @@ package COMP2450.model;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * LibraryManagement
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 public class LibraryManagement {
 
-    public static ArrayList<Library> libraries = new ArrayList<>();
+    public static List<Library> libraries;
 
     /*
      * LibraryManagement: keeps track of all Library objects in the program.
@@ -21,17 +22,21 @@ public class LibraryManagement {
         libraries = new ArrayList<>();
     }
 
+    public static void checkInvariants() {
+        Preconditions.checkArgument(libraries != null, "LibraryManagement data cant't be null");
+    }
+
     /*
      * Add a library to the list.
      * Precondition: library is not null.
      */
     public static void addLibrary(Library library) {
-        Preconditions.checkNotNull(library);
+        Preconditions.checkNotNull(library, "Library data cant't be null");
         libraries.add(library);
     }
 
     // Shared list of all libraries in the system.
-    public static ArrayList<Library> getLibraries() {
+    public static List<Library> getLibraries() {
         return libraries;
     }
 
@@ -43,14 +48,17 @@ public class LibraryManagement {
     public static Library findLibrary(String name) {
         Preconditions.checkArgument(name!=null && !name.isEmpty() , "name is null or empty");
         Library output = null;
-        for (Library library : libraries) {
-            if  (library.getName().equals(name)) {
-                output = library;
+        int index = 0;
+        while (output == null && index < libraries.size()) {
+            if (libraries.get(index).getName().equals(name)) {
+                output = libraries.get(index);
             }
+            index++;
         }
         if (output == null) {
             System.out.println("Library with name " + name + " not found");
         }
+        checkInvariants();
         return output;
     }
 
@@ -60,5 +68,6 @@ public class LibraryManagement {
      */
     public static void reset() {
        libraries = new ArrayList<>();
+        checkInvariants();
     }
 }

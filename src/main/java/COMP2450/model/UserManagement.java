@@ -3,6 +3,7 @@ package COMP2450.model;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * UserManagement
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  */
 
 public class UserManagement {
-    private static ArrayList<User> users;
+    private static List<User> users;
 
     /*
     * UserManagement: stores and manages all User objects.
@@ -24,11 +25,17 @@ public class UserManagement {
      * Add a user to the list.
      */
     public void addUser(User user) {
+        Preconditions.checkNotNull(user, "User cannot be null");
+        checkInvariants();
         if (!userExistsBoolean(user.getID())) {
             users.add(user);
         } else {
             System.out.println("This user is duplicate");
         }
+    }
+
+    public void checkInvariants() {
+        Preconditions.checkNotNull(users);
     }
 
     /*
@@ -37,6 +44,7 @@ public class UserManagement {
     public User getUser(int id) {
         User userFound = null;
         Preconditions.checkArgument(id > 0, "Invalid ID");
+        checkInvariants();
         for (User user : users) {
             if (user.getID() == id) {
                 userFound = user;
@@ -51,11 +59,13 @@ public class UserManagement {
     public boolean userExistsBoolean(int id) {
         Preconditions.checkArgument(id > 0, "Invalid ID");
         boolean userExists = false;
-        for (int i = 0; i < users.size() && !userExists; i++) {
-            if (users.get(i).getID() == (id)) {
-                userExists = true;
+        int i = 0;
+            while (!userExists && i < users.size()) {
+                if (users.get(i).getID() == (id)) {
+                    userExists = true;
+                }
+                i++;
             }
-        }
         return userExists;
     }
 
@@ -65,10 +75,12 @@ public class UserManagement {
     public User userExists(int id) {
         Preconditions.checkArgument(id > 0, "Invalid ID");
         User userAlreadyExists = null;
-        for (int i = 0; i < users.size() && (userAlreadyExists == null); i++) {
-            if ( (users.get(i)).getID() == (id) ) {
-                userAlreadyExists = users.get(i);
+        int index = 0;
+        while (userAlreadyExists == null && index < users.size()) {
+            if (users.get(index).getID() == id) {
+                userAlreadyExists = users.get(index);
             }
+            index++;
         }
         return (userAlreadyExists);
     }
@@ -84,17 +96,6 @@ public class UserManagement {
         } else {
             System.out.println("User does not exist!");
         }
-    }
-
-    /*
-     * Return all usernames as a single comma-separated string.
-     */
-    public String getUsers() {
-        String output ="";
-        for (User user : users) {
-            output += user.getUsername() + ", ";
-        }
-        return output;
     }
 
     /*

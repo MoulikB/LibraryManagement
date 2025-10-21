@@ -2,6 +2,9 @@ package COMP2450.model;
 
 import com.google.common.base.Preconditions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Movie
  * A movie stored in a library’s catalog, identified by an ID,
@@ -15,6 +18,7 @@ public class Movie implements MediaInterface {
     private final Library library;
     private final MediaGenres genre;
     int totalCopies = 0;
+    static List<Review> reviews = new ArrayList<>();
 
     /*
      * Constructor: makes a new Movie and adds it to the given library.
@@ -25,19 +29,24 @@ public class Movie implements MediaInterface {
      */
     public Movie(String title, String director, int mediaID,
                  Library library, MediaGenres genre) {
+
+        this.title = title;
+        this.director = director;
+        this.mediaID = mediaID;
+        this.library = library;
+        this.genre = genre;
+        checkInvariants();
+        library.addMedia(this);
+
+    }
+
+    public void checkInvariants() {
         Preconditions.checkNotNull(title);
         Preconditions.checkNotNull(director);
         Preconditions.checkArgument(mediaID >= 0);
         Preconditions.checkNotNull(library);
         Preconditions.checkNotNull(genre);
         Preconditions.checkArgument(!title.isEmpty());
-        this.title = title;
-        this.director = director;
-        this.mediaID = mediaID;
-        this.library = library;
-        this.genre = genre;
-        addToLibrary(this);
-
     }
 
     // This media is a "Movie".
@@ -65,11 +74,13 @@ public class Movie implements MediaInterface {
      * If at least one copy is available, decrease the count and return true.
      */
     public boolean borrowMedia() {
+        checkInvariants();
         boolean result = false;
         if (this.totalCopies > 0) {
             this.totalCopies--;
             result = true;
         }
+        checkInvariants();
         return result;
     }
 
@@ -112,11 +123,40 @@ public class Movie implements MediaInterface {
         this.totalCopies++;
     }
 
-    /**
-     *
-     * @return A simple text summary of the movie
+    /*
+     * Check if this media already exists in its library (same mediaID).
+     * Returns true if found, false otherwise.
      */
-    public String toString() {
-        return "Movie [title=" + title + ", director=" + director + ", mediaID=" + mediaID +" , genre= " + genre + "]";
+    public boolean mediaExists(MediaInterface media) {
+        checkInvariants();
+        Preconditions.checkNotNull(media);
+        Preconditions.checkArgument(media instanceof Movie);
+        boolean mediaExists = false;
+        Preconditions.checkNotNull(media);
+        Library library = media.getLibrary();
+
+        List<MediaInterface> mediaAvailable = library.getMediaAvailable();
+        int index = 0;
+        while (!mediaExists && index < mediaAvailable.size()) {
+            if (mediaAvailable.get(index).getMediaID() == media.getMediaID()) {
+                mediaExists = true;
+            }
+            index++;
+        }
+        checkInvariants();
+        return mediaExists;
+    }
+
+    /*
+     * Add a review to the shared reviews list.
+     */
+    public void addReview(Review review) {
+        Preconditions.checkNotNull(review);
+        reviews.add(review);
+    }
+
+    // Get all reviews from the shared list.
+    public List<Review> getReviews() {
+        return reviews;
     }
 }
