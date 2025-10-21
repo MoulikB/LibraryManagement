@@ -228,7 +228,7 @@ StudyRoom "1" <-- "0..*" Booking : maintains
 Computer "1" <-- "0..*" Booking : maintains
 StudyRoom "1" <-- "1" Library : located at
 Computer "1" <-- "1" Library : located at
-Timeslot <-- Resource
+Booking <-- TimeSlots : books at time
 
 %% ===== Invariants  =====
 note for Library "Invariant properties:\n<ul>\n    
