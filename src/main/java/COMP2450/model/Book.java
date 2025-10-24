@@ -45,6 +45,9 @@ public class Book implements MediaInterface {
         checkInvariants();
     }
 
+    /**
+     * Check the invariants for our domain model object and throw an error if violated
+     */
     public void checkInvariants() {
         Preconditions.checkArgument(this.title != null && !this.title.isEmpty(), "title can't be null");
         Preconditions.checkArgument(this.author != null && !this.author.isEmpty(), "author can't be null");
@@ -77,10 +80,11 @@ public class Book implements MediaInterface {
         return genre;
     }
 
-    /*
+    /**
      * Try to borrow one copy.
      * If at least one copy is available, decrease the count and return true.
      * Otherwise, return false and do nothing.
+     * @return if you can borrow the book
      */
     public boolean borrowMedia () {
         checkInvariants();
@@ -93,7 +97,9 @@ public class Book implements MediaInterface {
         return result;
     }
 
-    // Return one copy (increase the available count by 1).
+    /**
+     * Try to return one copy.
+     */
     public void returnMedia () {
         checkInvariants();
         totalCopies++;
@@ -135,23 +141,29 @@ public class Book implements MediaInterface {
         return mediaID;
     }
 
-    // Add one more available copy.
+    /**
+     * add a new copy to the total amount of books
+     */
     public void addCopies() {
         checkInvariants();
         totalCopies++;
         checkInvariants();
     }
 
-    // Change which library this book belongs to.
+    /** Change which library this book belongs to.
+     * @param library
+     */
     public void setLibrary(Library library) {
         Preconditions.checkArgument(library != null, "library can't be null");
         this.library = library;
         checkInvariants();
     }
 
-    /*
+    /**
      * Check if this media already exists in its library (same mediaID).
      * Returns true if found, false otherwise.
+     * @param media
+     * @return whether the media exists
      */
     public boolean mediaExists(MediaInterface media) {
         Preconditions.checkNotNull(media);
@@ -171,15 +183,19 @@ public class Book implements MediaInterface {
         return mediaExists;
     }
 
-    /*
+    /**
      * Add a review to the shared reviews list.
+     * @param review
      */
     public void addReview(Review review) {
         Preconditions.checkNotNull(review,"review can't be null");
         reviews.add(review);
     }
 
-    // Get all reviews from the shared list.
+    /** Get all reviews from the shared list.
+     *
+     * @return List of reviews
+     */
     public List<Review> getReviews() {
         return reviews;
     }

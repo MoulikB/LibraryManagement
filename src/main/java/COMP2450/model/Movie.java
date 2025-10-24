@@ -20,9 +20,13 @@ public class Movie implements MediaInterface {
     int totalCopies = 0;
     static List<Review> reviews = new ArrayList<>();
 
-    /*
+    /**
      * Constructor: makes a new Movie and adds it to the given library.
-     *
+     * @param library
+     * @param genre
+     * @param director
+     * @param mediaID
+     * @param title
      * Preconditions:
      *  - title, director, library, genre are not null or empty
      *  - mediaID is not negative
@@ -40,6 +44,9 @@ public class Movie implements MediaInterface {
 
     }
 
+    /**
+     * Check the invariants for our domain model object and throw an error if violated
+     */
     public void checkInvariants() {
         Preconditions.checkNotNull(title);
         Preconditions.checkNotNull(director);
@@ -49,7 +56,10 @@ public class Movie implements MediaInterface {
         Preconditions.checkArgument(!title.isEmpty());
     }
 
-    // This media is a "Movie".
+    /** the media type of the interface
+     *
+     * @return Movie
+     */
     public String getMediaType() {
         return "Movie";
     }
@@ -61,8 +71,7 @@ public class Movie implements MediaInterface {
         return this.director;
     }
 
-    /**
-     *
+    /** The genre of this movie
      * @return Return the genre of this movie.
      */
     public MediaGenres getMediaGenre() {
@@ -72,6 +81,7 @@ public class Movie implements MediaInterface {
     /**
      * Try to borrow one copy.
      * If at least one copy is available, decrease the count and return true.
+     * @return whether borrowing is possible or not
      */
     public boolean borrowMedia() {
         checkInvariants();
@@ -90,19 +100,21 @@ public class Movie implements MediaInterface {
         totalCopies++;
     }
 
-    /** @return Get the title.
+    /** Return the title of the movie
+     *@return Get the title.
      */
     public String getTitle() {
         return this.title;
     }
 
-    /** @return How many copies can be borrowed right now.
+    /** Check total available copies of the movie
+     * @return How many copies can be borrowed right now.
      */
     public int getAvailableCopies() {
         return this.totalCopies;
     }
 
-    /**
+    /** Return the library the media is stored in
      *
      * @return Which library this movie belongs to.
      */
@@ -110,7 +122,7 @@ public class Movie implements MediaInterface {
         return this.library;
     }
 
-    /**
+    /** Return the mediaID
      *
      * @return Get the media ID for this movie.
      */
@@ -118,14 +130,18 @@ public class Movie implements MediaInterface {
         return this.mediaID;
     }
 
-    // Add one more available copy.
+    /** Add one more available copy.
+     *
+     */
     public void addCopies() {
         this.totalCopies++;
     }
 
-    /*
+    /**
      * Check if this media already exists in its library (same mediaID).
      * Returns true if found, false otherwise.
+     * @param media
+     * @return whether the media exists
      */
     public boolean mediaExists(MediaInterface media) {
         checkInvariants();
@@ -147,15 +163,19 @@ public class Movie implements MediaInterface {
         return mediaExists;
     }
 
-    /*
+    /**
      * Add a review to the shared reviews list.
+     * @param review
      */
     public void addReview(Review review) {
         Preconditions.checkNotNull(review);
         reviews.add(review);
     }
 
-    // Get all reviews from the shared list.
+    /** Get all reviews from the shared list
+     *
+     * @return list of all reviews for the movie
+     */
     public List<Review> getReviews() {
         return reviews;
     }

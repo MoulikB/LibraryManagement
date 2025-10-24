@@ -1,5 +1,4 @@
 import java.util.List;
-import java.util.Scanner;
 
 import COMP2450.model.*;
 
@@ -7,79 +6,78 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Scanner scnr = new Scanner(System.in);
-        mainMenu(scnr);
-        scnr.close();
+        mainMenu();
+
 
     }
 
-    public static void mainMenu(Scanner scnr){
+    public static void mainMenu( ){
         System.out.println("Welcome to the library database management system");
-        chooseOption(scnr);
+        chooseOption();
     }
 
-    public static void chooseOption(Scanner scnr) {
+    public static void chooseOption() {
         printOptions();
-        int input = getIntInput(scnr);
+        int input = InputValidation.getIntInput();
         switch (input) {
             case 1: {
-                addMember(scnr);
+                addMember();
                 break;
             }
             case 2: {
-                showMember(scnr);
+                showMember();
                 break;
             }
             case 3: {
-                addLibrary(scnr);
+                addLibrary();
                 break;
             }
             case 4: {
-                showLibrary(scnr);
+                showLibrary();
                 break;
             }
             case 5: {
-                addMedia(scnr);
+                addMedia();
                 break;
             }
             case 6: {
-                showMedia(scnr);
+                showMedia();
                 break;
             }
             case 7: {
-                addResource(scnr);
+                addResource();
                 break;
             }
             case 8: {
-                showResource(scnr);
+                showResource();
                 break;
             }
             case 9: {
-                addReview(scnr);
+                addReview();
                 break;
             }
             case 10: {
-                showReviews(scnr);
+                showReviews();
                 break;
             }
             case 11: {
-                showMap(scnr);
+                showMap();
                 break;
             }
             case 12: {
-                removeMedia(scnr);
+                removeMedia();
                 break;
             }
             case 13: {
-                removeMember(scnr);
+                removeMember();
                 break;
             }
             case 14: {
-                removeLibrary(scnr);
+                removeLibrary();
                 break;
             }
             case 15: {
-                reset(scnr);
+                reset();
                 break;
             }
             case 16: {
@@ -88,7 +86,7 @@ public class Main {
             }
             default: {
                 System.out.println("Invalid choice, please try again.");
-                chooseOption(scnr);
+                chooseOption();
             }
         }
     }
@@ -114,67 +112,67 @@ public class Main {
     }
 
 
-    public static void reset(Scanner scnr){
+    public static void reset( ){
         UserManagement.reset();
         LibraryManagement.reset();
         System.out.println("Reset successful");
-        mainMenu(scnr);
+        mainMenu();
     }
 
-    static void addMember(Scanner scnr) {
+    static void addMember( ) {
         System.out.print("Enter member name (input can't be null or empty) : ");
-        String username = getStringInput(scnr);
+        String username = InputValidation.getStringInput();
 
         System.out.print("Enter new ID (input has to be an integer greater than 0) : ");
-        int id = getIntInput(scnr);
+        int id = InputValidation.getIntInput();
 
         System.out.print("Enter your email (input can't be null or empty):");
-        String email = getStringInput(scnr);
+        String email = InputValidation.getStringInput();
 
         System.out.print("Enter your phone number (input has to be an integer greater than 0) :");
-        int phone = getIntInput(scnr);
+        int phone = InputValidation.getIntInput();
 
         new User(username,id , email, phone);
-        chooseOption(scnr);
+        chooseOption();
     }
 
-    static void showMember(Scanner scnr) {
+    static void showMember( ) {
         System.out.print("Enter member id (input has to be an integer greater than 0) : ");
-        int id = getIntInput(scnr);
+        int id = InputValidation.getIntInput();
         User userFound = User.userDB.getUser(id);
         if (userFound == null) {
             System.out.println("No user found with that id");
         } else {
             PrintUser.userInfo(userFound);
         }
-        chooseOption(scnr);
+        chooseOption();
     }
 
-    static void removeMember( Scanner scnr) {
+    static void removeMember(  ) {
         System.out.print("Enter member ID (input has to be an integer greater than 0) : ");
-        int id = getIntInput(scnr);
+        int id = InputValidation.getIntInput();
 
         User.userDB.removeUser(id);
-        chooseOption(scnr);
+        chooseOption();
     }
 
-    static void addReview(Scanner scnr) {
+    static void addReview( ) {
 
         System.out.print("Enter member ID (input has to be an integer greater than 0) : ");
-        User user = User.userDB.getUser(getIntInput(scnr));
+        User user = User.userDB.getUser(InputValidation.getIntInput());
 
         System.out.print("Enter library name (input can't be null or empty) : ");
-        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
+        Library library = LibraryManagement.findLibrary(InputValidation.getStringInput());
 
         if (library!=null) {
             System.out.print("Enter mediaID (input has to be an integer greater than 0) : ");
-            MediaInterface media = library.showMedia(getIntInput(scnr));
+            MediaInterface media = library.showMedia(InputValidation.getIntInput());
             if (media!=null) {
                 System.out.print("Enter your review (input can't be null or empty): ");
-                String comment = getStringInput(scnr);
+                String comment = InputValidation.getStringInput();
 
                 System.out.print("Enter total stars out of 10 (input has to be an integer greater than 0) : ");
-                int stars = getIntInput(scnr);
+                int stars = InputValidation.getIntInput();
 
                 if (stars <= 10 && stars >= 1) {
                     addReview(user, media, comment, stars);
@@ -186,7 +184,7 @@ public class Main {
         } else {
             System.out.println("No library found with that name");
         }
-        chooseOption(scnr);
+        chooseOption();
     }
 
     static void addReview(User user, MediaInterface media, String comment, int stars) {
@@ -195,24 +193,24 @@ public class Main {
         media.addReview(review);
     }
 
-    static void showReviews(Scanner scnr) {
+    static void showReviews( ) {
         System.out.print("Enter UserID (input has to be an integer greater than 0) : ");
-        User user = User.userDB.getUser(getIntInput(scnr));
+        User user = User.userDB.getUser(InputValidation.getIntInput());
 
         if (user!=null) {
             System.out.print("Enter library name (input can't be null or empty): ");
-            Library library = LibraryManagement.findLibrary(getStringInput(scnr));
+            Library library = LibraryManagement.findLibrary(InputValidation.getStringInput());
 
             if (library != null) {
                 System.out.print("Enter mediaID (input has to be an integer greater than 0) : ");
-                MediaInterface media = library.showMedia(getIntInput(scnr));
+                MediaInterface media = library.showMedia(InputValidation.getIntInput());
 
                 showReviews(user, media);
             } else {
                 System.out.println("No library found with that name");
             }
         }
-        chooseOption(scnr);
+        chooseOption();
     }
 
     static void showReviews(User user, MediaInterface media) {
@@ -224,21 +222,21 @@ public class Main {
         }
     }
 
-    static void addLibrary(Scanner scnr) {
+    static void addLibrary( ) {
 
         System.out.println("Enter library name (input can't be null or empty) : ");
-        String name = getStringInput(scnr);
+        String name = InputValidation.getStringInput();
 
         new Library(name);
         System.out.println("Adding library " + name);
 
-        chooseOption(scnr);
+        chooseOption();
     }
 
-    static void showLibrary(Scanner scnr) {
+    static void showLibrary( ) {
 
         System.out.println("Enter library name (input can't be null or empty) : ");
-        String name = getStringInput(scnr);
+        String name = InputValidation.getStringInput();
 
         Library library = LibraryManagement.findLibrary(name);
         if (library == null) {
@@ -248,12 +246,12 @@ public class Main {
             PrintLibrary.printLibrary(library);
         }
 
-        chooseOption(scnr);
+        chooseOption();
     }
 
-    static void removeLibrary(Scanner scnr) {
+    static void removeLibrary( ) {
         System.out.print("Enter library name (input can't be null or empty): ");
-        String name = getStringInput(scnr);
+        String name = InputValidation.getStringInput();
         Library library = LibraryManagement.findLibrary(name);
         if (library!=null){
             for (Library dbLibrary : LibraryManagement.libraries) {
@@ -267,27 +265,27 @@ public class Main {
             System.out.println("Library " + name + " not found.");
         }
 
-        chooseOption(scnr);
+        chooseOption();
     }
 
-    static void addMedia(Scanner scnr) {
+    static void addMedia( ) {
         System.out.println("Enter media type (book/movie) (input can't be null or empty): ");
-        String mediaType = getStringInput(scnr);
+        String mediaType = InputValidation.getStringInput();
         if (mediaType.equalsIgnoreCase("book")) {
-            addBook(scnr);
+            addBook();
         }  else if (mediaType.equalsIgnoreCase("movie")) {
-            addMovie(scnr);
+            addMovie();
         }
 
-        chooseOption(scnr);
+        chooseOption();
     }
 
-    public static void addMovie(Scanner scnr) {
+    public static void addMovie( ) {
         System.out.println("Enter the movie title (input can't be null or empty): ");
-        String title = getStringInput(scnr);
+        String title = InputValidation.getStringInput();
 
         System.out.println("Enter the director (input can't be null or empty): ");
-        String director = getStringInput(scnr);
+        String director = InputValidation.getStringInput();
 
 
         System.out.println("""
@@ -299,13 +297,13 @@ public class Main {
                     THRILLER,
                     FICTION,
                     NONFICTION):\s""");
-        MediaGenres genre = findGenre(getStringInput(scnr));
+        MediaGenres genre = findGenre(InputValidation.getStringInput());
 
         System.out.println("Enter the mediaID (input has to be an integer greater than 0) : ");
-        int mediaID = getIntInput(scnr);
+        int mediaID = InputValidation.getIntInput();
 
         System.out.println("Enter the Library Name (input can't be null or empty): ");
-        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
+        Library library = LibraryManagement.findLibrary(InputValidation.getStringInput());
 
         new Movie( title, director, mediaID, library, genre);
     }
@@ -326,39 +324,39 @@ public class Main {
 
     }
 
-    public static void addBook(Scanner scnr) {
+    public static void addBook( ) {
 
         System.out.println("Enter the book title (input can't be null or empty): ");
-        String title = getStringInput(scnr);
+        String title = InputValidation.getStringInput();
 
         System.out.println("Enter the author (input can't be null or empty): ");
-        String author = getStringInput(scnr);
+        String author = InputValidation.getStringInput();
 
         System.out.println("Enter the publisher (input can't be null or empty): ");
-        String publisher = getStringInput(scnr);
+        String publisher = InputValidation.getStringInput();
 
         System.out.println("Enter the genre (input can't be null or empty): ");
-        MediaGenres genre = findGenre(getStringInput(scnr));
+        MediaGenres genre = findGenre(InputValidation.getStringInput());
 
         System.out.println("Enter the isbn or mediaID (input has to be an integer greater than 0) : ");
-        int isbn = getIntInput(scnr);
+        int isbn = InputValidation.getIntInput();
 
         System.out.println("Enter the Library Name (input can't be null or empty): ");
-        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
+        Library library = LibraryManagement.findLibrary(InputValidation.getStringInput());
         
         if (library !=null) {
             new Book(title,author,publisher,genre,isbn,library);
         }
     }
 
-    public static void showMedia(Scanner scnr) {
+    public static void showMedia( ) {
 
         System.out.println("Enter the Library Name (input can't be null or empty): ");
-        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
+        Library library = LibraryManagement.findLibrary(InputValidation.getStringInput());
 
         if (library!=null) {
             System.out.println("Enter the mediaID (input has to be an integer greater than 0) : ");
-            int mediaID = getIntInput(scnr);
+            int mediaID = InputValidation.getIntInput();
 
             MediaInterface media = library.showMedia(mediaID);
 
@@ -375,29 +373,29 @@ public class Main {
             System.out.println("Library Not Found");
         }
 
-        chooseOption(scnr);
+        chooseOption();
     }
 
-    public static void removeMedia(Scanner scnr) {
+    public static void removeMedia( ) {
 
         System.out.println("Enter the mediaID (input has to be an integer greater than 0) : ");
-        int mediaID = getIntInput(scnr);
+        int mediaID = InputValidation.getIntInput();
 
         System.out.println("Enter the Library Name (input can't be null or empty): ");
-        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
+        Library library = LibraryManagement.findLibrary(InputValidation.getStringInput());
         if (library!=null) {
             library.removeMedia(mediaID);
         } else {
             System.out.println("Library Not Found");
             System.out.println("Media Not Found");
         }
-        chooseOption(scnr);
+        chooseOption();
     }
 
-    public static void showMap(Scanner scnr) {
+    public static void showMap( ) {
 
         System.out.println("Enter library name (input can't be null or empty): ");
-        Library library = LibraryManagement.findLibrary(getStringInput(scnr));
+        Library library = LibraryManagement.findLibrary(InputValidation.getStringInput());
 
         if (library!=null) {
             System.out.println("Showing Map");
@@ -405,29 +403,29 @@ public class Main {
         } else {
             System.out.println("Library Not Found");
         }
-        chooseOption(scnr);
+        chooseOption();
     }
 
 
-    public static void addResource(Scanner scnr) {
+    public static void addResource( ) {
 
         System.out.print("Enter the name of the library to which the resource is to be added (input can't be null or empty) : ");
-        String name = getStringInput(scnr);
+        String name = InputValidation.getStringInput();
 
         Library library = LibraryManagement.findLibrary(name);
         if (library!=null) {
             System.out.print("Enter type of resource (computer/studyroom) (input can't be null or empty) : ");
-            String type = getStringInput(scnr).toLowerCase();
+            String type = InputValidation.getStringInput().toLowerCase();
 
             if (type.equals("computer")) {
                 System.out.print("Enter computer ID (input can't be null or empty) : ");
-                String compId = getStringInput(scnr);
+                String compId = InputValidation.getStringInput();
                 Computer comp = new Computer(compId, library);
                 library.addResource(comp);
                 System.out.println("Added new Computer: " + comp.getResourceName());
             } else if (type.equals("studyroom")) {
                 System.out.print("Enter room number (input can't be null or empty) : ");
-                String roomNum = getStringInput(scnr);
+                String roomNum = InputValidation.getStringInput();
                 StudyRoom room = new StudyRoom(roomNum, library);
                 library.addResource(room);
                 System.out.println("Added new Study Room: " + room.getResourceName());
@@ -438,19 +436,19 @@ public class Main {
             System.out.println("Library Not Found");
         }
 
-        chooseOption(scnr);
+        chooseOption();
     }
 
-    public static void showResource(Scanner scnr) {
+    public static void showResource( ) {
 
         System.out.print("Enter the name of the library name (input can't be null or empty) : ");
-        String name = getStringInput(scnr);
+        String name = InputValidation.getStringInput();
 
         Library library = LibraryManagement.findLibrary(name);
 
         if (library!=null) {
             System.out.print("Enter the name of the resource to show (e.g. Computer C1 or Study Room R1) (input can't be null or empty): ");
-            String resourceName = getStringInput(scnr);
+            String resourceName = InputValidation.getStringInput();
 
             boolean found = false;
             for (Resource resource : library.getResources()) {
@@ -468,22 +466,7 @@ public class Main {
             System.out.println("Library Not Found");
         }
 
-        chooseOption(scnr);
-    }
-
-    public static String getStringInput(Scanner scnr) {
-        return scnr.nextLine();
-    }
-
-    static int getIntInput(Scanner scnr) {
-    while (true) {
-        String s = scnr.nextLine().trim();
-        try { 
-            return Integer.parseInt(s); 
-        }
-        catch (NumberFormatException e) { 
-            System.out.print("Enter a valid integer: "); 
-        }
+        chooseOption();
     }
 }
-}
+

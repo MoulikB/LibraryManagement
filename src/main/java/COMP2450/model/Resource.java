@@ -7,13 +7,23 @@ package COMP2450.model;
  */
 
 public interface Resource {
-    // Each resource should have a name or ID to identify it
+    /**Each resource should have a name or ID to identify it
+     *
+     * @return the name of resource
+     */
     String getResourceName();
 
-    // Each resource should have a way to check availability
+    /** Each resource should have a way to check availability
+     *
+     * @param timeSlot
+     * @return whether we can book the timeslot
+     */
     boolean isAvailable(TimeSlots timeSlot);
 
-    // Each resource should be able to add a booking
+    /** Each resource should be able to add a booking
+     *
+     * @param booking
+     */
     void addBooking(Booking booking);
 }
 

@@ -1,13 +1,18 @@
 package COMP2450.model;
 
+import java.util.List;
+
 public class PrintLibrary {
     public static void printLibrary(Library library) {
 
         System.out.print( "Library : " + library.getName());
-        library.getMediaAvailable();
+        List<MediaInterface> mediaAvailable = library.getMediaAvailable();
+        for (MediaInterface media : mediaAvailable) {
+            System.out.print(media);
+        }
     }
 
     public static void printMap(Library library) {
-        library.getMap().printMap();
+        PrintMap.printMap(library.getMap());
     }
 }

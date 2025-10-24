@@ -16,8 +16,10 @@ public class Computer implements Resource {
     private final List<Booking> bookings = new ArrayList<>();
     Library library;
 
-    /*
+    /**
      * Make a new Computer and add it to the library.
+     * @param computerId
+     * @param library
      * Checks:
      *  - computerId is not null/empty
      *  - library is not null
@@ -31,19 +33,27 @@ public class Computer implements Resource {
         library.addResource(this);
     }
 
+    /**
+     * Check the invariants for our domain model object and throw an error if violated
+     */
     public void checkInvariants(){
         Preconditions.checkArgument(computerId != null && !computerId.isEmpty(),"computerId cannot be null or empty");
         Preconditions.checkNotNull(library, "library can't be null");
     }
 
-    // The display name of this resource.
+    /**
+     * Get Resource name, computerId in this case
+     * @return computerId
+     */
     public String getResourceName() {
         return computerId;
     }
 
-    /*
+    /**
      * Is this time slot free?
      * Returns false if any existing booking has the same timeSlot.
+     * @param timeSlot
+     * @return whether available
      */
     public boolean isAvailable(TimeSlots timeSlot) {
         Preconditions.checkNotNull(timeSlot);
@@ -51,7 +61,7 @@ public class Computer implements Resource {
         boolean result = true;
         int index =0;
         while (index < bookings.size() && result){
-            if ((bookings.get(index).timeSlot().equals(timeSlot))) {
+            if ((bookings.get(index).timeSlot.equals(timeSlot))) {
                 result = false;
             }
             index++;
@@ -60,20 +70,26 @@ public class Computer implements Resource {
         return result;
     }
 
-    /*
+    /**
      * Add a booking to this computer.
+     * @param booking
      */
     public void addBooking(Booking booking) {
         Preconditions.checkNotNull(booking);
         bookings.add(booking);
     }
 
-    // Get all bookings for this computer.
+    /** Get all bookings for this computer.
+     *
+     * @return a list of all bookings
+     */
     public List<Booking> getBookings() {
         return bookings;
     }
 
-    // Which library this computer belongs to
+    /** Which library this computer belongs to
+     * @return library
+     */
     public Library getLibrary() {
         return library;
     }

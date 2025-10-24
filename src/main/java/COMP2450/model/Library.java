@@ -18,8 +18,9 @@ public class Library {
     public static LibraryManagement libraryManagement = new LibraryManagement();
 
 
-    /*
+    /**
      * Make a new Library.
+     * @param name
      * - checks that the name is not null
      * - creates empty media/resources lists
      * - creates a Map for this library
@@ -33,6 +34,9 @@ public class Library {
         LibraryManagement.addLibrary(this);
     }
 
+    /**
+     * Check the invariants for our domain model object and throw an error if violated
+     */
     public void checkInvariants(){
         Preconditions.checkArgument(name!=null && !name.isEmpty(), "Library name cannot be null or empty");
         Preconditions.checkArgument(mediaAvailable!=null, "Library media cannot be null or empty");
@@ -40,45 +44,71 @@ public class Library {
         Preconditions.checkArgument(map!=null, "Library map cannot be null or empty");
     }
 
-    // Add a media item (book/movie) to this library.
+    /** Add a media item (book/movie) to this library.
+     *
+     * @param media
+     */
     public void addMedia(MediaInterface media) {
         Preconditions.checkArgument(media!=null, "Media object cannot be null");
         this.mediaAvailable.add(media);
     }
 
-    // Get all media in this library.
+    /** Get all media in this library.
+     *
+     * @return list of all media
+     */
     public List<MediaInterface> getMediaAvailable() {
         return mediaAvailable;
     }
 
-    // Get/set the library name.
+    /** Get/set the library name.
+     *
+     * @return library.name
+     */
     public String getName() {
         return name;
     }
 
+    /** Murate name of library
+     *
+     * @param name
+     */
     public void setName(String name) {
         Preconditions.checkArgument(name != null && !name.isEmpty(), "Library name cannot be null or empty");
         this.name = name;
         checkInvariants();
     }
 
-    // Access the map object
+    /** Access the map object
+     *
+     * @return the map to the library
+     */
     public Map getMap() {
         return map;
     }
 
-    // Get all resources (computers, study rooms, etc.).
+    /** Get all resources (computers, study rooms, etc.).
+     *
+     * @return list of all resources
+     */
     public List<Resource> getResources() {
         return resources;
     }
 
-    // Add a resource to this library.
+    /** Add a resource to this library.
+     *
+     * @param resource
+     */
     public void addResource(Resource resource) {
         Preconditions.checkArgument(resource!=null, "Resource object cannot be null");
         resources.add(resource);
     }
 
-    // Print info about one resource by name
+    /** Print info about one resource by name
+     *
+     * @param resourceName
+     * @return Resource object
+     */
     public Resource getResource(String resourceName) {
         Resource resourceFound = null;
         for (Resource resource : resources) {
@@ -90,8 +120,9 @@ public class Library {
         return resourceFound;
     }
 
-    /*
+    /**
      * Remove a media item by its ID.
+     * @param mediaId
      */
     public void removeMedia(int mediaId) {
         Preconditions.checkArgument(mediaId > 0, "Media ID cannot be less than 1");
@@ -111,9 +142,11 @@ public class Library {
 
     }
 
-    /*
+    /**
      * Find and return a media item by ID.
      * Prints a message if not found and returns null.
+     * @param mediaId
+     * @return media object
      */
     public MediaInterface showMedia(int mediaId) {
         Preconditions.checkArgument(mediaId>0, "Media ID cannot be less than 1");

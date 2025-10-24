@@ -15,19 +15,23 @@ public class LibraryManagement {
 
     public static List<Library> libraries;
 
-    /*
+    /**
      * LibraryManagement: keeps track of all Library objects in the program.
      */
     public LibraryManagement() {
         libraries = new ArrayList<>();
     }
 
+    /**
+     * Check the invariants for our domain model object and throw an error if violated
+     */
     public static void checkInvariants() {
         Preconditions.checkArgument(libraries != null, "LibraryManagement data cant't be null");
     }
 
-    /*
+    /**
      * Add a library to the list.
+     * @param library
      * Precondition: library is not null.
      */
     public static void addLibrary(Library library) {
@@ -35,13 +39,18 @@ public class LibraryManagement {
         libraries.add(library);
     }
 
-    // Shared list of all libraries in the system.
+    /** Shared list of all libraries in the system.
+     *
+     * @return list of libraries
+     */
     public static List<Library> getLibraries() {
         return libraries;
     }
 
-    /*
+    /**
      * Find a library by its name.
+     * @param name
+     * @return library object
      * - name must not be null or empty.
      * - returns the Library if found, otherwise prints a message and returns null.
      */
@@ -62,7 +71,7 @@ public class LibraryManagement {
         return output;
     }
 
-    /*
+    /**
      * Reset the list to empty.
      * This clears all libraries from the registry.
      */
