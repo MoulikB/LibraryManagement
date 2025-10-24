@@ -5,7 +5,7 @@ author: Moulik Bhatia (bhatiam3@myumanitoba.ca)
 date: 30 September 2025
 ---
 
-# Domain model
+## Domain model
 This repository contains a domain model and an initial implementation of our Library System.
 It maintains a simple library and user database management and manages users, media (books and movies) along with resources (computers and study rooms) and a booking system for said resources.
 

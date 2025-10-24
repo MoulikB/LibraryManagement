@@ -14,9 +14,9 @@ public class Booking {
     TimeSlots timeSlot;
     /**
      * Make a new Booking.
-     *@param resource   Which resource is booked
-     *@param memberName Who booked it
-     *@param timeSlot   1-hour time slot
+     *  @param resource   Which resource is booked
+     *  @param memberName Who booked it
+     *  @param timeSlot   1-hour time slot
      * Preconditions:
      *  - resource is not null
      *  - memberName is not null/empty

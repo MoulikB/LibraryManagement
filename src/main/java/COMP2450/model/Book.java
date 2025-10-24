@@ -21,9 +21,15 @@ public class Book implements MediaInterface {
     int totalCopies = 0;
     static List<Review> reviews = new ArrayList<>();
 
-    /*
+    /**
      * Constructor: makes a new Book and adds it to the given library.
      *
+     * @param title
+     * @param author
+     * @param genre
+     * @param isbn
+     * @param library
+     * @param publisher
      * Preconditions:
      *  - strings are not null/empty
      *  - genre and library are not null
@@ -142,7 +148,7 @@ public class Book implements MediaInterface {
     }
 
     /**
-     * add a new copy to the total amount of books
+     * Add a new copy to the total amount of books
      */
     public void addCopies() {
         checkInvariants();
