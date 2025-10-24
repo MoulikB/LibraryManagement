@@ -10,24 +10,24 @@ import com.google.common.base.Preconditions;
 
 public class Booking {
     Resource resource;
-    User memberName;
+    User user;
     TimeSlots timeSlot;
     /**
      * Make a new Booking.
      *  @param resource   Which resource is booked
-     *  @param memberName Who booked it
+     *  @param user Who booked it
      *  @param timeSlot   1-hour time slot
      * Preconditions:
      *  - resource is not null
      *  - memberName is not null/empty
      *  - timeSlot is not null
      */
-    public Booking(Resource resource, User memberName, TimeSlots timeSlot) {
+    public Booking(Resource resource, User user, TimeSlots timeSlot) {
         Preconditions.checkNotNull(resource, "Resource can't be null");
-        Preconditions.checkArgument(memberName != null, "member name can't be null or empty");
+        Preconditions.checkArgument(user != null, "member name can't be null or empty");
         Preconditions.checkNotNull(timeSlot, "TimeSlots can't be null");
         this.resource = resource;
-        this.memberName = memberName;
+        this.user = user;
         this.timeSlot = timeSlot;
         checkInvariants();
     }
@@ -37,8 +37,30 @@ public class Booking {
      */
     public void checkInvariants() {
         Preconditions.checkNotNull(resource, "resource can't be null");
-        Preconditions.checkArgument(memberName != null, "member name can't be null or empty");
+        Preconditions.checkArgument(user != null, "member name can't be null or empty");
         Preconditions.checkNotNull(timeSlot, "TimeSlots can't be null");
+    }
+
+    /**
+     * @return Resource which is booked
+     */
+    public Resource getResource() {
+        return resource;
+    }
+
+    /**
+     * @return provide the user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     *
+     * @return provide the timeslot
+     */
+    public TimeSlots getTimeSlot() {
+        return timeSlot;
     }
 
     /** A simple text summary of the booking for debugging purposes.
@@ -48,7 +70,7 @@ public class Booking {
     @Override
     public String toString() {
         checkInvariants();
-        return "Booking for " + resource.getResourceName() + " by " + memberName +
+        return "Booking for " + resource.getResourceName() + " by " + user.getID() +
                 " at " + timeSlot;
     }
 }

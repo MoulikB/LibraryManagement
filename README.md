@@ -1,71 +1,70 @@
-
 ---
 title: Library Management System
 author: Moulik Bhatia (bhatiam3@myumanitoba.ca)
-date: 30 September 2025
+date: 24 October 2025
 ---
 
-## Domain model
-This repository contains a domain model and an initial implementation of our Library System.
-It maintains a simple library and user database management and manages users, media (books and movies) along with resources (computers and study rooms) and a booking system for said resources.
+## Domain Model
 
-## Resources
+This repository contains a domain model and an implementation of a **Library Management System**.  
+It maintains a library and user database, manages media (books and movies), resources (computers and study rooms), and provides a booking system for reserving resources.
 
-- I researched most of my project using different public library resources like :
+## Resources and References
 
-1. Winnipeg library : <https://www.winnipeg.ca/recreation-leisure/libraries>
-2. University Of Manitoba Library : <https://umanitoba.ca/libraries/>
+I researched this project using publicly available library systems:
+
+1. Winnipeg Public Library — <https://www.winnipeg.ca/recreation-leisure/libraries>
+2. University of Manitoba Libraries — <https://umanitoba.ca/libraries/>
+
 
 ## Diagram
 
-Our domain model is a UML class diagram drawn using Mermaid.
+The following Mermaid UML diagram represents the domain model of the system.
 
 ```mermaid
 classDiagram
 %% ===== Core Library =====
     class Library {
-        -name: String
-        -description: String
-        -mediaAvailable: ArrayList<MediaInterface>
-        -map: Map
-        -resources: ArrayList<Resource>
-        +Library(name)
-        +addDescription(description) void
-        +addMedia(media: MediaInterface) void
-        +showMedia(mediaID: int) MediaInterface
-        +removeMedia(mediaID: int) void
-        +printMap() void
-        +getResources() ArrayList<Resource>
-        +addResource(resource: Resource) void
-        +showResource(resourceName: String) void
-        +getName() String
-        +toString() String
-    }
+    -name: String
+    -description: String
+    -mediaAvailable: List<MediaInterface>
+    -map: Map
+    -resources: List<Resource>
+    +Library(name: String)
+    +addDescription(description: String): void
+    +addMedia(media: MediaInterface): void
+    +showMedia(mediaID: int): MediaInterface
+    +removeMedia(mediaID: int): void
+    +printMap(): void
+    +getResources(): List<Resource>
+    +addResource(resource: Resource): void
+    +showResource(resourceName: String): void
+    +getName(): String
+}
 
-    class Map {
-        -map: char[][]
-        +Map(library: Library)
-        +printMap() void
-        +library: Library
-    }
+class Map {
+    -map: char[][]
+    +Map(library: Library)
+    +library: Library
+}
 
-Library "1" *-- "1" Map : layout  %% composition (Map exists for one Library)
-Library "1"  --o "0..*" Resource : resources  %% aggregation
-Library "1" --o "0..*" MediaInterface : catalog  %% aggregation
+Library "1" *-- "1" Map : layout %% composition (Map exists for one Library)
+Library "1" --o "0..*" Resource : aggregation
+Library "1" --o "0..*" MediaInterface : aggregation
 
-%% ===== Media hierarchy =====
+%% ===== Media Hierarchy =====
 class MediaInterface {
     <<interface>>
-    +getMediaType() String
-    +getCreator() String
-    +getMediaGenre() MediaGenres
-    +borrowMedia() boolean
-    +returnMedia() void
-    +getTitle() String
-    +getMediaID() int
-    +addCopies() void
-    +addReview(review: Review) void
-    +getReviews() ArrayList<Review>
+    +getMediaType(): String
+    +getCreator(): String
+    +getMediaGenre(): MediaGenres
+    +borrowMedia(): boolean
+    +returnMedia(): void
+    +getTitle(): String
+    +getMediaID(): int
+    +addCopies(): void
+    +addReview(review: Review): void
+    +getReviews(): List<Review>
 }
 
 class MediaGenres {
@@ -87,16 +86,15 @@ class Book {
     -library: Library
     -genre: MediaGenres
     -totalCopies: int
-    +Book(title, author, publisher, genre, isbn, library)
-    +getMediaType() String
-    +getCreator() String
-    +getMediaGenre() MediaGenres
-    +borrowMedia() boolean
-    +returnMedia() void
-    +getTitle() String
-    +getMediaID() int
-    +addCopies() void
-    +toString() String
+    +Book(title: String, author: String, publisher: String, genre: MediaGenres, isbn: int, library: Library)
+    +getMediaType(): String
+    +getCreator(): String
+    +getMediaGenre(): MediaGenres
+    +borrowMedia(): boolean
+    +returnMedia(): void
+    +getTitle(): String
+    +getMediaID(): int
+    +addCopies(): void
 }
 
 class Movie {
@@ -106,16 +104,15 @@ class Movie {
     -library: Library
     -genre: MediaGenres
     -totalCopies: int
-    +Movie(title, director, mediaID, library, genre)
-    +getMediaType() String
-    +getCreator() String
-    +getMediaGenre() MediaGenres
-    +borrowMedia() boolean
-    +returnMedia() void
-    +getTitle() String
-    +getMediaID() int
-    +addCopies() void
-    +toString() String
+    +Movie(title: String, director: String, mediaID: int, library: Library, genre: MediaGenres)
+    +getMediaType(): String
+    +getCreator(): String
+    +getMediaGenre(): MediaGenres
+    +borrowMedia(): boolean
+    +returnMedia(): void
+    +getTitle(): String
+    +getMediaID(): int
+    +addCopies(): void
 }
 
 MediaInterface <|.. Book : an instance of
@@ -132,91 +129,90 @@ class Review {
   +media: MediaInterface
   +comment: String
   +stars: int
-  +toString() : String
 }
 
-User "1" -- "0.." Review : writes >
+User "1" -- "0..*" Review : writes >
 
 %% ===== Users =====
 class User {
     -username: String
     -id: int
     -finesDue: double
-    -itemsIssued: ArrayList<int>
-    -reviewsWritten: ArrayList<Review>
-    +User(username, id)
-    +addReview(review: Review) void
-    +getReviews(): ArrayList<Review>
-    +getUsername() String
-    +getID() int
-    +equals(other: Object) boolean
+    -itemsIssued: List<int>
+    -reviewsWritten: List<Review>
+    +User(username: String, id: int)
+    +addReview(review: Review): void
+    +getReviews(): List<Review>
+    +getUsername(): String
+    +getID(): int
+    +equals(other: Object): boolean
 }
 
 class UserManagement {
-    -users: ArrayList<User>
+    -users: List<User>
     +UserManagement()
-    +addUser(user: User) void
-    +removeUser(id: int) void
-    +userExists(id: int) User
-    +getUser(id: int) User
-    +getUsers() String
-    +reset() void
+    +addUser(user: User): void
+    +removeUser(id: int): void
+    +userExists(id: int): User
+    +getUser(id: int): User
+    +getUsers(): String
+    +reset(): void
 }
+
 UserManagement "1" --> "0..*" User : manages  %% aggregation
 
-%% ===== Libraries collection =====
+%% ===== Libraries Collection =====
 class LibraryManagement {
-    +libraries: ArrayList<Library>
-    +addLIbrary(library: Library) void
-    +getLibraries() ArrayList<Library>
-    +findLibrary(name: String) Library
-    +reset() void }
-        
+    -libraries: List<Library>
+    +addLibrary(library: Library): void
+    +getLibraries(): List<Library>
+    +findLibrary(name: String): Library
+    +reset(): void
+}
 
 LibraryManagement "1" --> "0..*" Library : catalogs
 
 %% ===== Bookable Resources =====
 class Resource {
   <<interface>>
-  +getResourceName() String
-  +isAvailable(timeSlot: TimeSlots) boolean
-  +addBooking(booking: Booking) void
+  +getResourceName(): String
+  +isAvailable(timeSlot: TimeSlot): boolean
+  +addBooking(booking: Booking): void
 }
 
 class Booking {
     -resource: Resource
-    -memberName: String
-    -timeSlot: TimeSlots
-    +Booking(resource: Resource, memberName: String, timeSlot: TimeSlots)
-    +getResource() Resource
-    +getMemberName() String
-    +getTimeSlot() TimeSlots
-    +toString() String
+    -user: User
+    -timeSlot: TimeSlot
+    +Booking(resource: Resource, user: User, timeSlot: TimeSlot)
+    +getResource(): Resource
+    +getUser(): User
+    +getTimeSlot(): TimeSlot
 }
 
 class StudyRoom {
     -roomNumber: String
-    -bookings: ArrayList<Booking>
+    -bookings: List<Booking>
     -library: Library
     +StudyRoom(roomNumber: String, library: Library)
-    +getResourceName() String
-    +isAvailable(timeSlot: TimeSlots) boolean
-    +addBooking(booking: Booking) void
-    +getBookings() ArrayList<Booking>
+    +getResourceName(): String
+    +isAvailable(timeSlot: TimeSlot): boolean
+    +addBooking(booking: Booking): void
+    +getBookings(): List<Booking>
 }
 
 class Computer {
     -computerId: String
-    -bookings: ArrayList<Booking>
+    -bookings: List<Booking>
     -library: Library
     +Computer(computerId: String, library: Library)
-    +getResourceName() String
-    +isAvailable(timeSlot: TimeSlots) boolean
-    +addBooking(booking: Booking) void
-    +getBookings() ArrayList<Booking>
+    +getResourceName(): String
+    +isAvailable(timeSlot: TimeSlot): boolean
+    +addBooking(booking: Booking): void
+    +getBookings(): List<Booking>
 }
 
-class TimeSlots {
+class TimeSlot {
   <<utility>>
   +ONE_HOUR_SLOTS: List<String>
 }
@@ -224,85 +220,24 @@ class TimeSlots {
 Resource <|.. StudyRoom
 Resource <|.. Computer
 Booking "1" --> "1" Resource : books
+Booking "1" --> "1" User : madeBy
+Booking "1" --> "1" TimeSlot : scheduledAt
 StudyRoom "1" <-- "0..*" Booking : maintains
 Computer "1" <-- "0..*" Booking : maintains
-StudyRoom "1" <-- "1" Library : located at
-Computer "1" <-- "1" Library : located at
-Booking <-- TimeSlots : books at time
+StudyRoom "1" <-- "1" Library : locatedAt
+Computer "1" <-- "1" Library : locatedAt
 
-%% ===== Invariants  =====
-note for Library "Invariant properties:\n<ul>\n    
-<li>name != null</li>\n    
-<li>name.length() > 0</li>\n    
-<li>description != null</li>\n    
-<li>mediaAvailable != null</li>\n    
-<li>resources != null</li>\n    
-<li>map != null</li>\n    
-<li>loop: all mediaAvailable items are unique (no duplicate object references)</li>\n    
-<li>loop: all resources have unique names</li>\n</ul>"
+%% ===== Invariants =====
+note for Library "Invariant properties:\n<ul>\n<li>name != null</li>\n<li>description != null</li>\n<li>mediaAvailable != null</li>\n<li>resources != null</li>\n<li>map != null</li>\n<li>all media and resources unique</li>\n</ul>"
 
-note for Map "Invariant properties:\n<ul>\n    
-<li>map != null</li>\n    
-<li>library != null</li>\n</ul>"
+note for Book "Invariant properties:\n<ul>\n<li>title != null</li>\n<li>author != null</li>\n<li>publisher != null</li>\n<li>library != null</li>\n<li>genre != null</li>\n<li>totalCopies >= 0</li>\n</ul>"
 
-note for Book "Invariant properties:\n<ul>\n    
-<li>title != null</li>\n   
-<li>author != null</li>\n    
-<li>publisher != null</li>\n    
-<li>library != null</li>\n    
-<li>genre != null</li>\n    
-<li>totalCopies >= 0</li>\n</ul>"
+note for Movie "Invariant properties:\n<ul>\n<li>title != null</li>\n<li>director != null</li>\n<li>library != null</li>\n<li>genre != null</li>\n<li>totalCopies >= 0</li>\n</ul>"
 
-note for Movie "Invariant properties:\n<ul>\n    
-<li>title != null</li>\n    
-<li>director != null</li>\n    
-<li>library != null</li>\n    
-<li>genre != null</li>\n   
- <li>totalCopies >= 0</li>\n</ul>"
+note for Review "Invariant properties:\n<ul>\n<li>user != null</li>\n<li>media != null</li>\n<li>comment != null</li>\n<li>stars between 1 and 10</li>\n</ul>"
 
-note for Review "Invariant properties:\n<ul>\n    
-<li>user != null</li>\n    
-<li>media != null</li>\n    
-<li>comment != null</li>\n    
-<li>stars >= 1 && stars <= 10</li>\n</ul>"
+note for Booking "Invariant properties:\n<ul>\n<li>resource != null</li>\n<li>user != null</li>\n<li>timeSlot != null</li>\n<li>timeSlot ∈ TimeSlot.ONE_HOUR_SLOTS</li>\n</ul>"
 
-note for User "Invariant properties:\n<ul>\n    
-<li>username != null</li>\n    
-<li>username.length() > 0</li>\n    
-<li>id > 0</li>\n   
-<li>finesDue >= 0</li>\n    
-<li>itemsIssued != null</li>\n    
-<li>loop: all issued item IDs are valid</li>\n</ul>"
+note for Computer "Invariant properties:\n<ul>\n<li>computerId != null</li>\n<li>bookings != null</li>\n<li>library != null</li>\n<li>each timeSlot unique</li>\n</ul>"
 
-note for UserManagement "Invariant properties:\n<ul>\n    
-<li>users != null</li>\n    
-<li>loop: all user IDs are unique</li>\n</ul>"
-
-note for LibraryManagement "Invariant properties:\n<ul>\n    
-<li>libraries != null</li>\n    
-<li>loop: all libraries have unique names</li>\n</ul>"
-
-note for StudyRoom "Invariant properties:\n<ul>\n    
-<li>roomNumber != null</li>\n    
-<li>bookings != null</li>\n    
-<li>library != null</li>\n   
-<li>loop: each timeSlot appears at most once in bookings</li>\n</ul>"
-
-note for Computer "Invariant properties:\n<ul>\n    
-<li>computerId != null</li>\n    
-<li>bookings != null</li>\n    
-<li>library != null</li>\n    
-<li>loop: each timeSlot appears at most once in bookings</li>\n</ul>"
-
-note for Booking "Invariant properties:\n<ul>\n    
-<li>resource != null</li>\n    
-<li>memberName != null && memberName.length() > 0</li>\n    
-<li>timeSlot != null</li>\n    
-<li>timeSlot ∈ TimeSlots.ONE_HOUR_SLOTS</li>\n</ul>"
-
-note for TimeSlots "Invariant properties:\n<ul>\n    
-<li>ONE_HOUR_SLOTS != null</li>\n    
-<li>loop: all time slots are valid and unique</li>\n</ul>"
-
-```
-
+note for StudyRoom "Invariant properties:\n<ul>\n<li>roomNumber != null</li>\n<li>bookings != null</li>\n<li>library != null</li>\n<li>each timeSlot unique</li>\n</ul>"
