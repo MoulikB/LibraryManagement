@@ -33,14 +33,17 @@ public class Movie implements MediaInterface {
      */
     public Movie(String title, String director, int mediaID,
                  Library library, MediaGenres genre) {
-
+        Preconditions.checkArgument(title!= null && !title.isEmpty(), "Title cannot be null , or empty" );
+        Preconditions.checkArgument(director != null && !director.isEmpty(), "Director cannot be null or empty" );
+        Preconditions.checkArgument(mediaID > 0,"Media ID cannot be less than 1" );
+        Preconditions.checkNotNull(library , "Library cannot be null" );
+        Preconditions.checkNotNull(genre , "Genre cannot be null" );
         this.title = title;
         this.director = director;
         this.mediaID = mediaID;
         this.library = library;
         this.genre = genre;
         checkInvariants();
-        library.addMedia(this);
 
     }
 
@@ -48,12 +51,11 @@ public class Movie implements MediaInterface {
      * Check the invariants for our domain model object and throw an error if violated
      */
     public void checkInvariants() {
-        Preconditions.checkNotNull(title);
-        Preconditions.checkNotNull(director);
-        Preconditions.checkArgument(mediaID >= 0);
-        Preconditions.checkNotNull(library);
-        Preconditions.checkNotNull(genre);
-        Preconditions.checkArgument(!title.isEmpty());
+        Preconditions.checkArgument(title!= null && !title.isEmpty(), "Title cannot be null , or empty" );
+        Preconditions.checkArgument(director != null && !director.isEmpty(), "Director cannot be null or empty" );
+        Preconditions.checkArgument(mediaID > 0,"Media ID cannot be less than 1" );
+        Preconditions.checkNotNull(library , "Library cannot be null" );
+        Preconditions.checkNotNull(genre , "Genre cannot be null" );
     }
 
     /** the media type of the interface
@@ -97,7 +99,9 @@ public class Movie implements MediaInterface {
     /** Return one copy (increase the available count by 1).
      */
     public void returnMedia() {
+        checkInvariants();
         totalCopies++;
+        checkInvariants();
     }
 
     /** Return the title of the movie

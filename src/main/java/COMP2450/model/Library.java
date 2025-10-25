@@ -104,7 +104,7 @@ public class Library {
         resources.add(resource);
     }
 
-    /** Print info about one resource by name
+    /** Finds a resource from the list and returns it
      *
      * @param resourceName
      * @return Resource object
@@ -124,7 +124,7 @@ public class Library {
      * Remove a media item by its ID.
      * @param mediaId
      */
-    public void removeMedia(int mediaId) {
+    public boolean removeMedia(int mediaId) {
         Preconditions.checkArgument(mediaId > 0, "Media ID cannot be less than 1");
         boolean removed = false;
         int index = 0;
@@ -135,10 +135,8 @@ public class Library {
             }
             index++;
         }
-        if (!removed) {
-            System.out.println("Resource not found");
-        }
         checkInvariants();
+        return removed;
 
     }
 
@@ -156,9 +154,6 @@ public class Library {
             if (mediaAvailable.get(index).getMediaID() == mediaId) {
                 media = mediaAvailable.get(index);
             }
-        }
-        if (media == null) {
-            System.out.println("Resource not found");
         }
         checkInvariants();
         return media;

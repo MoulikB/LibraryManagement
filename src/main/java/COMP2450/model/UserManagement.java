@@ -25,20 +25,20 @@ public class UserManagement {
      * Add a user to the list.
      * @param user
      */
-    public void addUser(User user) {
+    public static boolean addUser(User user) {
         Preconditions.checkNotNull(user, "User cannot be null");
         checkInvariants();
-        if (!userExistsBoolean(user.getID())) {
+        boolean existsBoolean = userExistsBoolean(user.getID());
+        if (!existsBoolean) {
             users.add(user);
-        } else {
-            System.out.println("This user is duplicate");
         }
+        return existsBoolean;
     }
 
     /**
      * Check the invariants for our domain model object and throw an error if violated
      */
-    public void checkInvariants() {
+    public static void checkInvariants() {
         Preconditions.checkNotNull(users);
     }
 
@@ -62,12 +62,16 @@ public class UserManagement {
         return userFound;
     }
 
+    public static List<User> getUsers() {
+        return users;
+    }
+
     /**
      * Check if a user with this ID exists (true/false).
      * @param id
      * @return whether user exists
      */
-    public boolean userExistsBoolean(int id) {
+    public static boolean userExistsBoolean(int id) {
         Preconditions.checkArgument(id > 0, "Invalid ID");
         boolean userExists = false;
         int i = 0;
@@ -99,17 +103,17 @@ public class UserManagement {
     }
 
     /**
-     * Remove a user by ID. Prints a message if the user doesn't exist.
+     * Remove a user by ID.
      * @param id
+     * @return if user was removed
      */
-    public void removeUser(int id) {
+    public boolean removeUser(int id) {
         Preconditions.checkArgument(id > 0, "Invalid ID");
         User userExists = userExists(id);
         if (userExists!=null) {
             users.remove(userExists);
-        } else {
-            System.out.println("User does not exist!");
         }
+        return userExists != null;
     }
 
     /**

@@ -228,16 +228,16 @@ StudyRoom "1" <-- "1" Library : locatedAt
 Computer "1" <-- "1" Library : locatedAt
 
 %% ===== Invariants =====
-note for Library "Invariant properties:\n<ul>\n<li>name != null</li>\n<li>description != null</li>\n<li>mediaAvailable != null</li>\n<li>resources != null</li>\n<li>map != null</li>\n<li>all media and resources unique</li>\n</ul>"
+note for Library "Invariant properties:<ul><li>name != null</li><li>description != null</li><li>mediaAvailable != null</li><li>resources != null</li><li>map != null</li><li>all media and resources unique</li></ul>"
 
-note for Book "Invariant properties:\n<ul>\n<li>title != null</li>\n<li>author != null</li>\n<li>publisher != null</li>\n<li>library != null</li>\n<li>genre != null</li>\n<li>totalCopies >= 0</li>\n</ul>"
+note for Book "Invariant properties:<ul><li>title != null</li><li>author != null</li><li>publisher != null</li><li>library != null</li><li>genre != null</li><li>totalCopies >= 0</li></ul>"
 
-note for Movie "Invariant properties:\n<ul>\n<li>title != null</li>\n<li>director != null</li>\n<li>library != null</li>\n<li>genre != null</li>\n<li>totalCopies >= 0</li>\n</ul>"
+note for Movie "Invariant properties:<ul><li>title != null</li><li>director != null</li><li>library != null</li><li>genre != null</li><li>totalCopies >= 0</li></ul>"
 
-note for Review "Invariant properties:\n<ul>\n<li>user != null</li>\n<li>media != null</li>\n<li>comment != null</li>\n<li>stars between 1 and 10</li>\n</ul>"
+note for Review "Invariant properties:<ul><li>user != null</li><li>media != null</li><li>comment != null</li><li>stars between 1 and 10</li></ul>"
 
-note for Booking "Invariant properties:\n<ul>\n<li>resource != null</li>\n<li>user != null</li>\n<li>timeSlot != null</li>\n<li>timeSlot ∈ TimeSlot.ONE_HOUR_SLOTS</li>\n</ul>"
+note for Booking "Invariant properties:<ul><li>resource != null</li><li>user != null</li><li>timeSlot != null</li><li>timeSlot ∈ TimeSlot.ONE_HOUR_SLOTS</li></ul>"
 
-note for Computer "Invariant properties:\n<ul>\n<li>computerId != null</li>\n<li>bookings != null</li>\n<li>library != null</li>\n<li>each timeSlot unique</li>\n</ul>"
+note for Computer "Invariant properties:<ul><li>computerId != null</li><li>bookings != null</li><li>library != null</li><li>each timeSlot unique</li></ul>"
 
-note for StudyRoom "Invariant properties:\n<ul>\n<li>roomNumber != null</li>\n<li>bookings != null</li>\n<li>library != null</li>\n<li>each timeSlot unique</li>\n</ul>"
+note for StudyRoom "Invariant properties:<ul><li>roomNumber != null</li><li>bookings != null</li><li>library != null</li><li>each timeSlot unique</li></ul>"

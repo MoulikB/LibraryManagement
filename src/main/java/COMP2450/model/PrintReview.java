@@ -12,4 +12,10 @@ public class PrintReview {
         output += "\nStars: " + review.stars();
         System.out.println(output);
     }
+
+    public static void printReviews(MediaInterface media) {
+        for (Review rev : media.getReviews()) {
+            printReview(rev);
+        }
+    }
 }

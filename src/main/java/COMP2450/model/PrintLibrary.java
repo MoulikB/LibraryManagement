@@ -5,10 +5,20 @@ import java.util.List;
 public class PrintLibrary {
     public static void printLibrary(Library library) {
 
-        System.out.print( "Library : " + library.getName());
+        System.out.println( "Library : " + library.getName());
         List<MediaInterface> mediaAvailable = library.getMediaAvailable();
         for (MediaInterface media : mediaAvailable) {
-            System.out.print(media);
+            if (media instanceof Movie) {
+                PrintMedia.printMovie((Movie )media);
+            } else {
+                PrintMedia.printBook((Book)media);
+            }
+        }
+    }
+
+    public static void printLibraryList() {
+        for (var Library : LibraryManagement.getLibraries()) {
+            printLibrary(Library);
         }
     }
 

@@ -1,28 +1,51 @@
 package COMP2450.model;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * TimeSlots
  * Utility class defining canonical one-hour booking slots,
  * used to standardize scheduling across all resources.
  */
 
-public class TimeSlots {
-    private final String value;
-    public TimeSlots(String value) { this.value = value; }
+public enum TimeSlots {
+    NINE_TO_TEN("09:00–10:00"),
+    TEN_TO_ELEVEN("10:00–11:00"),
+    ELEVEN_TO_TWELVE("11:00–12:00"),
+    TWELVE_TO_ONE("12:00–13:00"),
+    ONE_TO_TWO("13:00–14:00"),
+    TWO_TO_THREE("14:00–15:00"),
+    THREE_TO_FOUR("15:00–16:00"),
+    FOUR_TO_FIVE("16:00–17:00");
 
-    public String value() { return value; }
+    private final String label;
 
-    public static final List<String> ONE_HOUR_SLOTS = Arrays.asList(
-            "09:00-10:00",
-            "10:00-11:00",
-            "11:00-12:00",
-            "12:00-13:00",
-            "13:00-14:00",
-            "14:00-15:00",
-            "15:00-16:00",
-            "16:00-17:00"
-    );
+    TimeSlots(String label) {
+        this.label = label;
+    }
+    /**
+     * @return A human-readable label for this time slot (e.g., "09:00–10:00").
+     */
+    public String getLabel() {
+        return label;
+    }
+
+    @Override
+    public String toString() {
+        return label;
+    }
+
+    /**
+     * Converts a string to the matching TimeSlots value, ignoring case and spacing.
+     * @param input A string label or enum name.
+     * @return The matching TimeSlots constant, or {@code null} if none match.
+     */
+    public static TimeSlots fromString(String input) {
+        if (input == null) return null;
+        for (TimeSlots slot : TimeSlots.values()) {
+            if (slot.name().equalsIgnoreCase(input.trim())
+                    || slot.label.equalsIgnoreCase(input.trim())) {
+                return slot;
+            }
+        }
+        return null;
+    }
 }

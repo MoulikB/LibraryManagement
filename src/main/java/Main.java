@@ -132,7 +132,10 @@ public class Main {
         System.out.print("Enter your phone number (input has to be an integer greater than 0) :");
         int phone = InputValidation.getIntInput();
 
-        new User(username,id , email, phone);
+
+        if (UserManagement.addUser(new User(username,id , email, phone))) {
+            System.out.println("User already exists");
+        }
         chooseOption();
     }
 
@@ -152,7 +155,9 @@ public class Main {
         System.out.print("Enter member ID (input has to be an integer greater than 0) : ");
         int id = InputValidation.getIntInput();
 
-        User.userDB.removeUser(id);
+        if (!User.userDB.removeUser(id)) {
+            System.out.println("User does not exist, nothing has been removed");
+        };
         chooseOption();
     }
 
@@ -305,7 +310,9 @@ public class Main {
         System.out.println("Enter the Library Name (input can't be null or empty): ");
         Library library = LibraryManagement.findLibrary(InputValidation.getStringInput());
 
-        new Movie( title, director, mediaID, library, genre);
+        if (library !=null) {
+        library.addMedia(new Movie( title, director, mediaID, library, genre));
+        }
     }
 
     static MediaGenres findGenre(String genreString){
@@ -345,7 +352,7 @@ public class Main {
         Library library = LibraryManagement.findLibrary(InputValidation.getStringInput());
         
         if (library !=null) {
-            new Book(title,author,publisher,genre,isbn,library);
+            library.addMedia(new Book(title,author,publisher,genre,isbn,library));
         }
     }
 
@@ -384,7 +391,9 @@ public class Main {
         System.out.println("Enter the Library Name (input can't be null or empty): ");
         Library library = LibraryManagement.findLibrary(InputValidation.getStringInput());
         if (library!=null) {
-            library.removeMedia(mediaID);
+            if (!library.removeMedia(mediaID)) {
+                System.out.println("Media Not Found");
+            }
         } else {
             System.out.println("Library Not Found");
             System.out.println("Media Not Found");

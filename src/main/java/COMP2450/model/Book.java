@@ -37,9 +37,9 @@ public class Book implements MediaInterface {
      */
     public Book(String title, String author, String publisher,
                 MediaGenres genre, int isbn, Library library) {
-        Preconditions.checkArgument(title != null && title.isEmpty(), "title can't be null");
-        Preconditions.checkArgument(author != null && author.isEmpty(), "author can't be null");
-        Preconditions.checkArgument(publisher != null && publisher.isEmpty(), "publisher can't be null");
+        Preconditions.checkArgument(title != null && !title.isEmpty(), "title can't be null");
+        Preconditions.checkArgument(author != null && !author.isEmpty(), "author can't be null");
+        Preconditions.checkArgument(publisher != null && !publisher.isEmpty(), "publisher can't be null");
         Preconditions.checkArgument(genre != null, "genre can't be null");
         Preconditions.checkArgument(isbn >= 0, "isbn can't be negative");
         Preconditions.checkArgument(library != null, "library can't be null");
@@ -49,7 +49,6 @@ public class Book implements MediaInterface {
         this.genre = genre;
         this.mediaID = isbn;
         setLibrary(library);
-        library.addMedia(this);
         checkInvariants();
     }
 

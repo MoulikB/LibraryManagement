@@ -52,7 +52,7 @@ public class LibraryManagement {
      * @param name
      * @return library object
      * - name must not be null or empty.
-     * - returns the Library if found, otherwise prints a message and returns null.
+     * - returns the Library if found, otherwise returns null.
      */
     public static Library findLibrary(String name) {
         Preconditions.checkArgument(name!=null && !name.isEmpty() , "name is null or empty");
@@ -63,9 +63,6 @@ public class LibraryManagement {
                 output = libraries.get(index);
             }
             index++;
-        }
-        if (output == null) {
-            System.out.println("Library with name " + name + " not found");
         }
         checkInvariants();
         return output;

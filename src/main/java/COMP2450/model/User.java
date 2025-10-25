@@ -17,10 +17,10 @@ public class User {
     public static UserManagement userDB = new UserManagement();
     private final String email;
     private final int phone;
-    private List<Review> reviewsWritten;
+    private final List<Review> reviewsWritten;
 
     private double finesDue;  // how much is owed (if any)
-    private List<Integer> itemsIssued = new ArrayList<>(); // media IDs issued
+    private final List<Integer> itemsIssued = new ArrayList<>(); // media IDs issued
     // Not using the above two in current implementation, will be added later when waitlist and mediaIssue class is added
 
     /**
@@ -45,7 +45,6 @@ public class User {
         this.email = email;
         this.phone = phone;
         checkInvariants();
-        userDB.addUser(this);
         reviewsWritten = new ArrayList<>();
     }
 
@@ -130,5 +129,8 @@ public class User {
         return output;
     }
 
+    public List<Integer> getItemsIssued() {
+        return itemsIssued;
+    }
 }
 

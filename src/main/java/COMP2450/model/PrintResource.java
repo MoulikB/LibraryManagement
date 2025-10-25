@@ -5,10 +5,9 @@ public class PrintResource {
         System.out.println("\n--- Resource Information ---");
         System.out.println("Name: " + resource.getResourceName());
         System.out.println("Available Time Slots:");
-        for (var slotValue : TimeSlots.ONE_HOUR_SLOTS) {
-            TimeSlots slot = new TimeSlots(slotValue);
-            if (resource.isAvailable(slot)) {
-                System.out.println(" - " + slotValue);
+        for (var slotValue : TimeSlots.values()) {
+            if (resource.isAvailable(slotValue)) {
+                System.out.println(slotValue);
             }
         }
     }

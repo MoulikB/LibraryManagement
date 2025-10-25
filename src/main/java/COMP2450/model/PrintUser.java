@@ -6,5 +6,9 @@ public class PrintUser {
         System.out.println( "ID : " + user.getID() + " , Name :" + user.getUsername() + ", Email : " + user.getEmail() + ", Phone : " + user.getPhone());
     }
 
-
+    public static void printAllUsers() {
+        for (var user : UserManagement.getUsers()) {
+            userInfo(user);
+        }
+    }
 }

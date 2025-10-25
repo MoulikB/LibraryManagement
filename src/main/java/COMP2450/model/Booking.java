@@ -63,14 +63,4 @@ public class Booking {
         return timeSlot;
     }
 
-    /** A simple text summary of the booking for debugging purposes.
-     *
-     * @return a short summary
-     */
-    @Override
-    public String toString() {
-        checkInvariants();
-        return "Booking for " + resource.getResourceName() + " by " + user.getID() +
-                " at " + timeSlot;
-    }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class StudyRoom implements Resource {
     private final String roomName;
-    private List<Booking> bookings;
+    private final List<Booking> bookings;
     final Library library;
 
     /**
@@ -65,6 +65,7 @@ public class StudyRoom implements Resource {
             if (bookings.get(index).timeSlot.equals(timeSlot)) {
                 result = false;
             }
+            index++;
         }
         checkInvariants();
         return result;
