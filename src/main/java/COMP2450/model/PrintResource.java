@@ -8,7 +8,7 @@ public class PrintResource {
         for (var slotValue : TimeSlots.ONE_HOUR_SLOTS) {
             TimeSlots slot = new TimeSlots(slotValue);
             if (resource.isAvailable(slot)) {
-                System.out.println(" - " + slot);
+                System.out.println(" - " + slotValue);
             }
         }
     }
