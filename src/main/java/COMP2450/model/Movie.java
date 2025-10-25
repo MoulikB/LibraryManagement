@@ -22,14 +22,11 @@ public class Movie implements MediaInterface {
 
     /**
      * Constructor: makes a new Movie and adds it to the given library.
-     * @param library
-     * @param genre
-     * @param director
-     * @param mediaID
-     * @param title
-     * Preconditions:
-     *  - title, director, library, genre are not null or empty
-     *  - mediaID is not negative
+     * @param library the library object this movie currently belongs to (can't be null)
+     * @param genre the genre of the movie (can't be null)
+     * @param director the director of the movie (can't be null)
+     * @param mediaID the ID of the movie (has to be a positive number)
+     * @param title the title of the movie (can not be null or empty)
      */
     public Movie(String title, String director, int mediaID,
                  Library library, MediaGenres genre) {
@@ -144,7 +141,7 @@ public class Movie implements MediaInterface {
     /**
      * Check if this media already exists in its library (same mediaID).
      * Returns true if found, false otherwise.
-     * @param media
+     * @param media The media we are searching for (can not be null and has to be an instance of movie)
      * @return whether the media exists
      */
     public boolean mediaExists(MediaInterface media) {
@@ -152,14 +149,15 @@ public class Movie implements MediaInterface {
         Preconditions.checkNotNull(media);
         Preconditions.checkArgument(media instanceof Movie);
         boolean mediaExists = false;
-        Preconditions.checkNotNull(media);
         Library library = media.getLibrary();
 
         List<MediaInterface> mediaAvailable = library.getMediaAvailable();
         int index = 0;
         while (!mediaExists && index < mediaAvailable.size()) {
-            if (mediaAvailable.get(index).getMediaID() == media.getMediaID()) {
-                mediaExists = true;
+            if (library.getMediaAvailable().get(index) instanceof Movie) {
+                if (mediaAvailable.get(index).getMediaID() == media.getMediaID()) {
+                    mediaExists = true;
+                }
             }
             index++;
         }
@@ -169,7 +167,7 @@ public class Movie implements MediaInterface {
 
     /**
      * Add a review to the shared reviews list.
-     * @param review
+     * @param review the review to be added (can not be null)
      */
     public void addReview(Review review) {
         Preconditions.checkNotNull(review);

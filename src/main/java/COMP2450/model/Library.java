@@ -14,14 +14,13 @@ public class Library {
     String name;
     List<MediaInterface> mediaAvailable;
     Map map;
-    List<Resource> resources = new ArrayList<>();
+    List<Resource> resources;
     public static LibraryManagement libraryManagement = new LibraryManagement();
 
 
     /**
-     * Make a new Library.
-     * @param name
-     * - checks that the name is not null
+     * Constructor:  Make a new Library
+     * @param name the name of the library (checks that the name is not null)
      * - creates empty media/resources lists
      * - creates a Map for this library
      * - registers this library in LibraryManagement
@@ -30,7 +29,9 @@ public class Library {
         Preconditions.checkArgument(name!=null && !name.isEmpty(), "Library name cannot be null or empty");
         this.name = name;
         this.mediaAvailable = new ArrayList<>();
+        this.resources = new ArrayList<>();
         map = new Map(this);
+        checkInvariants();
         LibraryManagement.addLibrary(this);
     }
 
@@ -46,11 +47,13 @@ public class Library {
 
     /** Add a media item (book/movie) to this library.
      *
-     * @param media
+     * @param media the media to be added to the resources list (must not be null)
      */
     public void addMedia(MediaInterface media) {
+        checkInvariants();
         Preconditions.checkArgument(media!=null, "Media object cannot be null");
         this.mediaAvailable.add(media);
+        checkInvariants();
     }
 
     /** Get all media in this library.
@@ -69,12 +72,13 @@ public class Library {
         return name;
     }
 
-    /** Murate name of library
+    /** Mutate name of library
      *
-     * @param name
+     * @param name new name of the library (must not be null or empty)
      */
     public void setName(String name) {
         Preconditions.checkArgument(name != null && !name.isEmpty(), "Library name cannot be null or empty");
+        checkInvariants();
         this.name = name;
         checkInvariants();
     }
@@ -97,19 +101,24 @@ public class Library {
 
     /** Add a resource to this library.
      *
-     * @param resource
+     * @param resource the new resource being added (must not be null)
      */
     public void addResource(Resource resource) {
         Preconditions.checkArgument(resource!=null, "Resource object cannot be null");
+        checkInvariants();
         resources.add(resource);
+        checkInvariants();
     }
 
     /** Finds a resource from the list and returns it
      *
-     * @param resourceName
+     * @param resourceName the name of the resource being searched for (must not be null or empty)
      * @return Resource object
      */
     public Resource getResource(String resourceName) {
+        checkInvariants();
+        Preconditions.checkArgument(resourceName!=null && !resourceName.isEmpty(),
+                "Resource name cannot be null or mepty");
         Resource resourceFound = null;
         for (Resource resource : resources) {
             if (resource.getResourceName().equals(resourceName)) {
@@ -122,10 +131,11 @@ public class Library {
 
     /**
      * Remove a media item by its ID.
-     * @param mediaId
+     * @param mediaId the ID which we are searching for to remove (cant be less than 1)
      */
     public boolean removeMedia(int mediaId) {
         Preconditions.checkArgument(mediaId > 0, "Media ID cannot be less than 1");
+        checkInvariants();
         boolean removed = false;
         int index = 0;
         while (index < mediaAvailable.size() && !removed) {
@@ -143,11 +153,12 @@ public class Library {
     /**
      * Find and return a media item by ID.
      * Prints a message if not found and returns null.
-     * @param mediaId
+     * @param mediaId the ID we are seaching for (cant be less than 1)
      * @return media object
      */
     public MediaInterface showMedia(int mediaId) {
         Preconditions.checkArgument(mediaId>0, "Media ID cannot be less than 1");
+        checkInvariants();
         MediaInterface media = null;
         int index = 0;
         while (index < mediaAvailable.size() && media == null) {

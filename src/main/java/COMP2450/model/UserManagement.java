@@ -15,7 +15,7 @@ public class UserManagement {
     private static List<User> users;
 
     /**
-    * UserManagement: stores and manages all User objects.
+    * Constructor : UserManagement: stores and manages all User objects.
      */
     public UserManagement() {
         users = new ArrayList<>();
@@ -23,7 +23,8 @@ public class UserManagement {
 
     /**
      * Add a user to the list.
-     * @param user
+     * @param user to be added (cannot be null)
+     * @return whether the user was added
      */
     public static boolean addUser(User user) {
         Preconditions.checkNotNull(user, "User cannot be null");
@@ -32,6 +33,7 @@ public class UserManagement {
         if (!existsBoolean) {
             users.add(user);
         }
+        checkInvariants();
         return existsBoolean;
     }
 
@@ -44,7 +46,7 @@ public class UserManagement {
 
     /**
      * Get a user by ID. Returns the user or null if not found.
-     * @param id
+     * @param id the ID we are searching for (has to be greater than 0)
      * @return user with corresponding id
      */
     public User getUser(int id) {
@@ -68,10 +70,11 @@ public class UserManagement {
 
     /**
      * Check if a user with this ID exists (true/false).
-     * @param id
+     * @param id The ID we are checking for in our function (has to be greater than 0)
      * @return whether user exists
      */
     public static boolean userExistsBoolean(int id) {
+        checkInvariants();
         Preconditions.checkArgument(id > 0, "Invalid ID");
         boolean userExists = false;
         int i = 0;
@@ -81,15 +84,17 @@ public class UserManagement {
             }
             i++;
         }
+        checkInvariants();
         return userExists;
     }
 
     /**
      * Find a user by ID and return it (or null if not found).
-     * @param id
+     * @param id the ID we are checking for (has to be greater than 0)
      * @return return user if it exists
      */
     public User userExists(int id) {
+        checkInvariants();
         Preconditions.checkArgument(id > 0, "Invalid ID");
         User userAlreadyExists = null;
         int index = 0;
@@ -99,20 +104,23 @@ public class UserManagement {
             }
             index++;
         }
+        checkInvariants();
         return (userAlreadyExists);
     }
 
     /**
      * Remove a user by ID.
-     * @param id
+     * @param id the ID we are checking for (has to be greater than 0)
      * @return if user was removed
      */
     public boolean removeUser(int id) {
+        checkInvariants();
         Preconditions.checkArgument(id > 0, "Invalid ID");
         User userExists = userExists(id);
         if (userExists!=null) {
             users.remove(userExists);
         }
+        checkInvariants();
         return userExists != null;
     }
 

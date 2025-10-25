@@ -22,18 +22,14 @@ public class Book implements MediaInterface {
     static List<Review> reviews = new ArrayList<>();
 
     /**
-     * Constructor: makes a new Book and adds it to the given library.
+     * Constructor: makes a new Book and adds it to the given library with some preconditions
      *
-     * @param title
-     * @param author
-     * @param genre
-     * @param isbn
-     * @param library
-     * @param publisher
-     * Preconditions:
-     *  - strings are not null/empty
-     *  - genre and library are not null
-     *  - ISBN is a positive integer
+     * @param title     the title of the book (must not be null or empty)
+     * @param author    the author's name (must not be null or empty)
+     * @param publisher the publisher's name (must not be null or empty)
+     * @param genre     the book's literary genre (must not be null)
+     * @param isbn      the unique identifier for this book (must be positive)
+     * @param library   the library to which this book belongs (must not be null)
      */
     public Book(String title, String author, String publisher,
                 MediaGenres genre, int isbn, Library library) {
@@ -158,7 +154,7 @@ public class Book implements MediaInterface {
     }
 
     /** Change which library this book belongs to.
-     * @param library
+     * @param library the library to which this book belongs (must not be null)
      */
     public void setLibrary(Library library) {
         Preconditions.checkArgument(library != null, "library can't be null");
@@ -169,10 +165,11 @@ public class Book implements MediaInterface {
     /**
      * Check if this media already exists in its library (same mediaID).
      * Returns true if found, false otherwise.
-     * @param media
+     * @param media  The media we are searching for (can not be null and has to be an instance of book)
      * @return whether the media exists
      */
     public boolean mediaExists(MediaInterface media) {
+        checkInvariants();
         Preconditions.checkNotNull(media);
         Preconditions.checkArgument(media instanceof Book);
         boolean mediaExists = false;
@@ -181,8 +178,10 @@ public class Book implements MediaInterface {
         List<MediaInterface> mediaAvailable = library.getMediaAvailable();
         int index = 0;
         while (!mediaExists && index < mediaAvailable.size()) {
-            if (mediaAvailable.get(index).getMediaID() == media.getMediaID()) {
-                mediaExists = true;
+            if (library.getMediaAvailable().get(index) instanceof Book) {
+                if (mediaAvailable.get(index).getMediaID() == media.getMediaID()) {
+                    mediaExists = true;
+                }
             }
             index++;
         }
@@ -192,7 +191,7 @@ public class Book implements MediaInterface {
 
     /**
      * Add a review to the shared reviews list.
-     * @param review
+     * @param review A review for the media (must not be null)
      */
     public void addReview(Review review) {
         Preconditions.checkNotNull(review,"review can't be null");

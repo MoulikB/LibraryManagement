@@ -17,12 +17,9 @@ public class Computer implements Resource {
     Library library;
 
     /**
-     * Make a new Computer and add it to the library.
-     * @param computerId
-     * @param library
-     * Checks:
-     *  - computerId is not null/empty
-     *  - library is not null
+     * Constructor : Make a new Computer and add it to the library.
+     * @param computerId the ID of the new resource (must not be null/empty)
+     * @param library the library being added to (must not be null)
      */
     public Computer(String computerId, Library library) {
         Preconditions.checkArgument(computerId != null && !computerId.isEmpty(),"computerId cannot be null or empty");
@@ -52,7 +49,7 @@ public class Computer implements Resource {
     /**
      * Is this time slot free?
      * Returns false if any existing booking has the same timeSlot.
-     * @param timeSlot
+     * @param timeSlot A timeslot from the given timeslot options we have (must not be null)
      * @return whether available
      */
     public boolean isAvailable(TimeSlots timeSlot) {
@@ -72,7 +69,7 @@ public class Computer implements Resource {
 
     /**
      * Add a booking to this computer.
-     * @param booking
+     * @param booking The booking to be added for this resource (must not be null)
      */
     public void addBooking(Booking booking) {
         Preconditions.checkNotNull(booking);

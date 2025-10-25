@@ -25,14 +25,10 @@ public class User {
 
     /**
      * Create a new User and add it to the shared user database.
-     * @param email
-     * @param id
-     * @param phone
-     * @param username
-     * Checks:
-     *  - username must not be null or empty
-     *  - id must be > 0
-     *
+     * @param email the email of the yser (email can't be empty or null)
+     * @param id the ID of the user (has to be greater than 0)
+     * @param phone the phone number of the user (has to be greater than 0)
+     * @param username the name of the yser (name can't be empty or null)
      * If checks pass, the user is registered in userDB.
      */
     public User(String username,int id, String email,int phone)  {
@@ -92,7 +88,7 @@ public class User {
 
     /** Add a review
      *
-     * @param review
+     * @param review the reviews that belong to this user
      */
     public void addReview(Review review) {
         Preconditions.checkNotNull(review);
@@ -111,24 +107,28 @@ public class User {
 
     /**
      * Compare two users for equality.
-     * @param other
+     * @param otherUser the other user being compared to. ( can not be null)
      * - Returns true if they are the same object.
      * - Otherwise, returns true if their IDs are equal.
      * @return whether the users or equal
      */
-    public boolean equals(User other) {
+    public boolean equals(User otherUser) {
         checkInvariants();
-        Preconditions.checkNotNull(other, "User cannot be null");
-        other.checkInvariants();
+        Preconditions.checkNotNull(otherUser, "User cannot be null");
+        otherUser.checkInvariants();
         boolean output;
-        if (this == other) {
+        if (this == otherUser) {
             output = true;
         } else {
-            output =  (this.id == other.id);
+            output =  (this.id == otherUser.id);
         }
         return output;
     }
 
+    /**
+     *
+     * @return List of all items issued
+     */
     public List<Integer> getItemsIssued() {
         return itemsIssued;
     }

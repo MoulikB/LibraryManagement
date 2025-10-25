@@ -14,8 +14,8 @@ public class Map {
     public Library library;
 
     /**
-    Creates map, for phase 1 we are using a default map
-     @param library
+    Constructor : Creates map, for phase 1 we are using a default map
+     @param library The library this map belongs to
      */
     public Map(Library library) {
         Preconditions.checkNotNull(library, "library cannot be null");

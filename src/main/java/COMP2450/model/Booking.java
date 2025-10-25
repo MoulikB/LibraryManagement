@@ -12,15 +12,13 @@ public class Booking {
     Resource resource;
     User user;
     TimeSlots timeSlot;
+
     /**
-     * Make a new Booking.
-     *  @param resource   Which resource is booked
-     *  @param user Who booked it
-     *  @param timeSlot   1-hour time slot
-     * Preconditions:
-     *  - resource is not null
-     *  - memberName is not null/empty
-     *  - timeSlot is not null
+     * Constructor : Make a new Booking with some preconditions
+     * @param resource  the resource being booked (must not be null)
+     * @param user      the user who made the booking (must not be null)
+     * @param timeSlot  the one-hour time slot for which the booking applies (must not be null)
+     *
      */
     public Booking(Resource resource, User user, TimeSlots timeSlot) {
         Preconditions.checkNotNull(resource, "Resource can't be null");

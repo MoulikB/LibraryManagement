@@ -18,11 +18,9 @@ public class StudyRoom implements Resource {
 
     /**
      * Make a new StudyRoom and add it to the library.
-     * @param library
-     * @param roomName
-     * Checks:
-     *  - roomName is not null or empty
-     *  - library is not null
+     * @param library The library the study room belongs to (can not be null)
+     * @param roomName The room name/number of the object (can not be null or empty)
+
      */
     public StudyRoom(String roomName, Library library) {
         Preconditions.checkArgument( roomName != null && !roomName.isEmpty(), "Room name cannot be null or empty");
@@ -54,10 +52,11 @@ public class StudyRoom implements Resource {
     /**
      * Is this time slot free?
      * Returns false if any existing booking has the same timeSlot.
-     * @param timeSlot
+     * @param timeSlot the timeslot we are trying to book ( can not be null)
      * @return whether timeslot is free
      */
     public boolean isAvailable(TimeSlots timeSlot) {
+        checkInvariants();
         Preconditions.checkArgument( timeSlot != null, "Time Slot cannot be null");
         boolean result = true;
         int index = 0;
@@ -73,7 +72,7 @@ public class StudyRoom implements Resource {
 
     /**
      * Add a booking to this room.
-     * @param booking
+     * @param booking The booking being added to this resource (can not be null)
      */
     public void addBooking(Booking booking) {
         checkInvariants();

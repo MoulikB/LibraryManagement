@@ -16,7 +16,7 @@ public class LibraryManagement {
     public static List<Library> libraries;
 
     /**
-     * LibraryManagement: keeps track of all Library objects in the program.
+     * Constructor : libraries keeps track of all Library objects in the program.
      */
     public LibraryManagement() {
         libraries = new ArrayList<>();
@@ -31,12 +31,13 @@ public class LibraryManagement {
 
     /**
      * Add a library to the list.
-     * @param library
-     * Precondition: library is not null.
+     * @param library the library to be added (can't be null)
      */
     public static void addLibrary(Library library) {
+        checkInvariants();
         Preconditions.checkNotNull(library, "Library data cant't be null");
         libraries.add(library);
+        checkInvariants();
     }
 
     /** Shared list of all libraries in the system.
@@ -49,13 +50,12 @@ public class LibraryManagement {
 
     /**
      * Find a library by its name.
-     * @param name
-     * @return library object
-     * - name must not be null or empty.
-     * - returns the Library if found, otherwise returns null.
+     * @param name the name of the library we are searching for
+     * @return an instance of the library object if found otherwise null
      */
     public static Library findLibrary(String name) {
         Preconditions.checkArgument(name!=null && !name.isEmpty() , "name is null or empty");
+        checkInvariants();
         Library output = null;
         int index = 0;
         while (output == null && index < libraries.size()) {

@@ -1,8 +1,5 @@
 package COMP2450.model;
 
-import com.google.common.base.Preconditions;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,8 +9,6 @@ import java.util.List;
  */
 
 public interface MediaInterface {
-
-
 
     String getMediaType();
 

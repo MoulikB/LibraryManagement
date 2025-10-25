@@ -1,5 +1,7 @@
 package COMP2450.model;
 
+import com.google.common.base.Preconditions;
+
 /**
  * TimeSlots
  * Utility class defining canonical one-hour booking slots,
@@ -35,17 +37,18 @@ public enum TimeSlots {
 
     /**
      * Converts a string to the matching TimeSlots value, ignoring case and spacing.
-     * @param input A string label or enum name.
+     * @param input A string label or enum name (can not be null)
      * @return The matching TimeSlots constant, or {@code null} if none match.
      */
     public static TimeSlots fromString(String input) {
-        if (input == null) return null;
+        Preconditions.checkArgument(input != null && !input.isEmpty(), "Input cannot be null or empty");
+        TimeSlots outputSlot = null;
         for (TimeSlots slot : TimeSlots.values()) {
             if (slot.name().equalsIgnoreCase(input.trim())
                     || slot.label.equalsIgnoreCase(input.trim())) {
-                return slot;
+                outputSlot = slot;
             }
         }
-        return null;
+        return outputSlot;
     }
 }
