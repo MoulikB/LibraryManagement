@@ -1,7 +1,19 @@
 package COMP2450.model;
 
+import com.google.common.base.Preconditions;
+
+/**
+ * Utility class responsible for printing map and its legend
+ *
+ **/
 public class PrintMap {
+    /**
+     * Method responsible for printing map and its legends.
+     * @param inputMap the map being provided (cannot be null)
+     *
+     **/
     public static void printMap(Map inputMap) {
+        Preconditions.checkNotNull(inputMap);
             for (char[] chars : inputMap.map) {
                 for (char c : chars) {
                     System.out.print(c);
@@ -23,5 +35,6 @@ public class PrintMap {
             System.out.println("|  : Wall of private study spaces");
             System.out.println("D  : Door");
             System.out.println("~  : Boundary of Main Desk");
+        Preconditions.checkNotNull(inputMap);
     }
 }

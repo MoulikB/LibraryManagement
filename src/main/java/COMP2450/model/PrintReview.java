@@ -1,8 +1,10 @@
 package COMP2450.model;
-
+/**
+ * Utility class responsible for printing reviews
+ **/
 public class PrintReview {
-    /*
-    Returns the review as a string
+    /**
+    prints the review as a string
      */
     public static void printReview(Review review) {
         System.out.println("==============");
@@ -15,6 +17,9 @@ public class PrintReview {
         System.out.println("==============");
     }
 
+    /**
+     prints the list of reviews for a media as a string
+     */
     public static void printReviews(MediaInterface media) {
         for (Review rev : media.getReviews()) {
             printReview(rev);
