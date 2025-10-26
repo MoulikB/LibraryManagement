@@ -26,18 +26,18 @@ classDiagram
 %% ===== Core Library =====
     class Library {
     -name: String
-    -mediaAvailable: List<MediaInterface>
+    -mediaAvailable: List~MediaInterface~
     -map: Map
-    -resources: List<Resource>
+    -resources: List~Resource~
     -libraryManagement : LibraryManagement
     +Library(name: String)
     +checkInvariants() : void
     +addMedia(media: MediaInterface): void
-    +getMediaAvailable() : List<MediaInterface>
+    +getMediaAvailable() : List~MediaInterface~
     +getName(): String
     +setName(String name) : void
     +getMap() : Map
-    +getResources() : List<Resource>
+    +getResources() : List~Resource~
     +addResource(Resource resource) : void
     +getResource(String resourceName) : Resource
     +removeMedia(mediaID: int): boolean
@@ -70,7 +70,7 @@ class MediaInterface {
     +getMediaID(): int
     +addCopies(): void
     +addReview(review: Review): void
-    +getReviews(): List<Review>
+    +getReviews(): List~Review~
     +mediaExists(MediaInterface media) : boolean
 }
 
@@ -93,7 +93,7 @@ class Book {
     -library: Library
     -genre: MediaGenres
     -totalCopies: int
-    -reviews : ArrayList<Review>
+    -reviews : List~Review~
     +Book(title: String, author: String, publisher: String, genre: MediaGenres, isbn: int, library: Library)
     +checkInvariants() : void
     +getMediaType(): String
@@ -121,7 +121,7 @@ class Movie {
     -totalCopies: int
     +Movie(title: String, director: String, mediaID: int, library: Library, genre: MediaGenres)
     -totalCopies: int
-    -reviews : ArrayList<Review>
+    -reviews : List~Review~
     +checkInvariants() : void
     +getMediaType(): String
     +getCreator(): String
@@ -163,8 +163,8 @@ class User {
     -finesDue: double
     -email : String
     -phone : int
-    -itemsIssued: List<Integer>
-    -reviewsWritten: List<Review>
+    -itemsIssued: List~Integer~
+    -reviewsWritten: List~Review~
     +User(username: String, id: int , email : String , phone : int)
     +checkInvariants() : void
     +getID() : int
@@ -172,14 +172,14 @@ class User {
     +getEmail() : String
     +getPhone() : int
     +addReview(review: Review): void
-    +getReviews(): List<Review>
+    +getReviews(): List~Review~
     +equals(User otherUser) : boolean
-    +getItemsIssued() : List<Integer>
+    +getItemsIssued() : List~Integer~
     +equals(User otherUser): boolean
 }
 
 class UserManagement {
-    -users: List<User>
+    -users: List~User~
     +UserManagement()
     +checkInvariants() : void
     +addUser(user: User): void
@@ -195,11 +195,11 @@ UserManagement "1" --> "0..*" User : manages  %% aggregation
 
 %% ===== Libraries Collection =====
 class LibraryManagement {
-    -libraries: List<Library>
+    -libraries: List~Library~
     +LibraryManagement()
     +checkInvariants() : void
     +addLibrary(library: Library): void
-    +getLibraries(): List<Library>
+    +getLibraries(): List~Library~
     +findLibrary(name: String): Library
     +reset(): void
 }
@@ -227,24 +227,24 @@ class Booking {
 
 class StudyRoom {
     -roomNumber: String
-    -bookings: List<Booking>
+    -bookings: List~Booking~
     -library: Library
     +StudyRoom(roomNumber: String, library: Library)
     +getResourceName(): String
     +isAvailable(timeSlot: TimeSlot): boolean
     +addBooking(booking: Booking): void
-    +getBookings(): List<Booking>
+    +getBookings(): List~Booking~
 }
 
 class Computer {
     -computerId: String
-    -bookings: List<Booking>
+    -bookings: List~Booking~
     -library: Library
     +Computer(computerId: String, library: Library)
     +getResourceName(): String
     +isAvailable(timeSlot: TimeSlot): boolean
     +addBooking(booking: Booking): void
-    +getBookings(): List<Booking>
+    +getBookings(): List~Booking~
     +getLibrary() : Library
 }
 
