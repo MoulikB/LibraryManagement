@@ -14,7 +14,7 @@ import java.util.List;
 public class StudyRoom implements Resource {
     private final String roomName;
     private final List<Booking> bookings;
-    final Library library;
+    private final Library library;
 
     /**
      * Make a new StudyRoom and add it to the library.
@@ -61,7 +61,7 @@ public class StudyRoom implements Resource {
         boolean result = true;
         int index = 0;
         while (index < bookings.size() && result) {
-            if (bookings.get(index).timeSlot.equals(timeSlot)) {
+            if (bookings.get(index).getTimeSlot().equals(timeSlot)) {
                 result = false;
             }
             index++;

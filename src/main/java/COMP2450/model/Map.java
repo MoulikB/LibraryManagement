@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
  */
 
 public class Map {
-    public char[][] map;
+    private final char[][] map;
     public Library library;
 
     /**
@@ -44,5 +44,9 @@ public class Map {
                 "|                                   |~~~~~~~~~~~~~~~|    |".toCharArray(),
                 "+--------------------------------------------------------+".toCharArray()
         };
+    }
+
+    public char[][] getMap() {
+        return map;
     }
 }

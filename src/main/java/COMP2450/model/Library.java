@@ -165,6 +165,7 @@ public class Library {
             if (mediaAvailable.get(index).getMediaID() == mediaId) {
                 media = mediaAvailable.get(index);
             }
+            index++;
         }
         checkInvariants();
         return media;

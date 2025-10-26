@@ -132,10 +132,11 @@ public class Movie implements MediaInterface {
     }
 
     /** Add one more available copy.
-     *
      */
     public void addCopies() {
+        checkInvariants();
         this.totalCopies++;
+        checkInvariants();
     }
 
     /**

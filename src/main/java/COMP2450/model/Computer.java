@@ -14,7 +14,7 @@ import java.util.List;
 public class Computer implements Resource {
     private final String computerId;
     private final List<Booking> bookings = new ArrayList<>();
-    Library library;
+    private final Library library;
 
     /**
      * Constructor : Make a new Computer and add it to the library.
@@ -58,7 +58,7 @@ public class Computer implements Resource {
         boolean result = true;
         int index =0;
         while (index < bookings.size() && result){
-            if ((bookings.get(index).timeSlot.equals(timeSlot))) {
+            if ((bookings.get(index).getTimeSlot().equals(timeSlot))) {
                 result = false;
             }
             index++;

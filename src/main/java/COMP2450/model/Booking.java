@@ -9,9 +9,9 @@ import com.google.common.base.Preconditions;
  */
 
 public class Booking {
-    Resource resource;
-    User user;
-    TimeSlots timeSlot;
+    private Resource resource;
+    private User user;
+    private TimeSlots timeSlot;
 
     /**
      * Constructor : Make a new Booking with some preconditions

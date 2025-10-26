@@ -65,7 +65,7 @@ public class Book implements MediaInterface {
     /**
      * @return the fixed media type label for books.
      */
-    public String getMediaType () {
+    public String getMediaType() {
         return "Book";
     }
 
