@@ -2,6 +2,10 @@ package COMP2450.model;
 
 import com.google.common.base.Preconditions;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
 /**
  * Book
  * A book stored in a library’s catalog, identified by ISBN,
@@ -15,34 +19,49 @@ public class Book implements MediaInterface {
     private final int mediaID;
     private Library library;
     private final MediaGenres genre;
+    static List<Review> reviews = new ArrayList<>();
     int totalCopies = 0;
     int issuedDays = 1;
+    static List<User> currentlyIssuedTo = new ArrayList<>();
+    static Stack<User> waitlist = new Stack<>();
 
-    /*
-     * Constructor: makes a new Book and adds it to the given library.
+    /**
+     * Constructor: makes a new Book and adds it to the given library with some preconditions
      *
-     * Preconditions:
-     *  - strings are not null/empty
-     *  - genre and library are not null
-     *  - ISBN is a positive integer
+     * @param title     the title of the book (must not be null or empty)
+     * @param author    the author's name (must not be null or empty)
+     * @param publisher the publisher's name (must not be null or empty)
+     * @param genre     the book's literary genre (must not be null)
+     * @param isbn      the unique identifier for this book (must be positive)
+     * @param library   the library to which this book belongs (must not be null)
      */
     public Book(String title, String author, String publisher,
                 MediaGenres genre, int isbn, Library library) {
-
         Preconditions.checkArgument(title != null && !title.isEmpty(), "title can't be null");
         Preconditions.checkArgument(author != null && !author.isEmpty(), "author can't be null");
         Preconditions.checkArgument(publisher != null && !publisher.isEmpty(), "publisher can't be null");
         Preconditions.checkArgument(genre != null, "genre can't be null");
         Preconditions.checkArgument(isbn >= 0, "isbn can't be negative");
         Preconditions.checkArgument(library != null, "library can't be null");
-
         this.title = title;
         this.author = author;
         this.publisher = publisher;
         this.genre = genre;
         this.mediaID = isbn;
         setLibrary(library);
-        addToLibrary(this);
+        checkInvariants();
+    }
+
+    /**
+     * Check the invariants for our domain model object and throw an error if violated
+     */
+    public void checkInvariants() {
+        Preconditions.checkArgument(this.title != null && !this.title.isEmpty(), "title can't be null");
+        Preconditions.checkArgument(this.author != null && !this.author.isEmpty(), "author can't be null");
+        Preconditions.checkArgument(this.publisher != null && !this.publisher.isEmpty(), "publisher can't be null");
+        Preconditions.checkArgument(this.genre != null, "genre can't be null");
+        Preconditions.checkArgument(this.mediaID >= 0, "isbn can't be negative");
+        Preconditions.checkArgument(this.library != null, "library can't be null");
     }
 
 
@@ -50,7 +69,7 @@ public class Book implements MediaInterface {
     /**
      * @return the fixed media type label for books.
      */
-    public String getMediaType () {
+    public String getMediaType() {
         return "Book";
     }
 
@@ -68,23 +87,25 @@ public class Book implements MediaInterface {
         return genre;
     }
 
-    /*
-     * Try to borrow one copy.
-     * If at least one copy is available, decrease the count and return true.
-     * Otherwise, return false and do nothing.
+    /**
+     * Borrow one copy.
+     * and add a copy to the list of all users who have borrowed it
      */
-    public boolean borrowMedia () {
-        boolean result = false;
-        if (this.totalCopies > 0) {
-            this.totalCopies--;
-            result = true;
-        }
-        return result;
+    public void borrowMedia(User user) {
+        Preconditions.checkArgument(user != null, "user can't be null");
+        checkInvariants();
+        this.totalCopies--;
+        currentlyIssuedTo.add(user);
+        checkInvariants();
     }
 
-    // Return one copy (increase the available count by 1).
+    /**
+     * Try to return one copy.
+     */
     public void returnMedia () {
+        checkInvariants();
         totalCopies++;
+        checkInvariants();
     }
 
     /**
@@ -103,7 +124,7 @@ public class Book implements MediaInterface {
 
     /**
      * @return Get the publisher name.
-    */
+     */
     public String getPublisher () {
         return publisher;
     }
@@ -122,22 +143,88 @@ public class Book implements MediaInterface {
         return mediaID;
     }
 
-    // Add one more available copy.
+    /**
+     * Add a new copy to the total amount of books
+     */
     public void addCopies() {
+        checkInvariants();
         totalCopies++;
+        checkInvariants();
     }
 
+    /** Change which library this book belongs to.
+     * @param library the library to which this book belongs (must not be null)
+     */
+    public void setLibrary(Library library) {
+        Preconditions.checkArgument(library != null, "library can't be null");
+        this.library = library;
+        checkInvariants();
+    }
 
     /**
-     * * @return A simple text summary of the book.
+     * Check if this media already exists in its library (same mediaID).
+     * Returns true if found, false otherwise.
+     * @param media  The media we are searching for (can not be null and has to be an instance of book)
+     * @return whether the media exists
      */
-    public String toString () {
-        return "Book [title=" + getTitle() + ", author=" + getCreator() + ", publisher=" + getPublisher() + ", Genre : " + getMediaGenre() + ", isbn=" + getMediaID() + "]";
+    public boolean mediaExists(MediaInterface media) {
+        checkInvariants();
+        Preconditions.checkNotNull(media);
+        Preconditions.checkArgument(media instanceof Book);
+        boolean mediaExists = false;
+        Library library = media.getLibrary();
+
+        List<MediaInterface> mediaAvailable = library.getMediaAvailable();
+        int index = 0;
+        while (!mediaExists && index < mediaAvailable.size()) {
+            if (library.getMediaAvailable().get(index) instanceof Book) {
+                if (mediaAvailable.get(index).getMediaID() == media.getMediaID()) {
+                    mediaExists = true;
+                }
+            }
+            index++;
+        }
+        checkInvariants();
+        return mediaExists;
     }
 
-    // Change which library this book belongs to.
-    public void setLibrary(Library library) {
-        this.library = library;
+    /**
+     * Add a review to the shared reviews list.
+     * @param review A review for the media (must not be null)
+     */
+    public void addReview(Review review) {
+        Preconditions.checkNotNull(review,"review can't be null");
+        reviews.add(review);
+    }
+
+    /**
+     * Get all reviews from the shared list.
+     *
+     * @return List of reviews
+     */
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public boolean issueUser(User user) {
+        checkInvariants();
+        Preconditions.checkNotNull(user);
+        boolean output = false;
+
+        if (this.getAvailableCopies() >= 1) {
+            this.borrowMedia(user);
+            output = true;
+        } else {
+            this.addWaitlist(user);;
+        }
+        checkInvariants();
+        return output;
+    }
+
+    public void addWaitlist(User user) {
+        checkInvariants();
+        Preconditions.checkNotNull(user);
+        waitlist.push(user);
+        checkInvariants();
     }
 }
-

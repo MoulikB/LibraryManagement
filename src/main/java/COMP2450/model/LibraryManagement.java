@@ -3,6 +3,7 @@ package COMP2450.model;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * LibraryManagement
@@ -12,53 +13,67 @@ import java.util.ArrayList;
 
 public class LibraryManagement {
 
-    public static ArrayList<Library> libraries = new ArrayList<>();
+    public static List<Library> libraries;
 
-    /*
-     * LibraryManagement: keeps track of all Library objects in the program.
+    /**
+     * Constructor : libraries keeps track of all Library objects in the program.
      */
     public LibraryManagement() {
         libraries = new ArrayList<>();
     }
 
-    /*
-     * Add a library to the list.
-     * Precondition: library is not null.
+    /**
+     * Check the invariants for our domain model object and throw an error if violated
      */
-    public static void addLibrary(Library library) {
-        Preconditions.checkNotNull(library);
-        libraries.add(library);
+    public static void checkInvariants() {
+        Preconditions.checkArgument(libraries != null, "LibraryManagement data cant't be null");
     }
 
-    // Shared list of all libraries in the system.
-    public static ArrayList<Library> getLibraries() {
+    /**
+     * Add a library to the list.
+     * @param library the library to be added (can't be null)
+     */
+    public static void addLibrary(Library library) {
+        checkInvariants();
+        Preconditions.checkNotNull(library, "Library data cant't be null");
+        libraries.add(library);
+        checkInvariants();
+    }
+
+    /** Shared list of all libraries in the system.
+     *
+     * @return list of libraries
+     */
+    public static List<Library> getLibraries() {
         return libraries;
     }
 
-    /*
+    /**
      * Find a library by its name.
-     * - name must not be null or empty.
-     * - returns the Library if found, otherwise prints a message and returns null.
+     * @param name the name of the library we are searching for
+     * @return an instance of the library object if found otherwise null
      */
     public static Library findLibrary(String name) {
         Preconditions.checkArgument(name!=null && !name.isEmpty() , "name is null or empty");
+        checkInvariants();
         Library output = null;
-        for (Library library : libraries) {
-            if  (library.getName().equals(name)) {
-                output = library;
+        int index = 0;
+        while (output == null && index < libraries.size()) {
+            if (libraries.get(index).getName().equals(name)) {
+                output = libraries.get(index);
             }
+            index++;
         }
-        if (output == null) {
-            System.out.println("Library with name " + name + " not found");
-        }
+        checkInvariants();
         return output;
     }
 
-    /*
+    /**
      * Reset the list to empty.
      * This clears all libraries from the registry.
      */
     public static void reset() {
-       libraries = new ArrayList<>();
+        libraries = new ArrayList<>();
+        checkInvariants();
     }
 }

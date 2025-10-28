@@ -9,46 +9,58 @@ import com.google.common.base.Preconditions;
  */
 
 public class Booking {
-    private Resource resource;  // Which resource is booked
-    private String memberName;  // Who booked it
-    private String timeSlot;    // 1-hour time slot string
+    private Resource resource;
+    private User user;
+    private TimeSlots timeSlot;
 
-    /*
-     * Make a new Booking.
+    /**
+     * Constructor : Make a new Booking with some preconditions
+     * @param resource  the resource being booked (must not be null)
+     * @param user      the user who made the booking (must not be null)
+     * @param timeSlot  the one-hour time slot for which the booking applies (must not be null)
      *
-     * Preconditions:
-     *  - resource is not null
-     *  - memberName is not null/empty
-     *  - timeSlot is not null
      */
-    public Booking(Resource resource, String memberName, String timeSlot) {
-        Preconditions.checkNotNull(resource);
-        Preconditions.checkArgument(memberName  != null && !memberName.isEmpty() , "member name can't be null or empty");
-        Preconditions.checkNotNull(timeSlot);
+    public Booking(Resource resource, User user, TimeSlots timeSlot) {
+        Preconditions.checkNotNull(resource, "Resource can't be null");
+        Preconditions.checkArgument(user != null, "member name can't be null or empty");
+        Preconditions.checkNotNull(timeSlot, "TimeSlots can't be null");
         this.resource = resource;
-        this.memberName = memberName;
+        this.user = user;
         this.timeSlot = timeSlot;
+        checkInvariants();
     }
 
-    // Get the booked resource
+    /**
+     * Check the invariants for our domain model object and throw an error if violated
+     */
+    public void checkInvariants() {
+        Preconditions.checkNotNull(resource, "resource can't be null");
+        Preconditions.checkArgument(user != null, "member name can't be null or empty");
+        Preconditions.checkNotNull(timeSlot, "TimeSlots can't be null");
+    }
+
+    /**
+     * @return Resource which is booked
+     */
     public Resource getResource() {
         return resource;
     }
 
-    // Get the name of the member who booked it.
-    public String getMemberName() {
-        return memberName;
+    /**
+     * @return provide the user
+     */
+    public User getUser() {
+        return user;
     }
 
-    // Get the 1-hour time slot string.
-    public String getTimeSlot() {
+    /**
+     *
+     * @return provide the timeslot
+     */
+    public TimeSlots getTimeSlot() {
         return timeSlot;
     }
 
-    // A simple text summary of the booking.
-    @Override
-    public String toString() {
-        return "Booking for " + resource.getResourceName() + " by " + memberName +
-                " at " + timeSlot;
-    }
+
+
 }
