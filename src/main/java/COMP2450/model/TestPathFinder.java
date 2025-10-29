@@ -5,9 +5,9 @@ public class TestPathFinder {
         Library lib = new Library("M"); // your class
         Map map = new Map(lib);
 
-        Position start = new Position(1, 50); // entrance
+        Position start = new Position(1, 27); // entrance
         Position goal = new Position(19, 35); // main desk
 
-        PathFinder.findPath(map, start, goal);
+        PathFinder.solveMap(map, start, goal);
     }
 }

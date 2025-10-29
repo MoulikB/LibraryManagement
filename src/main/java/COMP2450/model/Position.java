@@ -2,14 +2,27 @@ package COMP2450.model;
 
 public class Position {
     public int row;
-    public int col;
+    public int column;
 
-    public Position(int row, int col) {
+    /**
+     * Constructor: Creates a new position instance. It holds various info about the
+     * book
+     *
+     * @param row The row (X value) of the point
+     * @param column The column (y value) of the point
+     *
+     */
+    public Position(int row, int column) {
         this.row = row;
-        this.col = col;
+        this.column = column;
     }
 
+    /**
+     * Checks whether two positions are equal
+     * @param other another positiong
+     * @return a boolean confirming if 2 positions is equal
+     */
     public boolean equals(Position other) {
-        return row == other.row && col == other.col;
+        return this.row == other.row && this.column == other.column;
     }
 }

@@ -135,7 +135,7 @@ public class UserManagement {
     /*
      * Handles the user registration process by taking and validating input
      */
-    public void registerUser() {
+    public static void registerUser() {
 
         System.out.print("Welcome to the Registration process ");
 

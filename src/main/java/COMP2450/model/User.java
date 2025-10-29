@@ -144,7 +144,7 @@ public class User {
     public boolean borrowMedia(MediaInterface media) {
         boolean output = false;
         media.issueUser(this);
-
+        return output;
     }
 
     public double calculateFinesDue() {
