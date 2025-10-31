@@ -171,8 +171,10 @@ public class Movie implements MediaInterface {
      * @param review the review to be added (can not be null)
      */
     public void addReview(Review review) {
+        checkInvariants();
         Preconditions.checkNotNull(review);
         reviews.add(review);
+        checkInvariants();
     }
 
     /** Get all reviews from the shared list

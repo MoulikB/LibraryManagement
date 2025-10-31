@@ -118,13 +118,17 @@ public class Library {
     public Resource getResource(String resourceName) {
         checkInvariants();
         Preconditions.checkArgument(resourceName!=null && !resourceName.isEmpty(),
-                "Resource name cannot be null or mepty");
+                "Resource name cannot be null or empty");
         Resource resourceFound = null;
-        for (Resource resource : resources) {
-            if (resource.getResourceName().equals(resourceName)) {
-                resourceFound = resource;
+
+        int index = 0;
+        while (index < resources.size() && resourceFound == null){
+            if (resources.get(index).getResourceName().equals(resourceName)){
+                resourceFound = resources.get(index);
             }
+            index++;
         }
+
         checkInvariants();
         return resourceFound;
     }
@@ -137,6 +141,7 @@ public class Library {
         Preconditions.checkArgument(mediaId > 0, "Media ID cannot be less than 1");
         checkInvariants();
         boolean removed = false;
+
         int index = 0;
         while (index < mediaAvailable.size() && !removed) {
             if (mediaAvailable.get(index).getMediaID() == mediaId) {
@@ -145,6 +150,7 @@ public class Library {
             }
             index++;
         }
+
         checkInvariants();
         return removed;
 

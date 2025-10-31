@@ -20,6 +20,7 @@ public class LibraryManagement {
      */
     public LibraryManagement() {
         libraries = new ArrayList<>();
+        checkInvariants();
     }
 
     /**

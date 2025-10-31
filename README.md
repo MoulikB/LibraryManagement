@@ -23,6 +23,7 @@ The following Mermaid UML diagram represents the domain model of the system.
 
 ```mermaid
 classDiagram
+direction LR
 %% ===== Core Library =====
     class Library {
     -name: String
@@ -207,7 +208,7 @@ class LibraryManagement {
 LibraryManagement "1" --> "0..*" Library : catalogs
 
 %% ===== Bookable Resources =====
-class Resource {
+class Resource { 
   <<interface>>
   +getResourceName(): Resource
   +isAvailable(timeSlot: TimeSlot): boolean

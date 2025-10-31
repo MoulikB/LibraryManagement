@@ -158,6 +158,7 @@ public class Book implements MediaInterface {
      */
     public void setLibrary(Library library) {
         Preconditions.checkArgument(library != null, "library can't be null");
+        checkInvariants();
         this.library = library;
         checkInvariants();
     }

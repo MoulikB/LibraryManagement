@@ -122,6 +122,7 @@ public class User {
         } else {
             output =  (this.id == otherUser.id);
         }
+        checkInvariants();
         return output;
     }
 

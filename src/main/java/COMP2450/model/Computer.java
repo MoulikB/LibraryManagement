@@ -73,7 +73,9 @@ public class Computer implements Resource {
      */
     public void addBooking(Booking booking) {
         Preconditions.checkNotNull(booking);
+        checkInvariants();
         bookings.add(booking);
+        checkInvariants();
     }
 
     /** Get all bookings for this computer.
