@@ -75,6 +75,6 @@ public class LibraryManagement {
      */
     public static void reset() {
        libraries = new ArrayList<>();
-        checkInvariants();
+       checkInvariants();
     }
 }

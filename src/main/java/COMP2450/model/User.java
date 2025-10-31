@@ -114,6 +114,7 @@ public class User {
      */
     public boolean equals(User otherUser) {
         checkInvariants();
+        otherUser.checkInvariants();
         Preconditions.checkNotNull(otherUser, "User cannot be null");
         otherUser.checkInvariants();
         boolean output;
@@ -123,6 +124,7 @@ public class User {
             output =  (this.id == otherUser.id);
         }
         checkInvariants();
+        otherUser.checkInvariants();
         return output;
     }
 
