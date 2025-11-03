@@ -1,4 +1,8 @@
-package COMP2450.model;
+package COMP2450.model.PrintLogic;
+
+import COMP2450.model.Media.MediaInterface;
+import COMP2450.model.Review;
+
 /**
  * Utility class responsible for printing reviews
  **/

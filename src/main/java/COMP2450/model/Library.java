@@ -1,5 +1,6 @@
 package COMP2450.model;
 
+import COMP2450.model.Media.MediaInterface;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;

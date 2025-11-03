@@ -1,4 +1,7 @@
-package COMP2450.model;
+package COMP2450.model.Media;
+
+import COMP2450.model.*;
+import COMP2450.model.Exceptions.UnavailableMediaException;
 
 import java.util.List;
 
@@ -37,7 +40,7 @@ public interface MediaInterface {
     boolean mediaExists(MediaInterface media);
 
 
-    boolean issueUser(User user);
+    boolean issueUser(User user) throws UnavailableMediaException;
 
     void addWaitlist(User user);
 }

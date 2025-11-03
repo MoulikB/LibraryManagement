@@ -1,8 +1,8 @@
-package COMP2450.model;
+package COMP2450.model.PrintLogic;
 
+import COMP2450.model.Library;
+import COMP2450.model.LibraryManagement;
 import com.google.common.base.Preconditions;
-
-import java.util.List;
 
 /**
  * Utility class responsible for printing information about libraries and their contents.
@@ -19,14 +19,9 @@ public class PrintLibrary {
         Preconditions.checkNotNull(library, "Library is null");
         library.checkInvariants();
         System.out.println( "Library : " + library.getName());
-        List<MediaInterface> mediaAvailable = library.getMediaAvailable();
-        for (MediaInterface media : mediaAvailable) {
-            if (media instanceof Movie) {
-                PrintMedia.printMovie((Movie )media);
-            } else {
-                PrintMedia.printBook((Book)media);
-            }
-        }
+
+        PrintMedia.printAllMedia(library);
+
         Preconditions.checkNotNull(library, "Library is null");
         library.checkInvariants();
     }

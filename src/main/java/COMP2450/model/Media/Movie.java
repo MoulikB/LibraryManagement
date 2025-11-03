@@ -1,5 +1,10 @@
-package COMP2450.model;
+package COMP2450.model.Media;
 
+import COMP2450.model.Exceptions.UnavailableMediaException;
+import COMP2450.model.Library;
+import COMP2450.model.MediaGenres;
+import COMP2450.model.Review;
+import COMP2450.model.User;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
@@ -183,7 +188,7 @@ public class Movie implements MediaInterface {
         return reviews;
     }
 
-    public boolean issueUser(User user) {
+    public boolean issueUser(User user) throws UnavailableMediaException {
         checkInvariants();
         Preconditions.checkNotNull(user);
         boolean output = false;
@@ -191,9 +196,8 @@ public class Movie implements MediaInterface {
         if (this.getAvailableCopies() >= 1) {
             this.borrowMedia(user);
             output = true;
-        } else {
-            this.addWaitlist(user);;
         }
+        user.issue(this);
         checkInvariants();
         return output;
     }

@@ -1,5 +1,7 @@
-package COMP2450.model;
+package COMP2450.model.Media;
 
+import COMP2450.model.*;
+import COMP2450.model.Exceptions.UnavailableMediaException;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class Book implements MediaInterface {
     private final MediaGenres genre;
     static List<Review> reviews = new ArrayList<>();
     int totalCopies = 0;
-    int issuedDays = 1;
+    public int issuedDays = 1;
     static List<User> currentlyIssuedTo = new ArrayList<>();
     static Stack<User> waitlist = new Stack<>();
 
@@ -206,7 +208,7 @@ public class Book implements MediaInterface {
         return reviews;
     }
 
-    public boolean issueUser(User user) {
+    public boolean issueUser(User user) throws UnavailableMediaException {
         checkInvariants();
         Preconditions.checkNotNull(user);
         boolean output = false;
@@ -214,9 +216,8 @@ public class Book implements MediaInterface {
         if (this.getAvailableCopies() >= 1) {
             this.borrowMedia(user);
             output = true;
-        } else {
-            this.addWaitlist(user);;
         }
+        user.issue(this);
         checkInvariants();
         return output;
     }

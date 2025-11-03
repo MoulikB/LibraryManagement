@@ -1,5 +1,8 @@
-package COMP2450.model;
+package COMP2450.model.PrintLogic;
 
+import COMP2450.model.Library;
+import COMP2450.model.Resource;
+import COMP2450.model.TimeSlots;
 import com.google.common.base.Preconditions;
 
 /**
@@ -18,5 +21,13 @@ public class PrintResource {
             }
         }
         Preconditions.checkNotNull(resource);
+    }
+
+    public static void printResources(Library library) {
+        Preconditions.checkNotNull(library);
+        System.out.printf("\n--- Library %s Information ---\n",library.getName());
+        for (var resource : library.getResources()) {
+            printResource(resource);
+        }
     }
 }

@@ -1,6 +1,8 @@
-package COMP2450.model;
+package COMP2450.model.PrintLogic;
 
 
+import COMP2450.model.User;
+import COMP2450.model.UserManagement;
 import com.google.common.base.Preconditions;
 /**
  * Utility class responsible for printing information about users

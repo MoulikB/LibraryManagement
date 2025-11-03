@@ -1,5 +1,8 @@
 package COMP2450.model;
 
+import COMP2450.model.Media.Book;
+import COMP2450.model.Media.MediaInterface;
+import COMP2450.model.Media.Movie;
 import com.google.common.base.Preconditions;
 
 /**
@@ -141,11 +144,6 @@ public class User {
         this.itemsIssued.add(media);
     }
 
-    public boolean borrowMedia(MediaInterface media) {
-        boolean output = false;
-        media.issueUser(this);
-        return output;
-    }
 
     public double calculateFinesDue() {
         this.finesDue = 0;
