@@ -266,35 +266,6 @@ class TimeSlot {
    +fromString(String input) : TimeSlots
 }
 
-class PrintLibrary {
-    +printLibrary(Library library) : void
-    +printLibraryList() : void
-    +printMap(Library library) : void
-}
-
-class PrintMedia {
-    +printMovie(Movie movie) : void
-    +printBook(Book book) : void
-}
-
-class PrintUser {
-    +userInfo(User user) : void
-    +printALlUsers() : void
-}
-
-class PrintReview {
-    +printReview(Review review) : void
-    +printReviews(MediaInterface media) : void
-}
-
-class PrintResource {
-    +printResource(Resource resource) : void
-}
-
-class PrintMap {
-    +printMap(Map inputMap)
-}
-
 Resource <|.. StudyRoom
 Resource <|.. Computer
 Booking "1" --> "1" Resource : books
@@ -304,13 +275,6 @@ StudyRoom "1" <-- "0..*" Booking : maintains
 Computer "1" <-- "0..*" Booking : maintains
 StudyRoom "1" <-- "1" Library : locatedAt
 Computer "1" <-- "1" Library : locatedAt
-
-PrintLibrary ..> Library
-PrintMedia ..> MediaInterface
-PrintUser ..> User
-PrintReview ..> Review
-PrintResource ..> Resource
-PrintMap ..> Map
 
 %% ===== Invariants =====
 note for Library "Invariant properties:<ul><li>name != null</li><li>mediaAvailable != null</li><li>resources != null</li><li>map != null</li><li>all media and resources unique</li></ul>"
