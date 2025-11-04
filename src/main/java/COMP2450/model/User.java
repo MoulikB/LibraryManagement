@@ -2,13 +2,15 @@ package COMP2450.model;
 
 import com.google.common.base.Preconditions;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * User
  * A registered library member with a unique ID, username, fines,
  * issued items, and a history of written reviews.
  */
-import java.util.ArrayList;
-import java.util.List;
 
 public class User {
    

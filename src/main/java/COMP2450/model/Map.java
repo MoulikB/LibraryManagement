@@ -21,28 +21,25 @@ public class Map {
         Preconditions.checkNotNull(library, "library cannot be null");
         this.library = library;
         map = new char[][]{
-                "+--------------------------------------------------------+".toCharArray(),
-                "| 💻💻💻💻💻💻💻💻💻💻                                🚪   |".toCharArray(),
-                "| 💻💻💻💻💻💻💻💻💻💻                                    |".toCharArray(),
-                "| HH HH HH             CC CC            AA AA AA         |".toCharArray(),
-                "| HH HH HH             CC CC            AA AA AA         |".toCharArray(),
-                "| RR RR RR             TT TT            FF FF  FF        |".toCharArray(),
-                "| RR RR RR             TT TT            FF FF  FF        |".toCharArray(),
-                "| NN NN NN             🖨️🖨️             3️⃣ 3️⃣ 3️⃣         |".toCharArray(),
-                "| NN NN NN             🖨️🖨️             3️⃣ 3️⃣ 3️⃣         |".toCharArray(),
-                "|                                                        |".toCharArray(),
-                "| |--------D---------|  |-------D--------|  |------D-------| |".toCharArray(),
-                "| |                |  |               |  |             | |".toCharArray(),
-                "| |  Private Study |  | Private Study |  | Private Study| |".toCharArray(),
-                "| |     Space 1    |  |    Space 2    |  |    Space 3  | |".toCharArray(),
-                "| |                |  |               |  |             | |".toCharArray(),
-                "| |----------------|  |---------------|  |-------------| |".toCharArray(),
-                "|                                                        |".toCharArray(),
-                "|                                   |~~~~~~~~~~~~~~~|    |".toCharArray(),
-                "|                                   |    Main Desk  |    |".toCharArray(),
-                "|                                   |     (Help)    |    |".toCharArray(),
-                "|                                   |~~~~~~~~~~~~~~~|    |".toCharArray(),
-                "+--------------------------------------------------------+".toCharArray()
+                "+---------------------------------------+".toCharArray(),
+                "| L                                    D|".toCharArray(),
+                "| L                                     |".toCharArray(),
+                "| H             C            A          |".toCharArray(),
+                "| R             T            F          |".toCharArray(),
+                "| N             P            3          |".toCharArray(),
+                "|                                       |".toCharArray(),
+                "| |-------D--------|  |------D--------| |".toCharArray(),
+                "| |                |  |               | |".toCharArray(),
+                "| |  Private Study |  | Private Study | |".toCharArray(),
+                "| |     Space 1    |  |    Space 2    | |".toCharArray(),
+                "| |                |  |               | |".toCharArray(),
+                "| |----------------|  |---------------| |".toCharArray(),
+                "|                                       |".toCharArray(),
+                "|                  |~~~~~~~~~~~~~~~|    |".toCharArray(),
+                "|                  |    Main Desk  |    |".toCharArray(),
+                "|                  |     (Help)    |    |".toCharArray(),
+                "|                  |~~~~~~~~~~~~~~~|    |".toCharArray(),
+                "+---------------------------------------+".toCharArray()
         };
     }
 

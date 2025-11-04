@@ -157,7 +157,7 @@ public class Main {
 
         if (!User.userDB.removeUser(id)) {
             System.out.println("User does not exist, nothing has been removed");
-        };
+        }
         chooseOption();
     }
 
@@ -259,12 +259,14 @@ public class Main {
         String name = InputValidation.getStringInput();
         Library library = LibraryManagement.findLibrary(name);
         if (library!=null){
-            for (Library dbLibrary : LibraryManagement.libraries) {
-                if (dbLibrary.equals(library)) {
-                    LibraryManagement.libraries.remove(dbLibrary);
+            int index = 0;
+            boolean found = false;
+            while (index < LibraryManagement.getLibraries().size() && !found) {
+                if (LibraryManagement.getLibraries().get(index).equals(library)) {
+                    LibraryManagement.libraries.remove(index);
                     System.out.println("Library " + name + " removed.");
-                    break;
                 }
+                index++;
             }
         } else {
             System.out.println("Library " + name + " not found.");
@@ -459,14 +461,8 @@ public class Main {
             System.out.print("Enter the name of the resource to show (e.g. Computer C1 or Study Room R1) (input can't be null or empty): ");
             String resourceName = InputValidation.getStringInput();
 
-            boolean found = false;
-            for (Resource resource : library.getResources()) {
-                if (resource.getResourceName().equalsIgnoreCase(resourceName)) {
-                    found = true;
-                    PrintResource.printResource(resource);
-                    break;
-                }
-            }
+
+            boolean found = library.getResource(resourceName) != null;
 
             if (!found) {
                 System.out.println("Resource not found: " + resourceName);

@@ -27,7 +27,7 @@ public class LibraryManagement {
      * Check the invariants for our domain model object and throw an error if violated
      */
     public static void checkInvariants() {
-        Preconditions.checkArgument(libraries != null, "LibraryManagement data cant't be null");
+        Preconditions.checkArgument(libraries != null, "LibraryManagement data can't be null");
     }
 
     /**

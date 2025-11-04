@@ -262,8 +262,6 @@ class TimeSlot {
    -label : String
    +TimeSlots(String label) 
    +getLabel() : String
-   +toString() : String
-   +fromString(String input) : TimeSlots
 }
 
 Resource <|.. StudyRoom

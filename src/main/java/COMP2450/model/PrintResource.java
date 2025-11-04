@@ -14,7 +14,7 @@ public class PrintResource {
         System.out.println("Available Time Slots:");
         for (var slotValue : TimeSlots.values()) {
             if (resource.isAvailable(slotValue)) {
-                System.out.println(slotValue);
+                System.out.println(PrintTimeSlot.printSlot(slotValue));
             }
         }
         Preconditions.checkNotNull(resource);

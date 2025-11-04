@@ -18,7 +18,7 @@ public enum TimeSlots {
     THREE_TO_FOUR("15:00–16:00"),
     FOUR_TO_FIVE("16:00–17:00");
 
-    private final String label;
+    protected final String label;
 
     TimeSlots(String label) {
         this.label = label;
@@ -30,25 +30,4 @@ public enum TimeSlots {
         return label;
     }
 
-    @Override
-    public String toString() {
-        return label;
-    }
-
-    /**
-     * Converts a string to the matching TimeSlots value, ignoring case and spacing.
-     * @param input A string label or enum name (can not be null)
-     * @return The matching TimeSlots constant, or {@code null} if none match.
-     */
-    public static TimeSlots fromString(String input) {
-        Preconditions.checkArgument(input != null && !input.isEmpty(), "Input cannot be null or empty");
-        TimeSlots outputSlot = null;
-        for (TimeSlots slot : TimeSlots.values()) {
-            if (slot.name().equalsIgnoreCase(input.trim())
-                    || slot.label.equalsIgnoreCase(input.trim())) {
-                outputSlot = slot;
-            }
-        }
-        return outputSlot;
-    }
 }

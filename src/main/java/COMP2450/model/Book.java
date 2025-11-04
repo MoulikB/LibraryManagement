@@ -198,7 +198,9 @@ public class Book implements MediaInterface {
      */
     public void addReview(Review review) {
         Preconditions.checkNotNull(review,"review can't be null");
+        checkInvariants();
         reviews.add(review);
+        checkInvariants();
     }
 
     /** Get all reviews from the shared list.
