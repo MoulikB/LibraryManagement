@@ -461,10 +461,12 @@ public class Main {
             System.out.print("Enter the name of the resource to show (e.g. Computer C1 or Study Room R1) (input can't be null or empty): ");
             String resourceName = InputValidation.getStringInput();
 
+            Resource resource = library.getResource(resourceName);
+            boolean found = resource != null;
 
-            boolean found = library.getResource(resourceName) != null;
-
-            if (!found) {
+            if (found) {
+                PrintResource.printResource(resource);
+            } else {
                 System.out.println("Resource not found: " + resourceName);
             }
         } else {
