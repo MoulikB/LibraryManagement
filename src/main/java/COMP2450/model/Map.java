@@ -19,6 +19,7 @@ public class Map {
      */
     public Map(Library library) {
         Preconditions.checkNotNull(library, "library cannot be null");
+        library.checkInvariants();
         this.library = library;
         map = new char[][]{
                 "+---------------------------------------+".toCharArray(),

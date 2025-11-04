@@ -76,8 +76,10 @@ public class StudyRoom implements Resource {
      */
     public void addBooking(Booking booking) {
         checkInvariants();
+        booking.checkInvariants();
         Preconditions.checkArgument(booking != null);
         bookings.add(booking);
+        booking.checkInvariants();
         checkInvariants();
     }
 
