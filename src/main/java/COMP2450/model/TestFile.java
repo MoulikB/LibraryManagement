@@ -23,9 +23,6 @@ public class TestFile {
         System.out.println("X = " + output.getX());
         System.out.println("Y = " + output.getY());
 
-        PathFinder path = new PathFinder(lib.getMap(), coordinate, coordinate2);
-        path.findPath();
-        System.out.println("Path = " + path.getPath());
-        path.printPathOnMap();
+
     }
 }

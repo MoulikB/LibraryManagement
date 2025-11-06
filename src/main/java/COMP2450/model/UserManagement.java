@@ -12,15 +12,8 @@ import java.util.List;
  */
 
 public class UserManagement {
-    private static List<User> users;
-    public static int nextID = 0;
-
-    /**
-     * Constructor : UserManagement: stores and manages all User objects.
-     */
-    public UserManagement() {
-        users = new ArrayList<>();
-    }
+    private static List<User> users = new ArrayList<>();;
+    public static int nextID = 1;
 
     /**
      * Add a user to the list.
@@ -94,7 +87,7 @@ public class UserManagement {
      * @param id the ID we are checking for (has to be greater than 0)
      * @return return user if it exists
      */
-    public User userExists(int id) {
+    public static User userExists(int id) {
         checkInvariants();
         Preconditions.checkArgument(id > 0, "Invalid ID");
         User userAlreadyExists = null;

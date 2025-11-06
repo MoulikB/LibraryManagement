@@ -28,17 +28,16 @@ public class Map {
                 "| R             T            F          |".toCharArray(),
                 "| N             P            3          |".toCharArray(),
                 "|                                       |".toCharArray(),
-                "| |-------D--------|  |------D--------| |".toCharArray(),
-                "| |                |  |               | |".toCharArray(),
-                "| |  Private Study |  | Private Study | |".toCharArray(),
-                "| |     Space 1    |  |    Space 2    | |".toCharArray(),
-                "| |                |  |               | |".toCharArray(),
-                "| |----------------|  |---------------| |".toCharArray(),
+                "| |----D----|   |----D----|             |".toCharArray(),
+                "| | Study1  |   | Study2  |             |".toCharArray(),
+                "| |---------|   |---------|             |".toCharArray(),
                 "|                                       |".toCharArray(),
-                "|                  |~~~~~~~~~~~~~~~|    |".toCharArray(),
-                "|                  |    Main Desk  |    |".toCharArray(),
-                "|                  |     (Help)    |    |".toCharArray(),
-                "|                  |~~~~~~~~~~~~~~~|    |".toCharArray(),
+                "|                                       |".toCharArray(),
+                "|               K                       |".toCharArray(),  // K on open floor
+                "|                                       |".toCharArray(),
+                "|                  |~~~~~~~|            |".toCharArray(),
+                "|                  | Desk  |            |".toCharArray(),
+                "|                  |_______|            |".toCharArray(),
                 "+---------------------------------------+".toCharArray()
         };
     }

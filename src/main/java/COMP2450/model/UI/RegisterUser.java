@@ -31,7 +31,12 @@ public class RegisterUser {
         Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cant be null");
         Preconditions.checkArgument((number > 0), "Number must be not null and 10 digits");
 
-        return new User(username,password, UserManagement.nextID,email,number );
+        User user = new User(username,password,UserManagement.nextID , email, number);
+
+        if (UserManagement.addUser(user)) {
+              System.out.println("User already exists");
+        }
+        return UserManagement.userExists(UserManagement.nextID);
 
     }
 }

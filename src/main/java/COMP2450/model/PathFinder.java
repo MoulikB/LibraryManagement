@@ -1,208 +1,135 @@
 package COMP2450.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.google.common.base.Preconditions;
-
-/**
- * PathFinder
- * ------------------------------------------------------------
- * Implements a backtracking (stack-based DFS) algorithm on the map grid
- * to find a path from a start coordinate to an end coordinate.
- *
- * Design by Contract:
- *  - Preconditions checked with Guava Preconditions.
- *  - Loop invariants documented inline.
- *  - Postconditions verified upon completion.
- *
- * Dependencies:
- *  - Uses Stack<Coordinate> interface and LinkedListStack<Coordinate> implementation.
- *  - Relies on Map.java exposing a 2D char[][] grid field named 'map'.
- */
 public class PathFinder {
 
-    private final Map mapRef;
-    private final Coordinate start;
-    private final Coordinate end;
+    private static final char PATH_CHAR   = '+';
+    private static final char FLOOR_CHAR  = ' ';
+    private static final char START_CHAR  = 'K';
 
-    // Stores final discovered path (start -> ... -> goal)
-    private final LinkedListStack<Coordinate> path = new LinkedListStack<>();
+    private final Library library;
+    private char[][] map;
 
-    public PathFinder(Map mapRef, Coordinate start, Coordinate end) {
-        // === Preconditions ===
-
-
-        this.mapRef = mapRef;
-        this.start = start;
-        this.end = end;
+    /** Construct a PathFinder tied to a specific Library object. */
+    public PathFinder(Library library) {
+        if (library == null) {
+            throw new IllegalArgumentException("Library cannot be null");
+        }
+        this.library = library;
+        this.map = library.getMap().getMap(); // use the map from the library
     }
 
     /**
-     * Attempts to find a path from start to end using a backtracking (DFS) algorithm.
-     * Returns true if a valid path exists, false otherwise.
+     * Run DFS pathfinding from 'K' to the specified target character.
+     * @param targetChar The symbol to find (e.g., 'T', 'L', 'C')
+     * @return true if a path was found
      */
-    public boolean findPath() {
-        char[][] grid = mapRef.getMap();
-        int rows = grid.length;
-        int cols = grid[0].length;
+    public boolean runForTarget(char targetChar) {
+        Coordinate start  = findChar(START_CHAR);
+        Coordinate target = findChar(targetChar);
+
+        if (start == null || target == null) {
+            System.out.println("❌ Start or target not found on the map.");
+            return false;
+        }
+
+        return dfsAndMarkPath(start, target);
+    }
+
+    /**
+     * Perform DFS pathfinding using only LinkedListStack and Coordinate.
+     */
+    private boolean dfsAndMarkPath(Coordinate start, Coordinate target) {
+        final int rows = map.length;
+        final int cols = map[0].length;
 
         boolean[][] visited = new boolean[rows][cols];
         Coordinate[][] parent = new Coordinate[rows][cols];
 
-        Stack<Coordinate> stack = new LinkedListStack<>();
+        LinkedListStack<Coordinate> stack = new LinkedListStack<>();
         stack.push(start);
 
-        // === Invariant before loop ===
-        // - Each coordinate in the stack is visitable and not yet visited.
-        // - visited[x][y] == true ↔ cell has been fully expanded.
+        final int[][] dirs = { {1,0}, {-1,0}, {0,1}, {0,-1} };
+
+        boolean found = false;
 
         while (!stack.isEmpty()) {
-            Coordinate current = (Coordinate) stack.pop();
-            int x = current.getX();
-            int y = current.getY();
+            Coordinate cur = stack.pop();
+            int r = cur.getX();
+            int c = cur.getY();
 
-            if (!inBounds(grid, current)) continue;
-            if (visited[y][x]) continue;
+            if (!inBounds(r, c, rows, cols) || visited[r][c]) continue;
 
-            visited[y][x] = true;
+            visited[r][c] = true;
 
-            // === Goal check ===
-            if (current.equals(end)) {
-                reconstructPath(parent, current);
-                // === Postcondition ===
-                Preconditions.checkState(!path.isEmpty(), "Path reconstruction failed.");
-                return true;
+            if (r == target.getX() && c == target.getY()) {
+                found = true;
+                break;
             }
 
-            // Generate and push valid neighbours (E, W, S, N)
-            for (Coordinate neighbor : neighbors(current, cols, rows)) {
-                int nx = neighbor.getX();
-                int ny = neighbor.getY();
-
-                if (inBounds(grid, neighbor)
-                        && !visited[ny][nx]
-                        && isWalkable(grid[ny][nx])) {
-                    parent[ny][nx] = current;
-                    stack.push(neighbor);
+            for (int[] dir : dirs) {
+                int nr = r + dir[0];
+                int nc = c + dir[1];
+                if (isWalkable(nr, nc, rows, cols, visited, target)) {
+                    if (parent[nr][nc] == null) parent[nr][nc] = cur;
+                    stack.push(new Coordinate(nr, nc));
                 }
             }
-
-            // === Loop Invariant (maintained) ===
-            // Every coordinate pushed into the stack is unvisited and visitable.
         }
 
-        // === Postcondition ===
-        Preconditions.checkState(path.isEmpty(), "Path stack must be empty if no path found.");
-        return false;
-    }
+        if (!found) return false;
 
-    /**
-     * Returns the path found (top of the stack is the goal).
-     */
-    public Stack<Coordinate> getPath() {
-        return path;
-    }
-
-    // ------------------- Helper methods -------------------
-
-    private static boolean inBounds(char[][] grid, Coordinate c) {
-        int rows = grid.length;
-        int cols = grid[0].length;
-        int x = c.getX();
-        int y = c.getY();
-        return y >= 0 && y < rows && x >= 0 && x < cols;
-    }
-
-    private static boolean isWalkable(char cell) {
-        return cell == ' ';
-    }
-
-    private static List<Coordinate> neighbors(Coordinate c, int cols, int rows) {
-        int x = c.getX();
-        int y = c.getY();
-        List<Coordinate> out = new ArrayList<>(4);
-        if (x + 1 < cols) out.add(new Coordinate(x + 1, y));
-        if (x - 1 >= 0)   out.add(new Coordinate(x - 1, y));
-        if (y + 1 < rows) out.add(new Coordinate(x, y + 1));
-        if (y - 1 >= 0)   out.add(new Coordinate(x, y - 1));
-        return out;
-    }
-
-    private void reconstructPath(Coordinate[][] parent, Coordinate goal) {
-        Coordinate cur = goal;
-        while (cur != null) {
-            path.push(cur);
-            int x = cur.getX();
-            int y = cur.getY();
-            cur = parent[y][x];
-        }
-    }
-
-    /**
-     * Prints the map grid with the discovered path drawn on it.
-     *
-     * Preconditions:
-     *  - findPath() must have been called and succeeded
-     * Postconditions:
-     *  - Map printed with '+' for path cells, 'S' for start, 'E' for goal
-     *  - Original mapRef.map is NOT permanently modified
-     */
-    public void printPathOnMap() {
-        Preconditions.checkNotNull(mapRef, "Map reference cannot be null.");
-        Preconditions.checkNotNull(mapRef.getMap(), "Map grid cannot be null.");
-        Preconditions.checkState(!path.isEmpty(),
-                "Path not found. Run findPath() successfully before printing.");
-
-        char[][] grid = mapRef.getMap();
-        int rows = grid.length;
-        int cols = grid[0].length;
-
-        // Create a copy so we don’t alter the real map
-        char[][] visual = new char[rows][cols];
-        for (int r = 0; r < rows; r++) {
-            System.arraycopy(grid[r], 0, visual[r], 0, cols);
+        // reconstruct true path from target → start
+        LinkedListStack<Coordinate> rev = new LinkedListStack<>();
+        Coordinate step = target;
+        while (step != null) {
+            rev.push(step);
+            Coordinate p = parent[step.getX()][step.getY()];
+            if (p == null) break;
+            step = p;
         }
 
-        // Mark the path
-        LinkedListStack<Coordinate> temp = new LinkedListStack<>();
-
-        // Reverse path order to draw from start → goal
-        while (!path.isEmpty()) {
-            Coordinate c = path.pop();
-            temp.push(c);
+        // draw path
+        while (!rev.isEmpty()) {
+            Coordinate k = rev.pop();
+            int rr = k.getX(), cc = k.getY();
+            if (map[rr][cc] == FLOOR_CHAR) map[rr][cc] = PATH_CHAR;
         }
 
-        boolean first = true;
-        while (!temp.isEmpty()) {
-            Coordinate c = temp.pop();
-            int x = c.getX();
-            int y = c.getY();
+        return true;
+    }
 
-            // Mark start, end, and path
-            if (first) {
-                visual[y][x] = 'S'; // start
-                first = false;
-            } else if (temp.isEmpty()) {
-                visual[y][x] = 'E'; // end
-            } else {
-                if (visual[y][x] == ' ') {
-                    visual[y][x] = '+';
-                }
+    private boolean inBounds(int r, int c, int rows, int cols) {
+        return r >= 0 && r < rows && c >= 0 && c < cols;
+    }
+
+    private boolean isWalkable(int r, int c, int rows, int cols, boolean[][] visited, Coordinate target) {
+        if (!inBounds(r, c, rows, cols)) return false;
+        if (visited[r][c]) return false;
+        if (r == target.getX() && c == target.getY()) return true;
+        return map[r][c] == FLOOR_CHAR;
+    }
+
+    private Coordinate findChar(char ch) {
+        for (int r = 0; r < map.length; r++)
+            for (int c = 0; c < map[r].length; c++)
+                if (map[r][c] == ch) return new Coordinate(r, c);
+        return null;
+    }
+
+    /** Clears '+' marks from a previous pathfinding run. */
+    public void clearPath() {
+        for (int r = 0; r < map.length; r++) {
+            for (int c = 0; c < map[r].length; c++) {
+                if (map[r][c] == PATH_CHAR) map[r][c] = FLOOR_CHAR;
             }
-
-            // Restore original stack order
-            path.push(c);
         }
-
-        // Print the visualized map
-        System.out.println("=== MAP WITH PATH ===");
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                System.out.print(visual[r][c]);
-            }
-            System.out.println();
-        }
-        System.out.println("=====================");
     }
 
+    /** Print the current map state. */
+    public void printMap() {
+        System.out.println("\n=== LIBRARY MAP WITH PATH ===");
+        for (char[] row : map) {
+            System.out.println(new String(row));
+        }
+    }
 }
