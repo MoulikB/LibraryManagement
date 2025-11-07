@@ -158,7 +158,8 @@ public class Kiosk {
                 String title = InputValidation.getStringInput();
                 BrowseMedia.searchMedia(title);
             }
-            case 7 -> { return; }
+            case 7 -> {
+            }
         }
     }
 
