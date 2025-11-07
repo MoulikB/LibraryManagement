@@ -7,6 +7,7 @@ import COMP2450.model.Exceptions.BookingConflictException;
 import COMP2450.model.Exceptions.OverdueMediaException;
 import COMP2450.model.Exceptions.UnavailableMediaException;
 import COMP2450.model.Media.*;
+import COMP2450.model.PrintLogic.PrintMap;
 import COMP2450.model.PrintLogic.PrintResource;
 
 
@@ -244,11 +245,7 @@ public class Kiosk {
 
         // Step 3: Show destination legend
         System.out.println("Choose a destination symbol:");
-        System.out.println("  T → Technology Area");
-        System.out.println("  L → Literature Section");
-        System.out.println("  C → Cinema/Media Section");
-        System.out.println("  A → Archives");
-        System.out.println("  F → Fiction Section");
+        PrintMap.printLegend();
         System.out.print("Enter symbol (e.g., T): ");
 
         // Step 4: Get user input

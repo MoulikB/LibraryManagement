@@ -21,6 +21,13 @@ public class PrintMap {
             }
             System.out.println();
         }
+
+        printLegend();
+
+        Preconditions.checkNotNull(inputMap);
+    }
+
+    public static void printLegend() {
         System.out.println("\nLegend:");
         System.out.println("L : Computer Lab");
         System.out.println("D : Entrance");
@@ -33,9 +40,5 @@ public class PrintMap {
         System.out.println("N  : Non-fiction Shelves");
         System.out.println("P️  : Printing Lab");
         System.out.println("3  : 3D Printing Room");
-        System.out.println("|  : Wall of private study spaces");
-        System.out.println("D  : Door");
-        System.out.println("~  : Boundary of Main Desk");
-        Preconditions.checkNotNull(inputMap);
     }
 }
