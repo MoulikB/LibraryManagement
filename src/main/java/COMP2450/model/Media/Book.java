@@ -213,9 +213,11 @@ public class Book implements MediaInterface {
         Preconditions.checkNotNull(user);
         boolean output = false;
 
-        if (this.getAvailableCopies() >= 1) {
-            this.borrowMedia(user);
-            output = true;
+        if (waitlist.isEmpty()) {
+            if (this.getAvailableCopies() >= 1) {
+                this.borrowMedia(user);
+                output = true;
+            }
         }
         user.issue(this);
         checkInvariants();

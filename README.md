@@ -304,4 +304,121 @@ note for TimeSlots "Invariant properties:\n<ul>\n
 <li>loop: all time slots are valid and unique</li>\n</ul>"
 
 ```
+``` mermaid
+flowchart TD
+
+%% ========= SIGN IN =========
+subgraph SIGN_IN[**SIGN IN / REGISTER**]
+    login[[Log In]]
+    register[[Register New User]]
+    login_result{Valid credentials?}
+    new_user{Registration successful?}
+    home[[Main Menu]]
+
+    login -.invalid.-> login
+    login -.valid.-> home
+    register -.failed.-> register
+    register -.success.-> home
+end
+
+%% ========= MAIN MENU =========
+subgraph MAIN_MENU[**USER MAIN MENU**]
+    home --> browse_media
+    home --> borrow_media
+    home --> return_media
+    home --> view_resources
+    home --> book_resource
+    home --> map_pathfinder
+    home --> logout
+
+    browse_media[[Browse Media]]
+    borrow_media[[Borrow Media]]
+    return_media[[Return Media]]
+    view_resources[[View Resources]]
+    book_resource[[Book Resource]]
+    map_pathfinder[[Find Path on Map]]
+    logout[[Log Out]]
+end
+
+%% ========= BROWSE MEDIA =========
+subgraph BROWSE_MEDIA[**BROWSE MEDIA SUBPROCESS**]
+    bm_start[[Browse Menu]]
+    bm_choice{Select an option}
+    all_media[[Show all media]]
+    all_books[[Show all books]]
+    all_movies[[Show all movies]]
+    by_author[[Search by author]]
+    by_director[[Search by director]]
+    by_title[[Search by title]]
+    bm_back[[Go Back]]
+
+    bm_start --> bm_choice
+    bm_choice --> all_media
+    bm_choice --> all_books
+    bm_choice --> all_movies
+    bm_choice --> by_author
+    bm_choice --> by_director
+    bm_choice --> by_title
+    bm_choice --> bm_back
+    bm_back --> home
+end
+
+%% ========= BORROW MEDIA =========
+subgraph BORROW_MEDIA[**BORROW MEDIA SUBPROCESS**]
+    borrow_media --> enter_id[[Enter Media ID]]
+    enter_id --> check_availability{Copies available?}
+    check_availability -- yes --> issue[[Issue media to user]]
+    check_availability -- no --> waitlist_choice{Join waitlist?}
+    waitlist_choice -- yes --> add_waitlist[[Add user to waitlist]]
+    waitlist_choice -- no --> borrow_exit[[Cancel borrow]]
+    issue --> borrow_success[[Show success message]]
+    borrow_exit --> home
+    borrow_success --> home
+end
+
+%% ========= RETURN MEDIA =========
+subgraph RETURN_MEDIA[**RETURN MEDIA SUBPROCESS**]
+    return_media --> enter_return_id[[Enter Media ID]]
+    enter_return_id --> return_action[[Return media item]]
+    return_action --> confirm_return[[Show return confirmation]]
+    confirm_return --> home
+end
+
+%% ========= VIEW / BOOK RESOURCES =========
+subgraph RESOURCE_MENU[**RESOURCE HANDLING**]
+    view_resources --> list_resources[[Display all study rooms and computers]]
+
+    book_resource --> input_resource[[Enter Resource Name]]
+    input_resource --> valid_resource{Resource found?}
+    valid_resource -- no --> invalid_notice[[Show error message]]
+    invalid_notice --> home
+    valid_resource -- yes --> choose_slot[[Display time slots]]
+    choose_slot --> slot_valid{Valid slot chosen?}
+    slot_valid -- no --> invalid_slot[[Invalid input message]]
+    slot_valid -- yes --> confirm_booking[[Confirm and create booking]]
+    confirm_booking --> book_success[[Show success message]]
+    book_success --> home
+end
+
+%% ========= MAP FINDER =========
+subgraph MAP_PATHFINDER[**MAP PATH FINDER**]
+    map_pathfinder --> legend[[Display map legend]]
+    legend --> input_symbol[[Enter destination symbol]]
+    input_symbol --> valid_symbol{Symbol valid?}
+    valid_symbol -- no --> invalid_symbol[[Invalid input error]]
+    valid_symbol -- yes --> find_path[[Run pathfinding algorithm]]
+    find_path --> result_found{Path found?}
+    result_found -- yes --> show_path[[Print map with path]]
+    result_found -- no --> no_path[[Display: No path found]]
+    show_path --> home
+    no_path --> home
+    invalid_symbol --> home
+end
+
+%% ========= LOG OUT =========
+logout --> SIGN_IN
+
+
+
+```
 

@@ -10,7 +10,6 @@ import COMP2450.model.Media.*;
 import COMP2450.model.PrintLogic.PrintMap;
 import COMP2450.model.PrintLogic.PrintResource;
 
-
 public class Kiosk {
 
     private static User user = null;
@@ -25,7 +24,8 @@ public class Kiosk {
     // INITIALIZATION
     // =======================
     private static Library initializeLibrary() {
-        System.out.println("Enter library name (input can't be null or empty): ");
+        System.out.println("=== Library Setup ===");
+        System.out.print("Enter library name: ");
         String name = InputValidation.getStringInput();
         Library lib = new Library(name);
         addMedia(lib);
@@ -83,10 +83,19 @@ public class Kiosk {
         System.out.println("\n=== Welcome to the Library Kiosk ===");
         System.out.println("1. Log In");
         System.out.println("2. Register");
+        System.out.println("0. Exit");
         System.out.print("Enter your choice: ");
 
         int option = InputValidation.getIntInput();
-        user = (option == 1) ? LogIn.loginUser() : RegisterUser.registerUser();
+        switch (option) {
+            case 1 -> user = LogIn.loginUser();
+            case 2 -> user = RegisterUser.registerUser();
+            case 0 -> {
+                System.out.println("Goodbye!");
+                System.exit(0);
+            }
+            default -> System.out.println("Invalid option. Try again.");
+        }
 
         if (user != null) {
             System.out.println("Welcome, " + user.getUsername() + "!");
@@ -97,24 +106,30 @@ public class Kiosk {
     // USER MENU
     // =======================
     private static void showUserMenu() {
-        int choice = promptMenu(
-                "Browse Media",
-                "Borrow Media",
-                "Return Media",
-                "View Resources",
-                "Book a Resource",
-                "Log Out",
-                "Find Path on Map"
-        );
+        while (true) {
+            int choice = promptMenu(
+                    "Browse Media",
+                    "Borrow Media",
+                    "Return Media",
+                    "View Resources",
+                    "Book a Resource",
+                    "Find Path on Map",
+                    "Log Out"
+            );
 
-        switch (choice) {
-            case 1 -> browseMedia();
-            case 2 -> borrowMedia();
-            case 3 -> returnMedia();
-            case 4 -> viewResources();
-            case 5 -> bookResource();
-            case 6 -> logout();
-            case 7 -> findPathOnMap();
+            switch (choice) {
+                case 1 -> browseMedia();
+                case 2 -> borrowMedia();
+                case 3 -> returnMedia();
+                case 4 -> viewResources();
+                case 5 -> bookResource();
+                case 6 -> findPathOnMap();
+                case 7 -> {
+                    logout();
+                    return;
+                }
+                default -> System.out.println("Invalid choice. Try again.");
+            }
         }
     }
 
@@ -127,38 +142,36 @@ public class Kiosk {
     // BROWSE MEDIA
     // =======================
     private static void browseMedia() {
-        BrowseMedia.library = library;
+        while (true) {
+            int choice = promptMenu(
+                    "Browse all media",
+                    "Browse all movies",
+                    "Browse all books",
+                    "View movies by director",
+                    "View books by author",
+                    "Search by title",
+                    "Go Back"
+            );
 
-        int choice = promptMenu(
-                "Browse all media",
-                "Browse all movies",
-                "Browse all books",
-                "View movies by a certain director",
-                "View books by a certain author",
-                "Search by title",
-                "Go back"
-        );
-
-        switch (choice) {
-            case 1 -> BrowseMedia.showAllMedia();
-            case 2 -> BrowseMedia.showAllMovies();
-            case 3 -> BrowseMedia.showAllBooks();
-            case 4 -> {
-                System.out.println("Enter director name: ");
-                String director = InputValidation.getStringInput();
-                BrowseMedia.printByDirector(director);
-            }
-            case 5 -> {
-                System.out.println("Enter author name: ");
-                String author = InputValidation.getStringInput();
-                BrowseMedia.printByAuthor(author);
-            }
-            case 6 -> {
-                System.out.println("Enter media title: ");
-                String title = InputValidation.getStringInput();
-                BrowseMedia.searchMedia(title);
-            }
-            case 7 -> {
+            BrowseMedia.library = library;
+            switch (choice) {
+                case 1 -> BrowseMedia.showAllMedia();
+                case 2 -> BrowseMedia.showAllMovies();
+                case 3 -> BrowseMedia.showAllBooks();
+                case 4 -> {
+                    System.out.print("Enter director name: ");
+                    BrowseMedia.printByDirector(InputValidation.getStringInput());
+                }
+                case 5 -> {
+                    System.out.print("Enter author name: ");
+                    BrowseMedia.printByAuthor(InputValidation.getStringInput());
+                }
+                case 6 -> {
+                    System.out.print("Enter media title: ");
+                    BrowseMedia.searchMedia(InputValidation.getStringInput());
+                }
+                case 7 -> { return; } // Go back
+                default -> System.out.println("Invalid choice. Try again.");
             }
         }
     }
@@ -167,108 +180,103 @@ public class Kiosk {
     // BORROW / RETURN
     // =======================
     private static void borrowMedia() {
-        System.out.println("Enter the media ID to borrow: ");
+        System.out.print("Enter media ID to borrow: ");
         int mediaID = InputValidation.getIntInput();
-        MediaInterface mediaFound = library.showMedia(mediaID);
+        MediaInterface media = library.showMedia(mediaID);
+
+        if (media == null) {
+            System.out.println("❌ Media not found.");
+            return;
+        }
 
         try {
-            BorrowMedia.issueUser(mediaFound, user);
-            System.out.println("Media borrowed successfully!");
+            BorrowMedia.issueUser(media, user);
+            System.out.println("✅ Media borrowed successfully!");
         } catch (OverdueMediaException e) {
-            System.out.println("Overdue items detected. Please resolve before borrowing new media.");
+            System.out.println("⚠️  You have overdue items. Please return them first.");
         } catch (UnavailableMediaException e) {
-            System.out.println("No copies available. Join waitlist? [Y/N]");
+            System.out.print("No copies available. Join waitlist? (Y/N): ");
             if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
-                mediaFound.addWaitlist(user);
-                System.out.println("Added to waitlist.");
+                media.addWaitlist(user);
+                System.out.println("📋 Added to waitlist.");
             }
         }
     }
 
     private static void returnMedia() {
-        System.out.println("Enter the media ID to return: ");
+        System.out.print("Enter media ID to return: ");
         int mediaID = InputValidation.getIntInput();
-        MediaInterface mediaFound = library.showMedia(mediaID);
-        mediaFound.returnMedia();
-        System.out.println("Media returned successfully.");
+        MediaInterface media = library.showMedia(mediaID);
+
+        if (media == null) {
+            System.out.println("❌ Media not found.");
+            return;
+        }
+
+        media.returnMedia();
+        System.out.println("✅ Media returned successfully.");
     }
 
     // =======================
     // RESOURCES
     // =======================
     private static void viewResources() {
+        System.out.println("\n=== Available Resources ===");
         PrintResource.printResources(library);
+        System.out.println("=============================");
     }
 
     private static void bookResource() {
-        System.out.println("Enter the resource name to book: ");
+        System.out.print("Enter resource name to book: ");
         String resourceName = InputValidation.getStringInput();
         Resource resource = library.getResource(resourceName);
 
         if (resource == null) {
-            System.out.println("Resource not found.");
+            System.out.println("❌ Resource not found.");
             return;
         }
 
-        System.out.println("Available time slots:");
+        System.out.println("\nAvailable time slots:");
         TimeSlots[] slots = TimeSlots.values();
         for (int i = 0; i < slots.length; i++) {
             System.out.println((i + 1) + ". " + slots[i]);
         }
 
-        System.out.println("Select a timeslot number: ");
+        System.out.print("Select a time slot number: ");
         int slotChoice = InputValidation.getIntInput() - 1;
         if (slotChoice < 0 || slotChoice >= slots.length) {
-            System.out.println("Invalid choice.");
+            System.out.println("Invalid slot number.");
             return;
         }
 
-        TimeSlots timeSlot = slots[slotChoice];
         try {
-            new BookResource(new Booking(resource, user, timeSlot));
-            System.out.println("Resource booked successfully for " + timeSlot);
+            new BookResource(new Booking(resource, user, slots[slotChoice]));
+            System.out.println("✅ Resource booked for " + slots[slotChoice]);
         } catch (BookingConflictException e) {
-            System.out.println("Booking conflict: " + e.getMessage());
+            System.out.println("⚠️ Booking conflict: " + e.getMessage());
         }
     }
 
     // =======================
-// MAP PATHFINDER OPTION
-// =======================
+    // MAP PATH FINDER
+    // =======================
     private static void findPathOnMap() {
         System.out.println("\n=== Library Path Finder ===");
-
-        // Step 1: Create a PathFinder linked to the current library
         PathFinder pathFinder = new PathFinder(library);
-
-        // Step 2: Clear any previous paths
         pathFinder.clearPath();
 
-        // Step 3: Show destination legend
         System.out.println("Choose a destination symbol:");
         PrintMap.printLegend();
         System.out.print("Enter symbol (e.g., T): ");
 
-        // Step 4: Get user input
         String input = InputValidation.getStringInput().trim().toUpperCase();
         if (input.isEmpty()) {
             System.out.println("❌ Input cannot be empty.");
             return;
         }
 
-        char target = input.charAt(0);
-
-        // Step 5: Run the pathfinder
-        boolean found = pathFinder.runForTarget(target);
-
-        // Step 6: Show results
-        if (found) {
-            System.out.println("✅ Path found!");
-        } else {
-            System.out.println("❌ No path found between Kiosk and destination.");
-        }
-
-        // Step 7: Print the updated map
+        boolean found = pathFinder.runForTarget(input.charAt(0));
+        System.out.println(found ? "✅ Path found!" : "❌ No path found.");
         pathFinder.printMap();
     }
 
@@ -276,11 +284,11 @@ public class Kiosk {
     // HELPER MENU
     // =======================
     private static int promptMenu(String... options) {
-        System.out.println("\nPlease select an option:");
+        System.out.println("\n--- Select an Option ---");
         for (int i = 0; i < options.length; i++) {
             System.out.println((i + 1) + ". " + options[i]);
         }
+        System.out.print("Enter choice: ");
         return InputValidation.getIntInput();
     }
-
 }
