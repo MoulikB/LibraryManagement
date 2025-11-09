@@ -304,119 +304,173 @@ note for TimeSlots "Invariant properties:\n<ul>\n
 <li>loop: all time slots are valid and unique</li>\n</ul>"
 
 ```
-``` mermaid
+ ``` mermaid
 flowchart TD
 
-%% ========= SIGN IN =========
+%% ========= SIGN IN / REGISTER =========
 subgraph SIGN_IN[**SIGN IN / REGISTER**]
-    login[[Log In]]
-    register[[Register New User]]
-    login_result{Valid credentials?}
-    new_user{Registration successful?}
-    home[[Main Menu]]
+login[[Log In]]
+register[[Register New User]]
+login_result{Valid credentials?}
+register_result{Registration successful?}
+exit[[Exit Application]]
+home[[Main Menu]]
 
-    login -.invalid.-> login
-    login -.valid.-> home
-    register -.failed.-> register
-    register -.success.-> home
+    login --> login_result
+    login_result -- valid --> home
+    login_result -- invalid --> login
+
+    register --> register_result
+    register_result -- success --> home
+    register_result -- failed --> register
+
+    login -.or register-.-> exit
 end
+
 
 %% ========= MAIN MENU =========
 subgraph MAIN_MENU[**USER MAIN MENU**]
+home[[Main Menu]]
+browse_media[[Browse Media]]
+borrow_media[[Borrow Media]]
+return_media[[Return Media]]
+view_resources[[View Resources]]
+book_resource[[Book Resource]]
+map_pathfinder[[Find Path on Map]]
+logout[[Log Out]]
+
     home --> browse_media
     home --> borrow_media
-    home --> return_mediaa\
+    home --> return_media
     home --> view_resources
     home --> book_resource
     home --> map_pathfinder
     home --> logout
-
-    browse_media[[Browse Media]]
-    borrow_media[[Borrow Media]]
-    return_media[[Return Media]]
-    view_resources[[View Resources]]
-    book_resource[[Book Resource]]
-    map_pathfinder[[Find Path on Map]]
-    logout[[Log Out]]
 end
+
 
 %% ========= BROWSE MEDIA =========
-subgraph BROWSE_MEDIA[**BROWSE MEDIA SUBPROCESS**]
-    bm_start[[Browse Menu]]
-    bm_choice{Select an option}
-    all_media[[Show all media]]
-    all_books[[Show all books]]
-    all_movies[[Show all movies]]
-    by_author[[Search by author]]
-    by_director[[Search by director]]
-    by_title[[Search by title]]
-    bm_back[[Go Back]]
+subgraph BROWSE_MEDIA[**BROWSE MEDIA**]
+start[[Browse Menu]]
+choice{Select an option}
+all_media[[Show all media]]
+all_books[[Show all books]]
+all_movies[[Show all movies]]
+by_author[[View books by author]]
+by_director[[View movies by director]]
+by_title[[Search by title]]
+back[[Go Back to Main Menu]]
 
-    bm_start --> bm_choice
-    bm_choice --> all_media
-    bm_choice --> all_books
-    bm_choice --> all_movies
-    bm_choice --> by_author
-    bm_choice --> by_director
-    bm_choice --> by_title
-    bm_choice --> bm_back
-    bm_back --> home
+    start --> choice
+    choice --> all_media
+    choice --> all_books
+    choice --> all_movies
+    choice --> by_author
+    choice --> by_director
+    choice --> by_title
+    choice --> back
 end
+
 
 %% ========= BORROW MEDIA =========
-subgraph BORROW_MEDIA[**BORROW MEDIA SUBPROCESS**]
-    borrow_media --> enter_id[[Enter Media ID]]
-    enter_id --> check_availability{Copies available?}
-    check_availability -- yes --> issue[[Issue media to user]]
-    check_availability -- no --> waitlist_choice{Join waitlist?}
-    waitlist_choice -- yes --> add_waitlist[[Add user to waitlist]]
-    waitlist_choice -- no --> borrow_exit[[Cancel borrow]]
-    issue --> borrow_success[[Show success message]]
-    borrow_exit --> home
-    borrow_success --> home
+subgraph BORROW_MEDIA[**BORROW MEDIA**]
+start_borrow[[Borrow Menu]]
+enter_id[[Enter Media ID]]
+waitlist_check{Waitlist has users?}
+join_waitlist_from_full[[Ask to join waitlist]]
+availability{Copies available?}
+issue_media[[Issue media to user]]
+unavailable[[No copies available]]
+waitlist_choice{Join waitlist?}
+add_waitlist[[Add to waitlist]]
+cancel_borrow[[Cancel borrow]]
+borrow_done[[Show confirmation]]
+back_borrow[[Go Back]]
+
+    start_borrow --> enter_id --> waitlist_check
+    waitlist_check -- yes --> join_waitlist_from_full --> waitlist_choice
+    waitlist_check -- no --> availability
+    availability -- yes --> issue_media --> borrow_done
+    availability -- no --> unavailable --> waitlist_choice
+    waitlist_choice -- yes --> add_waitlist --> borrow_done
+    waitlist_choice -- no --> cancel_borrow
+    borrow_done --> back_borrow
 end
+
 
 %% ========= RETURN MEDIA =========
-subgraph RETURN_MEDIA[**RETURN MEDIA SUBPROCESS**]
-    return_media --> enter_return_id[[Enter Media ID]]
-    enter_return_id --> return_action[[Return media item]]
-    return_action --> confirm_return[[Show return confirmation]]
-    confirm_return --> home
+subgraph RETURN_MEDIA[**RETURN MEDIA**]
+start_return[[Return Menu]]
+enter_return_id[[Enter Media ID]]
+return_item[[Return media]]
+confirm_return[[Show confirmation]]
+back_return[[Go Back]]
+
+    start_return --> enter_return_id --> return_item --> confirm_return --> back_return
 end
 
-%% ========= VIEW / BOOK RESOURCES =========
-subgraph RESOURCE_MENU[**RESOURCE HANDLING**]
-    view_resources --> list_resources[[Display all study rooms and computers]]
 
-    book_resource --> input_resource[[Enter Resource Name]]
-    input_resource --> valid_resource{Resource found?}
-    valid_resource -- no --> invalid_notice[[Show error message]]
-    invalid_notice --> home
-    valid_resource -- yes --> choose_slot[[Display time slots]]
-    choose_slot --> slot_valid{Valid slot chosen?}
-    slot_valid -- no --> invalid_slot[[Invalid input message]]
-    slot_valid -- yes --> confirm_booking[[Confirm and create booking]]
-    confirm_booking --> book_success[[Show success message]]
-    book_success --> home
+%% ========= VIEW RESOURCES =========
+subgraph VIEW_RESOURCES[**VIEW RESOURCES**]
+start_view[[View Resources Menu]]
+display_resources[[Display all available resources]]
+back_view[[Go Back]]
+
+    start_view --> display_resources --> back_view
 end
 
-%% ========= MAP FINDER =========
+
+%% ========= BOOK RESOURCE =========
+subgraph BOOK_RESOURCE[**BOOK RESOURCE**]
+start_book[[Book Resource Menu]]
+input_resource[[Enter Resource Name]]
+resource_found{Resource found?}
+invalid_resource[[Show error message]]
+choose_slot[[Display available time slots]]
+confirm_booking[[Confirm booking]]
+booking_status{Booking successful?}
+success_booking[[Show success message]]
+conflict_booking[[Show conflict message]]
+back_book[[Go Back]]
+
+    start_book --> input_resource --> resource_found
+    resource_found -- no --> invalid_resource --> back_book
+    resource_found -- yes --> choose_slot --> confirm_booking --> booking_status
+    booking_status -- yes --> success_booking --> back_book
+    booking_status -- no --> conflict_booking --> back_book
+end
+
+
+%% ========= MAP PATH FINDER =========
 subgraph MAP_PATHFINDER[**MAP PATH FINDER**]
-    map_pathfinder --> legend[[Display map legend]]
-    legend --> input_symbol[[Enter destination symbol]]
-    input_symbol --> valid_symbol{Symbol valid?}
-    valid_symbol -- no --> invalid_symbol[[Invalid input error]]
-    valid_symbol -- yes --> find_path[[Run pathfinding algorithm]]
-    find_path --> result_found{Path found?}
-    result_found -- yes --> show_path[[Print map with path]]
-    result_found -- no --> no_path[[Display: No path found]]
-    show_path --> home
-    no_path --> home
-    invalid_symbol --> home
+start_map[[Map Menu]]
+show_legend[[Display map legend]]
+input_symbol[[Enter destination symbol]]
+valid_symbol{Valid input?}
+find_path[[Run pathfinding algorithm]]
+result{Path found?}
+show_path[[Display path on map]]
+no_path[[Display: No path found]]
+back_map[[Go Back]]
+
+    start_map --> show_legend --> input_symbol --> valid_symbol
+    valid_symbol -- no --> back_map
+    valid_symbol -- yes --> find_path --> result
+    result -- yes --> show_path --> back_map
+    result -- no --> no_path --> back_map
 end
+
 
 %% ========= LOG OUT =========
-logout --> SIGN_IN
+subgraph LOGOUT[**LOG OUT**]
+logout_action[[Log Out]]
+clear_session[[Clear current user data]]
+return_signin[[Return to Sign-In screen]]
+
+    logout_action --> clear_session --> return_signin
+end
+
+
 
 
 
