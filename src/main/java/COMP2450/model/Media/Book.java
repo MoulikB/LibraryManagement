@@ -213,7 +213,7 @@ public class Book implements MediaInterface {
         Preconditions.checkNotNull(user);
         boolean output = false;
 
-        if (waitlist.isEmpty()) {
+        if (waitlist.isEmpty()) { // only if the waitlist is empty issue media otherwise reserve for waitlist
             if (this.getAvailableCopies() >= 1) {
                 this.borrowMedia(user);
                 output = true;

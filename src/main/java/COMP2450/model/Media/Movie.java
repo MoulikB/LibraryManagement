@@ -194,7 +194,7 @@ public class Movie implements MediaInterface {
         boolean output = false;
 
         if (waitlist.isEmpty()) {
-            if (this.getAvailableCopies() >= 1) {
+            if (this.getAvailableCopies() >= 1) { // only if the waitlist is empty issue media otherwise reserve for waitlist
                 this.borrowMedia(user);
                 output = true;
             }

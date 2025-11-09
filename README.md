@@ -325,7 +325,7 @@ end
 subgraph MAIN_MENU[**USER MAIN MENU**]
     home --> browse_media
     home --> borrow_media
-    home --> return_media
+    home --> return_mediaa\
     home --> view_resources
     home --> book_resource
     home --> map_pathfinder
