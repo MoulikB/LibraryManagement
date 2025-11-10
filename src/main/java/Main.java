@@ -146,7 +146,7 @@ public class Main {
     static void showMember( ) {
         System.out.print("Enter member id (input has to be an integer greater than 0) : ");
         int id = InputValidation.getIntInput();
-        User userFound = User.userDB.getUser(id);
+        User userFound = UserManagement.getUser(id);
         if (userFound == null) {
             System.out.println("No user found with that id");
         } else {
@@ -159,7 +159,7 @@ public class Main {
         System.out.print("Enter member ID (input has to be an integer greater than 0) : ");
         int id = InputValidation.getIntInput();
 
-        if (!User.userDB.removeUser(id)) {
+        if (!UserManagement.removeUser(id)) {
             System.out.println("User does not exist, nothing has been removed");
         };
         chooseOption();
@@ -168,7 +168,7 @@ public class Main {
     static void addReview( ) {
 
         System.out.print("Enter member ID (input has to be an integer greater than 0) : ");
-        User user = User.userDB.getUser(InputValidation.getIntInput());
+        User user = UserManagement.getUser(InputValidation.getIntInput());
 
         System.out.print("Enter library name (input can't be null or empty) : ");
         Library library = LibraryManagement.findLibrary(InputValidation.getStringInput());
@@ -204,7 +204,7 @@ public class Main {
 
     static void showReviews( ) {
         System.out.print("Enter UserID (input has to be an integer greater than 0) : ");
-        User user = User.userDB.getUser(InputValidation.getIntInput());
+        User user = UserManagement.getUser(InputValidation.getIntInput());
 
         if (user!=null) {
             System.out.print("Enter library name (input can't be null or empty): ");

@@ -20,8 +20,8 @@ public class PrintMedia {
      */
     public static void printMovie(Movie movie) {
         Preconditions.checkNotNull(movie);
-        System.out.println( "Movie [title=" + movie.getTitle() + ", director=" + movie.getCreator() +
-                ", mediaID=" + movie.getMediaID() +" , genre= " + movie.getMediaGenre() + "]");
+        System.out.println( "Movie --------------- \nTitle : " + movie.getTitle() + "\nDirector : " + movie.getCreator() +
+                "\nMediaID : " + movie.getMediaID() +" \nGenre : " + movie.getMediaGenre() + "\n ---------------");
     }
 
     /**
@@ -29,8 +29,8 @@ public class PrintMedia {
      */
     public static void printBook(Book book) {
         Preconditions.checkNotNull(book);
-        System.out.println("Book [title=" +  book.getTitle() + ", author=" + book.getCreator() +
-                ", publisher=" + book.getPublisher() + ", Genre : " + book.getMediaGenre() + ", isbn=" + book.getMediaID() + "]");
+        System.out.println( "Book --------------- \nTitle : " + book.getTitle() + "\nAuthor : " + book.getCreator() +
+                "\nISBN : " + book.getMediaID() +" \nGenre : " + book.getMediaGenre() + "\n ---------------");
     }
 
     public static void printMedia(MediaInterface media) {

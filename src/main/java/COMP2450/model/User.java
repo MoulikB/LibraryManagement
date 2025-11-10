@@ -18,7 +18,6 @@ public class User {
     private final String username;
     private final String password;
     private final int id;
-    public static UserManagement userDB = new UserManagement();
     private final String email;
     private final int phone;
     private final List<Review> reviewsWritten;
@@ -182,15 +181,6 @@ public class User {
         if (movie.issuedDays > 5) {
             finesDue += 2;
         }
-    }
-
-    public boolean checkOverDue() {
-        boolean output = false;
-        calculateFinesDue();
-        if (finesDue >= 2) {
-            output = true;
-        }
-        return output;
     }
 
     public String getPassword() {

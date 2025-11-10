@@ -23,13 +23,15 @@ public class UserManagement {
     public static boolean addUser(User user) {
         Preconditions.checkNotNull(user, "User cannot be null");
         checkInvariants();
-        boolean existsBoolean = userExistsBoolean(user.getID());
-        if (!existsBoolean) {
+        boolean output = false;
+        boolean exists = userExistsBoolean(user.getID());
+        if (!exists) {
             users.add(user);
+            output = true; // user successfully added
         }
-        checkInvariants();
-        return existsBoolean;
+        return output; // user already existed
     }
+
 
     /**
      * Check the invariants for our domain model object and throw an error if violated
@@ -43,7 +45,7 @@ public class UserManagement {
      * @param id the ID we are searching for (has to be greater than 0)
      * @return user with corresponding id
      */
-    public User getUser(int id) {
+    public static User getUser(int id) {
         User userFound = null;
         Preconditions.checkArgument(id > 0, "Invalid ID");
         checkInvariants();
@@ -107,7 +109,7 @@ public class UserManagement {
      * @param id the ID we are checking for (has to be greater than 0)
      * @return if user was removed
      */
-    public boolean removeUser(int id) {
+    public static boolean removeUser(int id) {
         checkInvariants();
         Preconditions.checkArgument(id > 0, "Invalid ID");
         User userExists = userExists(id);

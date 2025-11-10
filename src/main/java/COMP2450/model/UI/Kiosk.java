@@ -3,11 +3,13 @@ package COMP2450.model.UI;
 import COMP2450.model.*;
 import COMP2450.model.BookResource;
 import COMP2450.model.BorrowMedia.BorrowMedia;
+import COMP2450.model.BorrowMedia.Waitlist;
 import COMP2450.model.Exceptions.BookingConflictException;
 import COMP2450.model.Exceptions.OverdueMediaException;
 import COMP2450.model.Exceptions.UnavailableMediaException;
 import COMP2450.model.Media.*;
 import COMP2450.model.PrintLogic.PrintMap;
+import COMP2450.model.PrintLogic.PrintMedia;
 import COMP2450.model.PrintLogic.PrintResource;
 
 public class Kiosk {
@@ -55,6 +57,10 @@ public class Kiosk {
         library.addMedia(new Movie("Avatar", "James Cameron", 208, library, MediaGenres.THRILLER));
         library.addMedia(new Movie("Aliens", "James Cameron", 209, library, MediaGenres.ACTION));
         library.addMedia(new Movie("Apocalypse Now", "Francis Ford Coppola", 210, library, MediaGenres.THRILLER));
+
+        for (var media : library.getMediaAvailable()) {
+            media.addCopies(); // Add at least one copy of each media
+        }
     }
 
     private static void addResources(Library library) {
@@ -197,19 +203,26 @@ public class Kiosk {
         } catch (UnavailableMediaException e) {
             System.out.print("No copies available. Join waitlist? (Y/N): ");
             if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
-                media.addWaitlist(user);
+                Waitlist.waitlistUser(media, user);
                 System.out.println("📋 Added to waitlist.");
             }
         }
     }
 
     private static void returnMedia() {
-        System.out.print("Enter media ID to return: ");
+        System.out.print("This is the media you have borrowed : ");
+
+        for (var media : user.getItemsIssued()) {
+            PrintMedia.printMedia(media);
+        }
+
+        System.out.print("\nEnter media ID to return: ");
+
         int mediaID = InputValidation.getIntInput();
         MediaInterface media = library.showMedia(mediaID);
 
-        if (media == null) {
-            System.out.println("❌ Media not found.");
+        if (media == null || !user.getItemsIssued().contains(media)) {
+            System.out.println("❌ Media not found or not issued.");
             return;
         }
 

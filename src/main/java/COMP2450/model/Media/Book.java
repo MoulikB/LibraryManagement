@@ -6,7 +6,6 @@ import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Book
@@ -25,7 +24,7 @@ public class Book implements MediaInterface {
     int totalCopies = 0;
     public int issuedDays = 1;
     static List<User> currentlyIssuedTo = new ArrayList<>();
-    static Stack<User> waitlist = new Stack<>();
+    static List<User> waitlist = new ArrayList<>();
 
     /**
      * Constructor: makes a new Book and adds it to the given library with some preconditions
@@ -211,15 +210,18 @@ public class Book implements MediaInterface {
     public boolean issueUser(User user) throws UnavailableMediaException {
         checkInvariants();
         Preconditions.checkNotNull(user);
+
         boolean output = false;
 
-        if (waitlist.isEmpty()) { // only if the waitlist is empty issue media otherwise reserve for waitlist
+        if (waitlist.isEmpty() || waitlist.get(0).equals(user)) { // only if the waitlist is empty or number one in the waitlist issue media otherwise reserve for waitlist
             if (this.getAvailableCopies() >= 1) {
                 this.borrowMedia(user);
                 output = true;
+                user.issue(this);
             }
+        } else {
+            throw new UnavailableMediaException("Media is not available");
         }
-        user.issue(this);
         checkInvariants();
         return output;
     }
@@ -227,7 +229,11 @@ public class Book implements MediaInterface {
     public void addWaitlist(User user) {
         checkInvariants();
         Preconditions.checkNotNull(user);
-        waitlist.push(user);
+        waitlist.add(user);
         checkInvariants();
+    }
+
+    public List<User> getWaitlist() {
+        return waitlist;
     }
 }

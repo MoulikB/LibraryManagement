@@ -4,9 +4,9 @@ import COMP2450.model.Media.MediaInterface;
 import COMP2450.model.User;
 
 public class Waitlist {
-    public void waitlistUser(MediaInterface media, User user) {
-        media.addWaitlist(user);
+    public static void waitlistUser(MediaInterface media, User user) {
+        if (!media.getWaitlist().contains(user)) {
+            media.addWaitlist(user);
+        }
     }
-
-
 }

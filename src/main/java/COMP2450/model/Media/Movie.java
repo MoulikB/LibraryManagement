@@ -191,15 +191,18 @@ public class Movie implements MediaInterface {
     public boolean issueUser(User user) throws UnavailableMediaException {
         checkInvariants();
         Preconditions.checkNotNull(user);
+
         boolean output = false;
 
-        if (waitlist.isEmpty()) {
-            if (this.getAvailableCopies() >= 1) { // only if the waitlist is empty issue media otherwise reserve for waitlist
+        if (waitlist.isEmpty() || waitlist.get(0).equals(user)) { // only if the waitlist is empty or number one in the waitlist issue media otherwise reserve for waitlist
+            if (this.getAvailableCopies() >= 1) {
                 this.borrowMedia(user);
                 output = true;
+                user.issue(this);
             }
+        } else {
+            throw new UnavailableMediaException("Media is not available");
         }
-        user.issue(this);
         checkInvariants();
         return output;
     }
