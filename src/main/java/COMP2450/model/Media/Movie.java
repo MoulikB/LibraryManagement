@@ -213,4 +213,8 @@ public class Movie implements MediaInterface {
         waitlist.push(user);
         checkInvariants();
     }
+
+    public List<User> getWaitlist() {
+        return waitlist;
+    }
 }
