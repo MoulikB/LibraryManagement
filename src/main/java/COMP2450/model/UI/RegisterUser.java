@@ -30,16 +30,17 @@ public class RegisterUser {
         Preconditions.checkArgument(password != null && !password.isEmpty(), "Password cant be null");
         Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cant be null");
         Preconditions.checkArgument((number > 0), "Number must be not null and 10 digits");
-
+        User output;
         User user = new User(username, password, UserManagement.nextID, email, number);
         if (UserManagement.addUser(user)) {
             System.out.println("✅ User registered successfully!");
             UserManagement.nextID++; // increment AFTER successful add
-            return user;
+            output = user;
         } else {
-            System.out.println("❌ User already exists");
-            return null;
+            System.out.println("❌ User already exists. Please try logging in.");
+            output = null;
         }
+        return output;
 
 
     }
