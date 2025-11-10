@@ -5,6 +5,9 @@ import COMP2450.model.Media.Book;
 import COMP2450.model.Media.MediaInterface;
 import COMP2450.model.Media.Movie;
 import COMP2450.model.PrintLogic.*;
+import COMP2450.model.Resources.Computer;
+import COMP2450.model.Resources.Resource;
+import COMP2450.model.Resources.StudyRoom;
 
 public class Main {
 

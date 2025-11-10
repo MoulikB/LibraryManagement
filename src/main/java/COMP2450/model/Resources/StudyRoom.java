@@ -1,5 +1,7 @@
-package COMP2450.model;
+package COMP2450.model.Resources;
 
+import COMP2450.model.Library;
+import COMP2450.model.TimeSlots;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
@@ -13,8 +15,8 @@ import java.util.List;
 
 public class StudyRoom implements Resource {
     private final String roomName;
-    private final List<Booking> bookings;
     private final Library library;
+    private final List<TimeSlots> unavailableTimeSlots = new ArrayList<>();
 
     /**
      * Make a new StudyRoom and add it to the library.
@@ -26,7 +28,6 @@ public class StudyRoom implements Resource {
         Preconditions.checkArgument( roomName != null && !roomName.isEmpty(), "Room name cannot be null or empty");
         Preconditions.checkArgument( library != null);
         this.roomName = roomName;
-        this.bookings = new ArrayList<>();
         this.library = library;
         checkInvariants();
         library.addResource(this);
@@ -37,8 +38,8 @@ public class StudyRoom implements Resource {
      */
     public void checkInvariants() {
         Preconditions.checkArgument(roomName != null && !roomName.isEmpty(), "Room name cannot be null");
-        Preconditions.checkNotNull(bookings, "Bookings cannot be null");
         Preconditions.checkNotNull(library, "Library cannot be null");
+        Preconditions.checkNotNull(unavailableTimeSlots, "Unavailable Timeslots List cannot be null");
     }
 
     /** The display name of this resource.
@@ -49,44 +50,17 @@ public class StudyRoom implements Resource {
         return roomName;
     }
 
-    /**
-     * Is this time slot free?
-     * Returns false if any existing booking has the same timeSlot.
-     * @param timeSlot the timeslot we are trying to book ( can not be null)
-     * @return whether timeslot is free
-     */
-    public boolean isAvailable(TimeSlots timeSlot) {
-        checkInvariants();
-        Preconditions.checkArgument( timeSlot != null, "Time Slot cannot be null");
-        boolean result = true;
-        int index = 0;
-        while (index < bookings.size() && result) {
-            if (bookings.get(index).getTimeSlot().equals(timeSlot)) {
-                result = false;
-            }
-            index++;
-        }
-        checkInvariants();
-        return result;
+    @Override
+    public Library getLibrary() {
+        return this.library;
     }
 
-    /**
-     * Add a booking to this room.
-     * @param booking The booking being added to this resource (can not be null)
-     */
-    public void addBooking(Booking booking) {
-        checkInvariants();
-        Preconditions.checkArgument(booking != null);
-        bookings.add(booking);
-        checkInvariants();
+    public void markUnavailable(TimeSlots timeSlots) {
+        unavailableTimeSlots.add(timeSlots);
     }
 
-    /** Get all bookings for this study room.
-     *
-     * @return list of all bookings
-     */
-    public List<Booking> getBookings() {
-        checkInvariants();
-        return bookings;
+    public List<TimeSlots> getUnavailableTimeSlots() {
+        return unavailableTimeSlots;
     }
+
 }

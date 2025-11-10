@@ -1,7 +1,7 @@
 package COMP2450.model.UI;
 //need to comment this out
 import COMP2450.model.*;
-import COMP2450.model.BookResource;
+import COMP2450.model.BorrowMedia.BookResource;
 import COMP2450.model.BorrowMedia.BorrowMedia;
 import COMP2450.model.BorrowMedia.Waitlist;
 import COMP2450.model.Exceptions.BookingConflictException;
@@ -11,6 +11,7 @@ import COMP2450.model.Media.*;
 import COMP2450.model.PrintLogic.PrintMap;
 import COMP2450.model.PrintLogic.PrintMedia;
 import COMP2450.model.PrintLogic.PrintResource;
+import COMP2450.model.Resources.Resource;
 
 public class Kiosk {
 
@@ -196,11 +197,10 @@ public class Kiosk {
             return;
         }
 
-        System.out.println("\nAvailable time slots:");
+
         TimeSlots[] slots = TimeSlots.values();
-        for (int i = 0; i < slots.length; i++) {
-            System.out.println((i + 1) + ". " + slots[i]);
-        }
+
+        PrintResource.printBookingAdjusted(resource);
 
         System.out.print("Select a time slot number: ");
         int slotChoice = InputValidation.getIntInput() - 1;

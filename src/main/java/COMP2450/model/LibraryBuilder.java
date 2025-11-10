@@ -2,6 +2,8 @@ package COMP2450.model;
 
 import COMP2450.model.Media.Book;
 import COMP2450.model.Media.Movie;
+import COMP2450.model.Resources.Computer;
+import COMP2450.model.Resources.StudyRoom;
 
 public class LibraryBuilder {
     public static Library initializeLibrary() {

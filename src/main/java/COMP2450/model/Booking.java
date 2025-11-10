@@ -1,5 +1,6 @@
 package COMP2450.model;
 
+import COMP2450.model.Resources.Resource;
 import com.google.common.base.Preconditions;
 
 /**
@@ -27,6 +28,7 @@ public class Booking {
         this.resource = resource;
         this.user = user;
         this.timeSlot = timeSlot;
+        resource.markUnavailable(timeSlot);
         checkInvariants();
     }
 

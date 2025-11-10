@@ -1,5 +1,7 @@
-package COMP2450.model;
+package COMP2450.model.Resources;
 
+import COMP2450.model.Library;
+import COMP2450.model.TimeSlots;
 import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
@@ -13,8 +15,8 @@ import java.util.List;
 
 public class Computer implements Resource {
     private final String computerId;
-    private final List<Booking> bookings = new ArrayList<>();
     private final Library library;
+    private final List<TimeSlots> unavailableTimeSlots = new ArrayList<>();
 
     /**
      * Constructor : Make a new Computer and add it to the library.
@@ -36,6 +38,7 @@ public class Computer implements Resource {
     public void checkInvariants(){
         Preconditions.checkArgument(computerId != null && !computerId.isEmpty(),"computerId cannot be null or empty");
         Preconditions.checkNotNull(library, "library can't be null");
+        Preconditions.checkNotNull(unavailableTimeSlots, "unavailableTimeSlots can't be null");
     }
 
     /**
@@ -45,49 +48,23 @@ public class Computer implements Resource {
     public String getResourceName() {
         return computerId;
     }
-    
-    /**
-     * Is this time slot free?
-     * Returns false if any existing booking has the same timeSlot.
-     * @param timeSlot A timeslot from the given timeslot options we have (must not be null)
-     * @return whether available
-     */
-    public boolean isAvailable(TimeSlots timeSlot) {
-        Preconditions.checkNotNull(timeSlot);
-        checkInvariants();
-        boolean result = true;
-        int index =0;
-        while (index < bookings.size() && result){
-            if ((bookings.get(index).getTimeSlot().equals(timeSlot))) {
-                result = false;
-            }
-            index++;
-        }
-        checkInvariants();
-        return result;
-    }
 
     /**
-     * Add a booking to this computer.
-     * @param booking The booking to be added for this resource (must not be null)
-     */
-    public void addBooking(Booking booking) {
-        Preconditions.checkNotNull(booking);
-        bookings.add(booking);
-    }
-
-    /** Get all bookings for this computer.
+     * Which library this computer belongs to
      *
-     * @return a list of all bookings
-     */
-    public List<Booking> getBookings() {
-        return bookings;
-    }
-
-    /** Which library this computer belongs to
      * @return library
      */
     public Library getLibrary() {
         return library;
     }
+
+    public void markUnavailable(TimeSlots timeSlots) {
+        unavailableTimeSlots.add(timeSlots);
+    }
+
+    public List<TimeSlots> getUnavailableTimeSlots() {
+        return unavailableTimeSlots;
+    }
+
+
 }

@@ -1,5 +1,6 @@
-package COMP2450.model;
+package COMP2450.model.BorrowMedia;
 
+import COMP2450.model.Booking;
 import COMP2450.model.Exceptions.BookingConflictException;
 import com.google.common.base.Preconditions;
 
