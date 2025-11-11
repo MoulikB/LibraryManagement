@@ -9,6 +9,7 @@ import COMP2450.model.Resources.Computer;
 import COMP2450.model.Resources.Resource;
 import COMP2450.model.Resources.StudyRoom;
 
+
 public class Main {
 
     public static void main(String[] args) {
@@ -130,6 +131,9 @@ public class Main {
         System.out.print("Enter member name (input can't be null or empty) : ");
         String username = InputValidation.getStringInput();
 
+        System.out.print("Enter member password : ");
+        String password = InputValidation.getStringInput();
+
         System.out.print("Enter new ID (input has to be an integer greater than 0) : ");
         int id = InputValidation.getIntInput();
 
@@ -140,16 +144,16 @@ public class Main {
         int phone = InputValidation.getIntInput();
 
 
-//        if (UserManagement.addUser(new User(username,id , email, phone))) {
-//            System.out.println("User already exists");
-//        }exists
+        if (UserManagement.addUser(new User(username,password, id , email, phone))) {
+            System.out.println("User already exists");
+        }
         chooseOption();
     }
 
     static void showMember( ) {
-        System.out.print("Enter member id (input has to be an integer greater than 0) : ");
-        int id = InputValidation.getIntInput();
-        User userFound = UserManagement.getUser(id);
+        System.out.print("Enter member username : ");
+        String username = InputValidation.getStringInput();
+        User userFound = UserManagement.getUser(username);
         if (userFound == null) {
             System.out.println("No user found with that id");
         } else {
@@ -159,19 +163,20 @@ public class Main {
     }
 
     static void removeMember(  ) {
-        System.out.print("Enter member ID (input has to be an integer greater than 0) : ");
-        int id = InputValidation.getIntInput();
+        System.out.print("Enter member username : ");
+        String username = InputValidation.getStringInput();
 
-        if (!UserManagement.removeUser(id)) {
+        if (!UserManagement.removeUser(username)) {
             System.out.println("User does not exist, nothing has been removed");
-        };
+        }
         chooseOption();
     }
 
     static void addReview( ) {
 
-        System.out.print("Enter member ID (input has to be an integer greater than 0) : ");
-        User user = UserManagement.getUser(InputValidation.getIntInput());
+        System.out.print("Enter member username : ");
+        String username = InputValidation.getStringInput();
+        User user = UserManagement.getUser(username);
 
         System.out.print("Enter library name (input can't be null or empty) : ");
         Library library = LibraryManagement.findLibrary(InputValidation.getStringInput());
@@ -206,8 +211,9 @@ public class Main {
     }
 
     static void showReviews( ) {
-        System.out.print("Enter UserID (input has to be an integer greater than 0) : ");
-        User user = UserManagement.getUser(InputValidation.getIntInput());
+        System.out.print("Enter member username : ");
+        String username = InputValidation.getStringInput();
+        User user = UserManagement.getUser(username);
 
         if (user!=null) {
             System.out.print("Enter library name (input can't be null or empty): ");

@@ -1,6 +1,5 @@
 package COMP2450.model.PrintLogic;
 
-import COMP2450.model.BorrowMedia.BookResource;
 import COMP2450.model.Library;
 import COMP2450.model.Resources.Resource;
 import COMP2450.model.TimeSlots;

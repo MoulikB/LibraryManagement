@@ -22,6 +22,9 @@ public class PrintMedia {
         Preconditions.checkNotNull(movie);
         System.out.println( "Movie --------------- \nTitle : " + movie.getTitle() + "\nDirector : " + movie.getCreator() +
                 "\nMediaID : " + movie.getMediaID() +" \nGenre : " + movie.getMediaGenre() + "\n ---------------");
+        for (var review : movie.getReviews()) {
+            PrintReview.printReview(review);
+        }
     }
 
     /**
@@ -31,6 +34,9 @@ public class PrintMedia {
         Preconditions.checkNotNull(book);
         System.out.println( "Book --------------- \nTitle : " + book.getTitle() + "\nAuthor : " + book.getCreator() +
                 "\nISBN : " + book.getMediaID() +" \nGenre : " + book.getMediaGenre() + "\n ---------------");
+        for (var review : book.getReviews()) {
+            PrintReview.printReview(review);
+        }
     }
 
     public static void printMedia(MediaInterface media) {

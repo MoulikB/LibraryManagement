@@ -126,7 +126,7 @@ public class User {
         if (this == otherUser) {
             output = true;
         } else {
-            output =  (this.id == otherUser.id);
+            output =  (this.username.equals(otherUser.username));
         }
         return output;
     }
