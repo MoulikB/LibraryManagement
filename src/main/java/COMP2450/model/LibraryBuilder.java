@@ -5,15 +5,32 @@ import COMP2450.model.Media.Movie;
 import COMP2450.model.Resources.Computer;
 import COMP2450.model.Resources.StudyRoom;
 
+/**
+ * LibraryBuilder
+ * Helps initialize a sample library with preloaded media and resources.
+ * Used mainly at startup for testing or demonstration.
+ */
 public class LibraryBuilder {
+
+    /**
+     * Builds and returns a new Library pre-filled with media and resources.
+     *
+     * @return the initialized Library object
+     */
     public static Library initializeLibrary() {
+        Library lib;
         String name = "2450";
-        Library lib = new Library(name);
+        lib = new Library(name);
         addMedia(lib);
         addResources(lib);
         return lib;
     }
 
+    /**
+     * Adds predefined books and movies to the library’s media collection.
+     *
+     * @param library the library to add media to
+     */
     private static void addMedia(Library library) {
         library.addMedia(new Book("1984", "George Orwell", "Penguin", MediaGenres.FICTION, 123, library));
         library.addMedia(new Book("To Kill a Mockingbird", "Harper Lee", "J.B. Lippincott & Co.", MediaGenres.FICTION, 124, library));
@@ -42,6 +59,11 @@ public class LibraryBuilder {
         }
     }
 
+    /**
+     * Adds study rooms and computers to the library’s resource list.
+     *
+     * @param library the library to add resources to
+     */
     private static void addResources(Library library) {
         library.addResource(new StudyRoom("Study Room 1", library));
         library.addResource(new StudyRoom("Study Room 2", library));

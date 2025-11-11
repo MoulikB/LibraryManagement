@@ -1,5 +1,5 @@
 package COMP2450.model.UI;
-//need to comment this out
+
 import COMP2450.model.*;
 import COMP2450.model.BorrowMedia.BookResource;
 import COMP2450.model.BorrowMedia.BorrowMedia;
@@ -13,18 +13,31 @@ import COMP2450.model.PrintLogic.PrintMedia;
 import COMP2450.model.PrintLogic.PrintResource;
 import COMP2450.model.Resources.Resource;
 
+/**
+ * Kiosk
+ * Acts as the main user interface for the Library Management System.
+ * Handles user login, registration, browsing, borrowing, and booking operations.
+ */
 public class Kiosk {
 
     private static User user = null;
     private static Library library;
 
+    /**
+     * Entry point of the program. Initializes the library and starts the kiosk.
+     */
     public static void main(String[] args) {
         library = LibraryBuilder.initializeLibrary();
         runKiosk();
     }
 
+    /**
+     * Keeps the kiosk running continuously.
+     * Displays the appropriate menu depending on whether a user is logged in.
+     */
     private static void runKiosk() {
-        while (true) {
+        boolean running = true;
+        while (running) {
             if (user == null) {
                 showWelcomeScreen();
             } else {
@@ -33,17 +46,23 @@ public class Kiosk {
         }
     }
 
+    /**
+     * Displays the initial welcome screen with login and registration options.
+     */
     private static void showWelcomeScreen() {
-        System.out.println("\n=== Welcome to the Library " + library.getName() +" Kiosk ===");
+        System.out.println("\n=== Welcome to the Library " + library.getName() + " Kiosk ===");
         System.out.println("1. Log In");
         System.out.println("2. Register");
         System.out.print("Enter your choice: ");
 
         int option = InputValidation.getIntInput();
-        switch (option) {
-            case 1 -> user = LogIn.loginUser();
-            case 2 -> user = RegisterUser.registerUser();
-            default -> System.out.println("Invalid option. Try again.");
+
+        if (option == 1) {
+            user = LogIn.loginUser();
+        } else if (option == 2) {
+            user = RegisterUser.registerUser();
+        } else {
+            System.out.println("Invalid option. Try again.");
         }
 
         if (user != null) {
@@ -51,11 +70,13 @@ public class Kiosk {
         }
     }
 
-    // =======================
-    // USER MENU
-    // =======================
+    /**
+     * Displays the main user menu and handles user input for each option.
+     */
     private static void showUserMenu() {
-        while (true) {
+        boolean stayInMenu = true;
+
+        while (stayInMenu) {
             int choice = promptMenu(
                     "Browse Media",
                     "Borrow Media",
@@ -75,23 +96,28 @@ public class Kiosk {
                 case 6 -> findPathOnMap();
                 case 7 -> {
                     logout();
-                    return;
+                    stayInMenu = false;
                 }
                 default -> System.out.println("Invalid choice. Try again.");
             }
         }
     }
 
+    /**
+     * Logs out the current user.
+     */
     private static void logout() {
         System.out.println("Logging out " + user.getUsername() + "...");
         user = null;
     }
 
-    // =======================
-    // BROWSE MEDIA
-    // =======================
+    /**
+     * Displays the browsing menu for different types of media.
+     */
     private static void browseMedia() {
-        while (true) {
+        boolean stayInMenu = true;
+
+        while (stayInMenu) {
             int choice = promptMenu(
                     "Browse all media",
                     "Browse all movies",
@@ -103,31 +129,33 @@ public class Kiosk {
             );
 
             BrowseMedia.library = library;
-            switch (choice) {
-                case 1 -> BrowseMedia.showAllMedia();
-                case 2 -> BrowseMedia.showAllMovies();
-                case 3 -> BrowseMedia.showAllBooks();
-                case 4 -> {
-                    System.out.print("Enter director name: ");
-                    BrowseMedia.printByDirector(InputValidation.getStringInput());
-                }
-                case 5 -> {
-                    System.out.print("Enter author name: ");
-                    BrowseMedia.printByAuthor(InputValidation.getStringInput());
-                }
-                case 6 -> {
-                    System.out.print("Enter media title: ");
-                    BrowseMedia.searchMedia(InputValidation.getStringInput());
-                }
-                case 7 -> { return; } // Go back
-                default -> System.out.println("Invalid choice. Try again.");
+
+            if (choice == 1) {
+                BrowseMedia.showAllMedia();
+            } else if (choice == 2) {
+                BrowseMedia.showAllMovies();
+            } else if (choice == 3) {
+                BrowseMedia.showAllBooks();
+            } else if (choice == 4) {
+                System.out.print("Enter director name: ");
+                BrowseMedia.printByDirector(InputValidation.getStringInput());
+            } else if (choice == 5) {
+                System.out.print("Enter author name: ");
+                BrowseMedia.printByAuthor(InputValidation.getStringInput());
+            } else if (choice == 6) {
+                System.out.print("Enter media title: ");
+                BrowseMedia.searchMedia(InputValidation.getStringInput());
+            } else if (choice == 7) {
+                stayInMenu = false;
+            } else {
+                System.out.println("Invalid choice. Try again.");
             }
         }
     }
 
-    // =======================
-    // BORROW / RETURN
-    // =======================
+    /**
+     * Allows the user to borrow a media item by ID.
+     */
     private static void borrowMedia() {
         System.out.print("Enter media ID to borrow: ");
         int mediaID = InputValidation.getIntInput();
@@ -135,8 +163,7 @@ public class Kiosk {
 
         if (media == null) {
             System.out.println("❌ Media not found.");
-        }
-        else {
+        } else {
             try {
                 BorrowMedia.issueUser(media, user);
                 System.out.println("✅ Media borrowed successfully!");
@@ -152,71 +179,64 @@ public class Kiosk {
         }
     }
 
+    /**
+     * Handles returning borrowed media and optionally adds a review.
+     */
     private static void returnMedia() {
-        System.out.print("This is the media you have borrowed : ");
-
+        System.out.print("This is the media you have borrowed: ");
         for (var media : user.getItemsIssued()) {
             PrintMedia.printMedia(media);
         }
 
         System.out.print("\nEnter media ID to return: ");
-
         int mediaID = InputValidation.getIntInput();
         MediaInterface media = library.showMedia(mediaID);
 
         if (media == null || !user.getItemsIssued().contains(media)) {
             System.out.println("❌ Media not found or not issued.");
-        }
-
-        else {
+        } else {
             media.returnMedia();
             System.out.println("✅ Media returned successfully.");
             System.out.println("Would you like to leave a review?");
-
             if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
-
-                System.out.println("Enter a small comment/para to describe the media : ");
+                System.out.println("Enter a small comment/para to describe the media: ");
                 String comment = InputValidation.getStringInput();
 
-                System.out.println("Enter a star rating out of 10 : ");
+                System.out.println("Enter a star rating out of 10: ");
                 int rating = InputValidation.getIntInput();
 
                 new Review(user, media, comment, rating);
-
                 System.out.println("Review has been successfully returned.");
             }
         }
     }
 
-    // =======================
-    // RESOURCES
-    // =======================
+    /**
+     * Displays all available library resources.
+     */
     private static void viewResources() {
         System.out.println("\n=== Available Resources ===");
         PrintResource.printResources(library);
         System.out.println("=============================");
     }
 
+    /**
+     * Allows users to view and book resources, including future bookings.
+     */
     private static void bookResource() {
         System.out.print("Enter resource name to view or book: ");
         String resourceName = InputValidation.getStringInput();
         Resource resource = library.getResource(resourceName);
-
         if (resource == null) {
             System.out.println("❌ Resource not found.");
             return;
         }
-
         while (true) {
-            int choice = promptMenu(
-                    "Book a specific time slot (today)",
+            int choice = promptMenu( "Book a specific time slot (today)",
                     "Book a resource for a future date (within 2 weeks)",
                     "View all available slots (next 2 weeks)",
                     "View next X available slots after a time",
-                    "View available slots in a date range",
-                    "Go Back"
-            );
-
+                    "View available slots in a date range", "Go Back" );
             switch (choice) {
                 case 1 -> handleBooking(resource, java.time.LocalDate.now());
                 case 2 -> handleFutureBooking(resource);
@@ -230,7 +250,7 @@ public class Kiosk {
     }
 
     /**
-     * Book for today (legacy behavior).
+     * Books a resource for the current day.
      */
     private static void handleBooking(Resource resource, java.time.LocalDate date) {
         TimeSlots[] slots = TimeSlots.values();
@@ -248,17 +268,18 @@ public class Kiosk {
                 System.out.println("✅ Booked " + resource.getResourceName() +
                         " on " + date + " for " + slots[slotChoice]);
             } catch (BookingConflictException e) {
-                System.out.println("⚠️ Booking conflict: Already booked by another user");
+                System.out.println("⚠️ Booking conflict: Already booked by another user.");
             }
         }
     }
 
     /**
-     * Book for a specific future date (within 14 days).
+     * Books a resource for a specific future date within 14 days.
      */
     private static void handleFutureBooking(Resource resource) {
         System.out.print("Enter booking date (YYYY-MM-DD): ");
         String input = InputValidation.getStringInput();
+        boolean validDate = true;
 
         try {
             java.time.LocalDate chosenDate = java.time.LocalDate.parse(input);
@@ -266,28 +287,28 @@ public class Kiosk {
 
             if (chosenDate.isBefore(today) || chosenDate.isAfter(today.plusDays(13))) {
                 System.out.println("⚠️ Date must be within the next 14 days.");
-                return;
+                validDate = false;
             }
 
-            System.out.println("\n📅 " + chosenDate + " — Checking available time slots:");
-            showDailyAvailability(resource);
+            if (validDate) {
+                System.out.println("\n📅 " + chosenDate + " — Checking available time slots:");
+                showDailyAvailability(resource);
 
-            System.out.print("Select an available slot number to book: ");
-            int slotChoice = InputValidation.getIntInput() - 1;
-            TimeSlots[] slots = TimeSlots.values();
+                System.out.print("Select an available slot number to book: ");
+                int slotChoice = InputValidation.getIntInput() - 1;
+                TimeSlots[] slots = TimeSlots.values();
 
-            if (slotChoice < 0 || slotChoice >= slots.length) {
-                System.out.println("Invalid slot number.");
-                return;
-            }
-
-            // Optional: you could extend Booking to include date
-            try {
-                new BookResource(new Booking(resource, user, slots[slotChoice]));
-                System.out.println("✅ Booked " + resource.getResourceName() +
-                        " on " + chosenDate + " for " + slots[slotChoice]);
-            } catch (BookingConflictException e) {
-                System.out.println("⚠️ Booking conflict: " + e.getMessage());
+                if (slotChoice < 0 || slotChoice >= slots.length) {
+                    System.out.println("Invalid slot number.");
+                } else {
+                    try {
+                        new BookResource(new Booking(resource, user, slots[slotChoice]));
+                        System.out.println("✅ Booked " + resource.getResourceName() +
+                                " on " + chosenDate + " for " + slots[slotChoice]);
+                    } catch (BookingConflictException e) {
+                        System.out.println("⚠️ Booking conflict: " + e.getMessage());
+                    }
+                }
             }
 
         } catch (Exception e) {
@@ -296,7 +317,7 @@ public class Kiosk {
     }
 
     /**
-     * Show all slots for a given date, marking which are booked.
+     * Displays all time slots for a given date, showing which are available or booked.
      */
     private static void showDailyAvailability(Resource resource) {
         TimeSlots[] slots = TimeSlots.values();
@@ -309,12 +330,18 @@ public class Kiosk {
         System.out.println("-------------------------------");
     }
 
+    /**
+     * Shows all available time slots in the next two weeks.
+     */
     private static void showTwoWeekAvailability(Resource resource) {
         System.out.println("\n📅 Available slots in the next 2 weeks:");
         var slots = TimeSlotSearch.viewNextTwoWeeks(resource);
         slots.forEach(System.out::println);
     }
 
+    /**
+     * Shows the next X available slots after a given time.
+     */
     private static void showNextXAfterTime(Resource resource) {
         System.out.print("Enter start time (HH:mm, e.g. 13:00): ");
         String timeInput = InputValidation.getStringInput();
@@ -330,6 +357,9 @@ public class Kiosk {
         }
     }
 
+    /**
+     * Shows available slots between two given dates.
+     */
     private static void showRangeAvailability(Resource resource) {
         System.out.print("Enter start date (YYYY-MM-DD): ");
         String startInput = InputValidation.getStringInput();
@@ -348,9 +378,9 @@ public class Kiosk {
         }
     }
 
-
-
-
+    /**
+     * Finds and prints a path on the library map from 'K' to a chosen symbol.
+     */
     private static void findPathOnMap() {
         System.out.println("\n=== Library Path Finder ===");
         PathFinder pathFinder = new PathFinder(library);
@@ -361,17 +391,22 @@ public class Kiosk {
         System.out.print("Enter symbol (e.g., T): ");
 
         String input = InputValidation.getStringInput().trim().toUpperCase();
+        boolean found;
         if (input.isEmpty()) {
             System.out.println("❌ Input cannot be empty.");
         } else {
-            boolean found = pathFinder.runForTarget(input.charAt(0));
+            found = pathFinder.runForTarget(input.charAt(0));
             System.out.println(found ? "✅ Path found!" : "❌ No path found.");
             pathFinder.printMap();
         }
     }
 
-
-
+    /**
+     * Displays a numbered menu with options and returns the user's choice.
+     *
+     * @param options list of options to display
+     * @return the selected menu choice as an integer
+     */
     private static int promptMenu(String... options) {
         System.out.println("\n--- Select an Option ---");
         for (int i = 0; i < options.length; i++) {

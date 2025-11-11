@@ -6,23 +6,38 @@ import COMP2450.model.TimeSlots;
 import com.google.common.base.Preconditions;
 
 /**
- * Utility class responsible for printing information about resources
- *
- **/
+ * PrintResource
+ * Handles printing details about library resources and their time slots.
+ */
 public class PrintResource {
+
+    /**
+     * Prints general information about a single resource,
+     * including its name and all possible time slots.
+     *
+     * @param resource the resource to print
+     */
     public static void printResource(Resource resource) {
-        Preconditions.checkNotNull(resource);
+        Preconditions.checkNotNull(resource, "Resource cannot be null");
         System.out.println("\n--- Resource Information ---");
         System.out.println("Name: " + resource.getResourceName());
         System.out.println("Available Time Slots:");
+
         for (var slotValue : TimeSlots.values()) {
             System.out.println(slotValue);
         }
+
         Preconditions.checkNotNull(resource);
     }
 
+    /**
+     * Prints resource information with current booking availability.
+     * Displays each time slot and marks whether it is booked or available.
+     *
+     * @param resource the resource to print
+     */
     public static void printBookingAdjusted(Resource resource) {
-        Preconditions.checkNotNull(resource);
+        Preconditions.checkNotNull(resource, "Resource cannot be null");
         System.out.println("\n--- Resource Information ---");
         System.out.println("Name: " + resource.getResourceName());
         System.out.println("Currently Available Time Slots:");
@@ -39,9 +54,14 @@ public class PrintResource {
         }
     }
 
+    /**
+     * Prints all resources belonging to the specified library.
+     *
+     * @param library the library whose resources should be printed
+     */
     public static void printResources(Library library) {
-        Preconditions.checkNotNull(library);
-        System.out.printf("\n--- Library %s Information ---\n",library.getName());
+        Preconditions.checkNotNull(library, "Library cannot be null");
+        System.out.printf("\n--- Library %s Information ---%n", library.getName());
         for (var resource : library.getResources()) {
             printResource(resource);
         }

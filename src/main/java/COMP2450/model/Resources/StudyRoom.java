@@ -52,15 +52,28 @@ public class StudyRoom implements Resource {
 
     @Override
     public Library getLibrary() {
-        return this.library;
+        Library result = this.library;
+        return result;
     }
 
+    /**
+     * Marks a specific time slot as unavailable for this resource.
+     *
+     * @param timeSlots the time slot to mark as unavailable
+     */
     public void markUnavailable(TimeSlots timeSlots) {
         unavailableTimeSlots.add(timeSlots);
     }
 
+    /**
+     * Returns the list of time slots that are currently unavailable.
+     *
+     * @return a list of unavailable TimeSlots
+     */
     public List<TimeSlots> getUnavailableTimeSlots() {
-        return unavailableTimeSlots;
+        List<TimeSlots> result = unavailableTimeSlots;
+        return result;
     }
+
 
 }

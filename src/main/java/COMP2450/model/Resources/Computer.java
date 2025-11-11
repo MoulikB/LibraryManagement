@@ -58,13 +58,26 @@ public class Computer implements Resource {
         return library;
     }
 
+    /**
+     * Marks a given time slot as unavailable for this resource.
+     *
+     * @param timeSlots the time slot to be marked as unavailable
+     */
     public void markUnavailable(TimeSlots timeSlots) {
+        Preconditions.checkNotNull(timeSlots, "Time slot cannot be null");
         unavailableTimeSlots.add(timeSlots);
     }
 
+    /**
+     * Returns the list of time slots that are currently unavailable for this resource.
+     * Note: This returns the actual list, not a copy.
+     *
+     * @return the list of unavailable time slots
+     */
     public List<TimeSlots> getUnavailableTimeSlots() {
         return unavailableTimeSlots;
     }
+
 
 
 }

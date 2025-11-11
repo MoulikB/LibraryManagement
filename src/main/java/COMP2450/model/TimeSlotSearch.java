@@ -8,19 +8,25 @@ import java.util.List;
 
 /**
  * TimeSlotSearch
- * Provides filtering and viewing options for available time slots,
- * limited to a 14-day window starting today.
+ * <p>
+ * Helps find and display available booking times for any resource.
+ * All searches stay within two weeks (14 days) from today.
  */
 public class TimeSlotSearch {
 
+    /** The maximum number of days ahead users can view or book. */
     private static final int MAX_DAYS_AHEAD = 14;
 
     /**
-     * View all available time slots for the next 14 days (2 weeks).
+     * Shows all available time slots for the next two weeks.
+     *
+     * @param resource the resource to check
+     * @return a list of available time slots with dates
      */
     public static List<String> viewNextTwoWeeks(Resource resource) {
         List<String> available = new ArrayList<>();
         LocalDate today = LocalDate.now();
+
         for (int i = 0; i < MAX_DAYS_AHEAD; i++) {
             LocalDate date = today.plusDays(i);
             for (TimeSlots slot : TimeSlots.values()) {
@@ -33,15 +39,20 @@ public class TimeSlotSearch {
     }
 
     /**
-     * View available slots within a custom date range.
-     * The range will be clamped to within 14 days of today.
+     * Shows available slots between two given dates.
+     * The search will not go outside the 14-day window.
+     *
+     * @param resource the resource to check
+     * @param start starting date (inclusive)
+     * @param end ending date (inclusive)
+     * @return a list of available slots between those dates
      */
     public static List<String> viewInRange(Resource resource, LocalDate start, LocalDate end) {
         List<String> available = new ArrayList<>();
         LocalDate today = LocalDate.now();
         LocalDate maxDate = today.plusDays(MAX_DAYS_AHEAD - 1);
 
-        // Clamp range to stay within 14-day window
+        // keep the range within the next two weeks
         if (start.isBefore(today)) start = today;
         if (end.isAfter(maxDate)) end = maxDate;
 
@@ -58,8 +69,13 @@ public class TimeSlotSearch {
     }
 
     /**
-     * Get the next X available slots after a given time today.
-     * Only checks slots within the 14-day window.
+     * Finds the next X available time slots after a given time.
+     * Looks ahead up to 14 days.
+     *
+     * @param resource the resource to check
+     * @param afterTime the time to start checking from
+     * @param x how many open slots to list
+     * @return a list of the next available slots
      */
     public static List<String> nextXAvailable(Resource resource, LocalTime afterTime, int x) {
         List<String> available = new ArrayList<>();
@@ -78,6 +94,12 @@ public class TimeSlotSearch {
         return available;
     }
 
+    /**
+     * Reads the start time from a time slot label and converts it to a LocalTime.
+     *
+     * @param slot the time slot
+     * @return the start time of that slot
+     */
     private static LocalTime parseStartTime(TimeSlots slot) {
         String time = slot.getLabel().substring(0, 5);
         return LocalTime.parse(time);

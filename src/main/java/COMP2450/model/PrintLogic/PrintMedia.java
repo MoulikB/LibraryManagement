@@ -5,95 +5,160 @@ import COMP2450.model.Library;
 import COMP2450.model.Media.MediaInterface;
 import COMP2450.model.Media.Movie;
 import com.google.common.base.Preconditions;
-
 import java.util.List;
 
 /**
- * Utility class responsible for printing information about various medias
- *
- **/
+ * PrintMedia
+ * Handles printing summaries and detailed information
+ * about movies, books, and other library media.
+ */
 public class PrintMedia {
 
     /**
+     * Prints a simple text summary of a movie,
+     * including title, director, ID, genre, and its reviews.
      *
-     * Print a simple text summary of the movie
+     * @param movie the movie to print
+     * @throws NullPointerException if movie is null
      */
     public static void printMovie(Movie movie) {
-        Preconditions.checkNotNull(movie);
-        System.out.println( "Movie --------------- \nTitle : " + movie.getTitle() + "\nDirector : " + movie.getCreator() +
-                "\nMediaID : " + movie.getMediaID() +" \nGenre : " + movie.getMediaGenre() + "\n ---------------");
+        Preconditions.checkNotNull(movie, "Movie cannot be null");
+        System.out.println("Movie ---------------");
+        System.out.println("Title : " + movie.getTitle());
+        System.out.println("Director : " + movie.getCreator());
+        System.out.println("MediaID : " + movie.getMediaID());
+        System.out.println("Genre : " + movie.getMediaGenre());
+        System.out.println("---------------");
+
         for (var review : movie.getReviews()) {
             PrintReview.printReview(review);
         }
     }
 
     /**
-     * * Print a text summary of the book.
+     * Prints a simple text summary of a book,
+     * including title, author, ISBN, genre, and its reviews.
+     *
+     * @param book the book to print
+     * @throws NullPointerException if book is null
      */
     public static void printBook(Book book) {
-        Preconditions.checkNotNull(book);
-        System.out.println( "Book --------------- \nTitle : " + book.getTitle() + "\nAuthor : " + book.getCreator() +
-                "\nISBN : " + book.getMediaID() +" \nGenre : " + book.getMediaGenre() + "\n ---------------");
+        Preconditions.checkNotNull(book, "Book cannot be null");
+        System.out.println("Book ---------------");
+        System.out.println("Title : " + book.getTitle());
+        System.out.println("Author : " + book.getCreator());
+        System.out.println("ISBN : " + book.getMediaID());
+        System.out.println("Genre : " + book.getMediaGenre());
+        System.out.println("---------------");
+
         for (var review : book.getReviews()) {
             PrintReview.printReview(review);
         }
     }
 
+    /**
+     * Prints either a book or movie depending on media type.
+     *
+     * @param media the media item to print
+     * @throws NullPointerException if media is null
+     */
     public static void printMedia(MediaInterface media) {
-        Preconditions.checkNotNull(media);
-        if (media instanceof Book ) {
+        Preconditions.checkNotNull(media, "Media cannot be null");
+
+        if (media instanceof Book) {
             printBook((Book) media);
-        } else if (media instanceof Movie ) {
+        } else if (media instanceof Movie) {
             printMovie((Movie) media);
         }
     }
 
+    /**
+     * Prints all media items stored in a given library.
+     *
+     * @param library the library whose media should be printed
+     * @throws NullPointerException if library is null
+     */
     public static void printAllMedia(Library library) {
-        Preconditions.checkNotNull(library);
+        Preconditions.checkNotNull(library, "Library cannot be null");
         List<MediaInterface> mediaAvailable = library.getMediaAvailable();
         for (MediaInterface media : mediaAvailable) {
             printMedia(media);
         }
     }
 
+    /**
+     * Prints all movies stored in the given library.
+     *
+     * @param library the library to list movies from
+     * @throws NullPointerException if library is null
+     */
     public static void printAllMovies(Library library) {
-        Preconditions.checkNotNull(library);
+        Preconditions.checkNotNull(library, "Library cannot be null");
         List<MediaInterface> mediaAvailable = library.getMediaAvailable();
+
         for (MediaInterface media : mediaAvailable) {
             if (media instanceof Movie) {
-                PrintMedia.printMedia(media);
-            }
-        }
-    }
-    public static void printAllBooks(Library library) {
-        Preconditions.checkNotNull(library);
-        List<MediaInterface> mediaAvailable = library.getMediaAvailable();
-        for (MediaInterface media : mediaAvailable) {
-            if (media instanceof Book) {
-                PrintMedia.printMedia(media);
+                printMedia(media);
             }
         }
     }
 
-    public static void printByDirector(Library library, String director) {
-        Preconditions.checkNotNull(library);
+    /**
+     * Prints all books stored in the given library.
+     *
+     * @param library the library to list books from
+     * @throws NullPointerException if library is null
+     */
+    public static void printAllBooks(Library library) {
+        Preconditions.checkNotNull(library, "Library cannot be null");
         List<MediaInterface> mediaAvailable = library.getMediaAvailable();
+
+        for (MediaInterface media : mediaAvailable) {
+            if (media instanceof Book) {
+                printMedia(media);
+            }
+        }
+    }
+
+    /**
+     * Prints all movies in the library by a given director.
+     *
+     * @param library  the library to search
+     * @param director the director name to match
+     * @throws NullPointerException if library or director is null
+     */
+    public static void printByDirector(Library library, String director) {
+        Preconditions.checkNotNull(library, "Library cannot be null");
+        Preconditions.checkNotNull(director, "Director name cannot be null");
+
+        List<MediaInterface> mediaAvailable = library.getMediaAvailable();
+
         for (MediaInterface media : mediaAvailable) {
             if (media instanceof Movie) {
                 if (media.getCreator().equals(director)) {
-                    PrintMedia.printMedia(media);
+                    printMedia(media);
                 }
             }
         }
     }
 
+    /**
+     * Prints all books in the library by a given author.
+     *
+     * @param library the library to search
+     * @param author  the author name to match
+     * @throws NullPointerException if library or author is null
+     */
     public static void printByAuthor(Library library, String author) {
-        Preconditions.checkNotNull(library);
+        Preconditions.checkNotNull(library, "Library cannot be null");
+        Preconditions.checkNotNull(author, "Author name cannot be null");
+
         List<MediaInterface> mediaAvailable = library.getMediaAvailable();
+
         for (MediaInterface media : mediaAvailable) {
             if (media instanceof Book) {
                 if (media.getCreator().equals(author)) {
-                    PrintMedia.printMedia(media);
+                    printMedia(media);
                 }
             }
         }

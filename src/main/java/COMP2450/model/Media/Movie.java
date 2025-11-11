@@ -188,13 +188,21 @@ public class Movie implements MediaInterface {
         return reviews;
     }
 
+    /**
+     * Issues this media item to a user if available or if they are first in the waitlist.
+     *
+     * @param user the user requesting the media
+     * @return true if the media was successfully issued, false otherwise
+     * @throws UnavailableMediaException if the media is not available for this user
+     */
     public boolean issueUser(User user) throws UnavailableMediaException {
         checkInvariants();
-        Preconditions.checkNotNull(user);
+        Preconditions.checkNotNull(user, "User cannot be null");
 
         boolean output = false;
 
-        if (waitlist.isEmpty() || waitlist.get(0).equals(user)) { // only if the waitlist is empty or number one in the waitlist issue media otherwise reserve for waitlist
+        // Only allow issuing if the waitlist is empty or user is first in line
+        if (waitlist.isEmpty() || waitlist.get(0).equals(user)) {
             if (this.getAvailableCopies() >= 1) {
                 this.borrowMedia(user);
                 output = true;
@@ -203,18 +211,30 @@ public class Movie implements MediaInterface {
         } else {
             throw new UnavailableMediaException("Media is not available");
         }
+
         checkInvariants();
         return output;
     }
 
+    /**
+     * Adds a user to the waitlist for this media item.
+     *
+     * @param user the user to add to the waitlist
+     */
     public void addWaitlist(User user) {
         checkInvariants();
-        Preconditions.checkNotNull(user);
-        waitlist.push(user);
+        Preconditions.checkNotNull(user, "User cannot be null");
+        waitlist.add(user);
         checkInvariants();
     }
 
+    /**
+     * Returns the current waitlist for this media item.
+     *
+     * @return the list of users waiting for this media
+     */
     public List<User> getWaitlist() {
         return waitlist;
     }
+
 }

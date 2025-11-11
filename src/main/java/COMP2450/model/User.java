@@ -139,11 +139,22 @@ public class User {
         return itemsIssued;
     }
 
+    /**
+     * Adds a borrowed media item to the user's issued list.
+     *
+     * @param media the media item being issued to the user
+     */
     public void issue(MediaInterface media) {
         this.itemsIssued.add(media);
     }
 
-
+    /**
+     * Calculates the total amount of fines the user owes.
+     * This resets the current fine amount and checks all issued
+     * books and movies for overdue status.
+     *
+     * @return the total fine amount owed
+     */
     public double calculateFinesDue() {
         this.finesDue = 0;
         checkBooksFines();
@@ -151,41 +162,61 @@ public class User {
         return finesDue;
     }
 
+    /**
+     * Checks all issued books for overdue fines.
+     * Adds a $2 fine for each book overdue by more than 5 days.
+     */
     public void checkBooksFines() {
-
         for (MediaInterface media : itemsIssued) {
             if (media.getMediaType().equals("Book")) {
                 checkBookFines((Book) media);
             }
         }
-
     }
 
+    /**
+     * Checks all issued movies for overdue fines.
+     * Adds a $2 fine for each movie overdue by more than 5 days.
+     */
     public void checkMovieFines() {
-
         for (MediaInterface media : itemsIssued) {
             if (media.getMediaType().equals("Movie")) {
                 checkMovieFines((Movie) media);
             }
         }
-
     }
 
+    /**
+     * Adds a fine if the given book has been issued for more than 5 days.
+     *
+     * @param book the book to check for overdue status
+     */
     public void checkBookFines(Book book) {
         if (book.issuedDays > 5) {
             finesDue += 2;
         }
     }
 
+    /**
+     * Adds a fine if the given movie has been issued for more than 5 days.
+     *
+     * @param movie the movie to check for overdue status
+     */
     public void checkMovieFines(Movie movie) {
         if (movie.issuedDays > 5) {
             finesDue += 2;
         }
     }
 
+    /**
+     * Returns the user's password.
+     *
+     * @return the user's password
+     */
     public String getPassword() {
         return this.password;
     }
+
 }
 
 
