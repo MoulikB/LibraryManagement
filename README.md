@@ -183,16 +183,6 @@ class Resource {
   +addBooking(booking: Booking) void
 }
 
-class Booking {
-    -resource: Resource
-    -memberName: String
-    -timeSlot: String
-    +Booking(resource: Resource, memberName: String, timeSlot: String)
-    +getResource() Resource
-    +getMemberName() String
-    +getTimeSlot() String
-    +toString() String
-}
 
 class StudyRoom {
     -roomNumber: String
@@ -221,6 +211,61 @@ class TimeSlots {
   +ONE_HOUR_SLOTS: List<String>
 }
 
+
+%% ===== Resource & Booking Management =====
+    class Booking {
+        - resource: Resource
+        - user: User
+        - timeSlot: TimeSlot
+        + Booking(resource: Resource, user: User, timeSlot: TimeSlot)
+        + getResource(): Resource
+        + getUser(): User
+        + getTimeSlot(): TimeSlot
+    }
+
+    class BookResource {
+        - booking: Booking
+        - static bookings: List~BookResource~
+        + BookResource(booking: Booking)
+        + checkBooking(): void
+    }
+
+    class BorrowMedia {
+        + issueUser(media: MediaInterface, user: User)
+    }
+
+    class Waitlist {
+        + waitlistUser(media: MediaInterface, user: User): void
+    }
+
+    class TimeSlotSearch {
+        - MAX_DAYS_AHEAD: int
+        + viewNextTwoWeeks(resource: Resource): List~String~
+        + viewInRange(resource: Resource, start: LocalDate, end: LocalDate): List~String~
+        + nextXAvailable(resource: Resource, afterTime: LocalTime, x: int): List~String~
+        - parseStartTime(slot: TimeSlots): LocalTime
+    }
+
+    TimeSlotSearch --> Resource : checks
+    TimeSlotSearch --> TimeSlots : uses
+
+
+
+
+    Waitlist "1" --> "1" MediaInterface : manages
+    Waitlist "1" --> "1" User : addsTo
+
+
+
+    BookResource "1" --> "1" Booking : registers
+    BorrowMedia "1" --> "1" MediaInterface : uses
+    BorrowMedia "1" --> "1" User : issuesTo
+    Booking "1" --> "1" Resource : books
+    Booking "1" --> "1" User : madeBy
+
+
+
+
 Resource <|.. StudyRoom
 Resource <|.. Computer
 Booking "1" --> "1" Resource : books
@@ -228,6 +273,107 @@ StudyRoom "1" <-- "0..*" Booking : maintains
 Computer "1" <-- "0..*" Booking : maintains
 StudyRoom "1" <-- "1" Library : located at
 Computer "1" <-- "1" Library : located at
+
+%% ===== User Interface (UI) Layer =====
+    class Kiosk {
+        - user: User
+        - library: Library
+        + main(args: String[]): void
+        - runKiosk(): void
+        - showWelcomeScreen(): void
+        - showUserMenu(): void
+        - logout(): void
+        - browseMedia(): void
+        - borrowMedia(): void
+        - returnMedia(): void
+        - viewResources(): void
+        - bookResource(): void
+        - handleBooking(resource: Resource, date: LocalDate): void
+        - handleFutureBooking(resource: Resource): void
+        - showDailyAvailability(resource: Resource): void
+        - showTwoWeekAvailability(resource: Resource): void
+        - showNextXAfterTime(resource: Resource): void
+        - showRangeAvailability(resource: Resource): void
+        - findPathOnMap(): void
+        - promptMenu(options: String[]): int
+    }
+
+    class LogIn {
+        + loginUser(): User
+        - isInvalid(input: String): boolean
+    }
+
+    class RegisterUser {
+        + registerUser(): User
+    }
+
+    Kiosk "1" --> "1" Library : accesses
+    Kiosk "1" --> "1" User : activeUser
+    Kiosk "1" --> "1" BorrowMedia : uses
+    Kiosk "1" --> "1" Waitlist : uses
+    Kiosk "1" --> "1" BookResource : uses
+    Kiosk "1" --> "1" LogIn : uses
+    Kiosk "1" --> "1" RegisterUser : uses
+    Kiosk "1" --> "1" Resource : books
+    LogIn "1" --> "1" UserManagement : validates
+    RegisterUser "1" --> "1" UserManagement : registers
+
+%% ===== Pathfinding Subsystem =====
+    class PathFinder {
+        - PATH_CHAR: char
+        - FLOOR_CHAR: char
+        - START_CHAR: char
+        - library: Library
+        - map: char[][]
+        + PathFinder(library: Library)
+        + runForTarget(targetChar: char): boolean
+        - dfsAndMarkPath(start: Coordinate, target: Coordinate): boolean
+        - inBounds(r: int, c: int, rows: int, cols: int): boolean
+        - isWalkable(r: int, c: int, rows: int, cols: int, visited: boolean[][], target: Coordinate): boolean
+        - findChar(ch: char): Coordinate
+        + clearPath(): void
+        + printMap(): void
+    }
+
+    class Coordinate {
+        - x: int
+        - y: int
+        + Coordinate(x: int, y: int)
+        + getX(): int
+        + getY(): int
+        + equals(other: Coordinate): boolean
+    }
+
+    class Stack {
+<<interface>>
++ push(item: T): void
++ pop(): Object
++ size(): int
++ isEmpty(): boolean
++ peek(): Object
+}
+
+class LinkedListStack {
+- top: Node<T>
+- size: int
++ push(item: T): void
++ pop(): T
++ size(): int
++ isEmpty(): boolean
++ peek(): T
+}
+
+class EmptyStackException {
++ EmptyStackException(message: String)
+}
+
+PathFinder --> Library : uses
+PathFinder --> Coordinate : uses
+PathFinder --> LinkedListStack : uses
+LinkedListStack --> Stack : implements
+LinkedListStack --> EmptyStackException : throws
+
+
 
 %% ===== Invariants  =====
 note for Library "Invariant properties:\n<ul>\n    
@@ -303,176 +449,125 @@ note for TimeSlots "Invariant properties:\n<ul>\n
 <li>ONE_HOUR_SLOTS != null</li>\n    
 <li>loop: all time slots are valid and unique</li>\n</ul>"
 
-```
- ``` mermaid
+``` 
+
+The following Mermaid diagram shows the user flow for the `Kiosk` interface —  
+from login to browsing, borrowing, booking, and pathfinding.
+
+```mermaid
+
 flowchart TD
 
-%% ========= SIGN IN / REGISTER =========
-subgraph SIGN_IN[**SIGN IN / REGISTER**]
-login[[Log In]]
-register[[Register New User]]
-login_result{Valid credentials?}
-register_result{Registration successful?}
-exit[[Exit Application]]
-home[[Main Menu]]
+%% ========= WELCOME SCREEN =========
+subgraph WELCOME["WELCOME / LOGIN / REGISTER"]
+    start[[Start Kiosk]]
+    login[[Log In]]
+    register[[Register New User]]
+    login_result{Valid credentials?}
+    register_result{Registration successful?}
+    home[[Main Menu]]
+    exit[[Exit Program]]
 
+    start --> login
+    start --> register
     login --> login_result
-    login_result -- valid --> home
-    login_result -- invalid --> login
-
     register --> register_result
-    register_result -- success --> home
-    register_result -- failed --> register
-
-    login -.or register-.-> exit
+    login_result -- Yes --> home
+    login_result -- No --> login
+    register_result -- Yes --> home
+    register_result -- No --> register
+    start --> exit
 end
-
 
 %% ========= MAIN MENU =========
-subgraph MAIN_MENU[**USER MAIN MENU**]
-home[[Main Menu]]
-browse_media[[Browse Media]]
-borrow_media[[Borrow Media]]
-return_media[[Return Media]]
-view_resources[[View Resources]]
-book_resource[[Book Resource]]
-map_pathfinder[[Find Path on Map]]
-logout[[Log Out]]
-
-    home --> browse_media
-    home --> borrow_media
-    home --> return_media
-    home --> view_resources
-    home --> book_resource
-    home --> map_pathfinder
-    home --> logout
+subgraph MAIN["USER MAIN MENU"]
+    home --> browse[[Browse Media]]
+    home --> borrow[[Borrow Media]]
+    home --> returnm[[Return Media]]
+    home --> viewres[[View Resources]]
+    home --> bookres[[Book Resource]]
+    home --> map[[Find Path on Map]]
+    home --> logout[[Log Out]]
 end
 
-
-%% ========= BROWSE MEDIA =========
-subgraph BROWSE_MEDIA[**BROWSE MEDIA**]
-start[[Browse Menu]]
-choice{Select an option}
-all_media[[Show all media]]
-all_books[[Show all books]]
-all_movies[[Show all movies]]
-by_author[[View books by author]]
-by_director[[View movies by director]]
-by_title[[Search by title]]
-back[[Go Back to Main Menu]]
-
-    start --> choice
-    choice --> all_media
-    choice --> all_books
-    choice --> all_movies
-    choice --> by_author
-    choice --> by_director
-    choice --> by_title
-    choice --> back
+%% ========= MEDIA BROWSING =========
+subgraph BROWSE_MEDIA["Browse Media Options"]
+    browse --> all[[Browse All Media]]
+    browse --> movies[[Browse All Movies]]
+    browse --> books[[Browse All Books]]
+    browse --> director[[View by Director]]
+    browse --> author[[View by Author]]
+    browse --> title[[Search by Title]]
+    browse --> back1[[Back to Main Menu]]
+    back1 --> return_browse[[Return to Main Menu]]
+    return_browse --> home
 end
 
-
-%% ========= BORROW MEDIA =========
-subgraph BORROW_MEDIA[**BORROW MEDIA**]
-start_borrow[[Borrow Menu]]
-enter_id[[Enter Media ID]]
-waitlist_check{Waitlist has users?}
-join_waitlist_from_full[[Ask to join waitlist]]
-availability{Copies available?}
-issue_media[[Issue media to user]]
-unavailable[[No copies available]]
-waitlist_choice{Join waitlist?}
-add_waitlist[[Add to waitlist]]
-cancel_borrow[[Cancel borrow]]
-borrow_done[[Show confirmation]]
-back_borrow[[Go Back]]
-
-    start_borrow --> enter_id --> waitlist_check
-    waitlist_check -- yes --> join_waitlist_from_full --> waitlist_choice
-    waitlist_check -- no --> availability
-    availability -- yes --> issue_media --> borrow_done
-    availability -- no --> unavailable --> waitlist_choice
-    waitlist_choice -- yes --> add_waitlist --> borrow_done
-    waitlist_choice -- no --> cancel_borrow
-    borrow_done --> back_borrow
+%% ========= BORROWING MEDIA =========
+subgraph BORROW_MEDIA["Borrow Media"]
+    borrow --> find_media[[Enter Media ID]]
+    find_media --> available{Available?}
+    available -- Yes --> borrow_success[[Borrow Success]]
+    available -- No --> waitlist_choice{Join Waitlist?}
+    waitlist_choice -- Yes --> waitlist_added[[Added to Waitlist]]
+    waitlist_choice -- No --> waitlist_declined[[Not Added to Waitlist]]
+    borrow_success --> post_borrow[[Return to Menu]]
+    waitlist_added --> post_borrow
+    waitlist_declined --> post_borrow
+    post_borrow --> return_borrow[[Return to Main Menu]]
+    return_borrow --> home
 end
-
 
 %% ========= RETURN MEDIA =========
-subgraph RETURN_MEDIA[**RETURN MEDIA**]
-start_return[[Return Menu]]
-enter_return_id[[Enter Media ID]]
-return_item[[Return media]]
-confirm_return[[Show confirmation]]
-back_return[[Go Back]]
-
-    start_return --> enter_return_id --> return_item --> confirm_return --> back_return
+subgraph RETURN_MEDIA["Return Media"]
+    returnm --> show_borrowed[[Show Borrowed Media]]
+    show_borrowed --> enter_id[[Enter Media ID]]
+    enter_id --> confirm_return[[Return Media]]
+    confirm_return --> review_prompt[[Leave a Review?]]
+    review_prompt -- Yes --> review_yes[[Add Comment and Rating]]
+    review_prompt -- No --> skip_review[[Skip Review]]
+    review_yes --> review_done[[Review Submitted]]
+    review_done --> return_return[[Return to Main Menu]]
+    skip_review --> return_return
+    return_return --> home
 end
 
+%% ========= RESOURCES & BOOKINGS =========
+subgraph BOOKING["Book Library Resources"]
+    bookres --> resource_name[[Enter Resource Name]]
+    resource_name --> exists{Resource Exists?}
+    exists -- No --> return_booking[[Return to Main Menu]]
+    exists -- Yes --> resource_menu[[Resource Options]]
 
-%% ========= VIEW RESOURCES =========
-subgraph VIEW_RESOURCES[**VIEW RESOURCES**]
-start_view[[View Resources Menu]]
-display_resources[[Display all available resources]]
-back_view[[Go Back]]
+    resource_menu --> today[[Book for Today]]
+    resource_menu --> future[[Book Future Date <= 2 Weeks]]
+    resource_menu --> two_week[[View All Available 2 Weeks]]
+    resource_menu --> nextx[[Next X After Time]]
+    resource_menu --> range[[View in Date Range]]
+    resource_menu --> back2[[Back to Main Menu]]
 
-    start_view --> display_resources --> back_view
+    today --> confirm_today[[Confirm Booking]]
+    future --> confirm_future[[Confirm Booking]]
+    confirm_today --> return_booking
+    confirm_future --> return_booking
+    two_week --> return_booking
+    nextx --> return_booking
+    range --> return_booking
+    back2 --> return_booking
+    return_booking --> home
 end
 
-
-%% ========= BOOK RESOURCE =========
-subgraph BOOK_RESOURCE[**BOOK RESOURCE**]
-start_book[[Book Resource Menu]]
-input_resource[[Enter Resource Name]]
-resource_found{Resource found?}
-invalid_resource[[Show error message]]
-choose_slot[[Display available time slots]]
-confirm_booking[[Confirm booking]]
-booking_status{Booking successful?}
-success_booking[[Show success message]]
-conflict_booking[[Show conflict message]]
-back_book[[Go Back]]
-
-    start_book --> input_resource --> resource_found
-    resource_found -- no --> invalid_resource --> back_book
-    resource_found -- yes --> choose_slot --> confirm_booking --> booking_status
-    booking_status -- yes --> success_booking --> back_book
-    booking_status -- no --> conflict_booking --> back_book
+%% ========= MAP PATHFINDER =========
+subgraph MAP["Library Map Pathfinder"]
+    map --> dest[[Choose Destination Symbol]]
+    dest --> path_found{Path Found?}
+    path_found -- Yes --> show_path[[Display Path]]
+    path_found -- No --> show_error[[No Path Found]]
+    show_path --> return_map[[Return to Main Menu]]
+    show_error --> return_map
+    return_map --> home
 end
 
-
-%% ========= MAP PATH FINDER =========
-subgraph MAP_PATHFINDER[**MAP PATH FINDER**]
-start_map[[Map Menu]]
-show_legend[[Display map legend]]
-input_symbol[[Enter destination symbol]]
-valid_symbol{Valid input?}
-find_path[[Run pathfinding algorithm]]
-result{Path found?}
-show_path[[Display path on map]]
-no_path[[Display: No path found]]
-back_map[[Go Back]]
-
-    start_map --> show_legend --> input_symbol --> valid_symbol
-    valid_symbol -- no --> back_map
-    valid_symbol -- yes --> find_path --> result
-    result -- yes --> show_path --> back_map
-    result -- no --> no_path --> back_map
-end
-
-
-%% ========= LOG OUT =========
-subgraph LOGOUT[**LOG OUT**]
-logout_action[[Log Out]]
-clear_session[[Clear current user data]]
-return_signin[[Return to Sign-In screen]]
-
-    logout_action --> clear_session --> return_signin
-end
-
-
-
-
-
+%% ========= LOGOUT =========
+logout --> WELCOME
 ```
-

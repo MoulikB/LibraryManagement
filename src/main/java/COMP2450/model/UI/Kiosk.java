@@ -3,11 +3,13 @@ package COMP2450.model.UI;
 import COMP2450.model.*;
 import COMP2450.model.BorrowMedia.BookResource;
 import COMP2450.model.BorrowMedia.BorrowMedia;
+import COMP2450.model.BorrowMedia.TimeSlotSearch;
 import COMP2450.model.BorrowMedia.Waitlist;
 import COMP2450.model.Exceptions.BookingConflictException;
 import COMP2450.model.Exceptions.OverdueMediaException;
 import COMP2450.model.Exceptions.UnavailableMediaException;
 import COMP2450.model.Media.*;
+import COMP2450.model.Pathfinder.PathFinder;
 import COMP2450.model.PrintLogic.PrintMap;
 import COMP2450.model.PrintLogic.PrintMedia;
 import COMP2450.model.PrintLogic.PrintResource;
@@ -167,6 +169,10 @@ public class Kiosk {
             try {
                 BorrowMedia.issueUser(media, user);
                 System.out.println("✅ Media borrowed successfully!");
+                if (media.getWaitlist().contains(user)) {
+                    media.getWaitlist().remove(user);
+                    System.out.println("Removed from waitlist!");
+                }
             } catch (OverdueMediaException e) {
                 System.out.println("⚠️  You have overdue items. Please return them first.");
             } catch (UnavailableMediaException e) {
@@ -174,6 +180,8 @@ public class Kiosk {
                 if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
                     Waitlist.waitlistUser(media, user);
                     System.out.println("📋 Added to waitlist.");
+                } else {
+                    System.out.println("Okay. Returning to Menu");
                 }
             }
         }

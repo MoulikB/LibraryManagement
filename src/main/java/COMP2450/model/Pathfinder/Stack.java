@@ -1,4 +1,4 @@
-package COMP2450.model;
+package COMP2450.model.Pathfinder;
 
 /**
  * This is a generic interface for a stack.

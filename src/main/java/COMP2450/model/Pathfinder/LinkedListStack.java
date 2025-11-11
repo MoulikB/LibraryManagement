@@ -1,4 +1,4 @@
-package COMP2450.model;
+package COMP2450.model.Pathfinder;
 
 import com.google.common.base.Preconditions;
 

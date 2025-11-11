@@ -1,6 +1,8 @@
-package COMP2450.model;
+package COMP2450.model.BorrowMedia;
 
 import COMP2450.model.Resources.Resource;
+import COMP2450.model.TimeSlots;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
