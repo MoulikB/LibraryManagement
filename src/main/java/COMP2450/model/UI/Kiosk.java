@@ -198,31 +198,156 @@ public class Kiosk {
     }
 
     private static void bookResource() {
-        System.out.print("Enter resource name to book: ");
+        System.out.print("Enter resource name to view or book: ");
         String resourceName = InputValidation.getStringInput();
         Resource resource = library.getResource(resourceName);
 
         if (resource == null) {
             System.out.println("❌ Resource not found.");
-        } else {
-            TimeSlots[] slots = TimeSlots.values();
-            PrintResource.printBookingAdjusted(resource);
+            return;
+        }
 
-            System.out.print("Select a time slot number: ");
-            int slotChoice = InputValidation.getIntInput() - 1;
+        while (true) {
+            int choice = promptMenu(
+                    "Book a specific time slot (today)",
+                    "Book a resource for a future date (within 2 weeks)",
+                    "View all available slots (next 2 weeks)",
+                    "View next X available slots after a time",
+                    "View available slots in a date range",
+                    "Go Back"
+            );
 
-            if (slotChoice < 0 || slotChoice >= slots.length) {
-                System.out.println("Invalid slot number.");
-            } else {
-                try {
-                    new BookResource(new Booking(resource, user, slots[slotChoice]));
-                    System.out.println("✅ Resource booked for " + slots[slotChoice]);
-                } catch (BookingConflictException e) {
-                    System.out.println("⚠️ Booking conflict: " + e.getMessage());
-                }
+            switch (choice) {
+                case 1 -> handleBooking(resource, java.time.LocalDate.now());
+                case 2 -> handleFutureBooking(resource);
+                case 3 -> showTwoWeekAvailability(resource);
+                case 4 -> showNextXAfterTime(resource);
+                case 5 -> showRangeAvailability(resource);
+                case 6 -> { return; }
+                default -> System.out.println("Invalid choice. Try again.");
             }
         }
     }
+
+    /**
+     * Book for today (legacy behavior).
+     */
+    private static void handleBooking(Resource resource, java.time.LocalDate date) {
+        TimeSlots[] slots = TimeSlots.values();
+        System.out.println("\n📅 " + date + " — Available slots:");
+        PrintResource.printBookingAdjusted(resource);
+
+        System.out.print("Select a time slot number: ");
+        int slotChoice = InputValidation.getIntInput() - 1;
+
+        if (slotChoice < 0 || slotChoice >= slots.length) {
+            System.out.println("Invalid slot number.");
+        } else {
+            try {
+                new BookResource(new Booking(resource, user, slots[slotChoice]));
+                System.out.println("✅ Booked " + resource.getResourceName() +
+                        " on " + date + " for " + slots[slotChoice]);
+            } catch (BookingConflictException e) {
+                System.out.println("⚠️ Booking conflict: Already booked by another user");
+            }
+        }
+    }
+
+    /**
+     * Book for a specific future date (within 14 days).
+     */
+    private static void handleFutureBooking(Resource resource) {
+        System.out.print("Enter booking date (YYYY-MM-DD): ");
+        String input = InputValidation.getStringInput();
+
+        try {
+            java.time.LocalDate chosenDate = java.time.LocalDate.parse(input);
+            java.time.LocalDate today = java.time.LocalDate.now();
+
+            if (chosenDate.isBefore(today) || chosenDate.isAfter(today.plusDays(13))) {
+                System.out.println("⚠️ Date must be within the next 14 days.");
+                return;
+            }
+
+            System.out.println("\n📅 " + chosenDate + " — Checking available time slots:");
+            showDailyAvailability(resource);
+
+            System.out.print("Select an available slot number to book: ");
+            int slotChoice = InputValidation.getIntInput() - 1;
+            TimeSlots[] slots = TimeSlots.values();
+
+            if (slotChoice < 0 || slotChoice >= slots.length) {
+                System.out.println("Invalid slot number.");
+                return;
+            }
+
+            // Optional: you could extend Booking to include date
+            try {
+                new BookResource(new Booking(resource, user, slots[slotChoice]));
+                System.out.println("✅ Booked " + resource.getResourceName() +
+                        " on " + chosenDate + " for " + slots[slotChoice]);
+            } catch (BookingConflictException e) {
+                System.out.println("⚠️ Booking conflict: " + e.getMessage());
+            }
+
+        } catch (Exception e) {
+            System.out.println("⚠️ Invalid date format. Use YYYY-MM-DD.");
+        }
+    }
+
+    /**
+     * Show all slots for a given date, marking which are booked.
+     */
+    private static void showDailyAvailability(Resource resource) {
+        TimeSlots[] slots = TimeSlots.values();
+        System.out.println("-------------------------------");
+        for (int i = 0; i < slots.length; i++) {
+            boolean booked = resource.getUnavailableTimeSlots().contains(slots[i]);
+            String status = booked ? "❌ BOOKED" : "✅ AVAILABLE";
+            System.out.printf("%d. %s %s%n", (i + 1), slots[i].getLabel(), status);
+        }
+        System.out.println("-------------------------------");
+    }
+
+    private static void showTwoWeekAvailability(Resource resource) {
+        System.out.println("\n📅 Available slots in the next 2 weeks:");
+        var slots = TimeSlotSearch.viewNextTwoWeeks(resource);
+        slots.forEach(System.out::println);
+    }
+
+    private static void showNextXAfterTime(Resource resource) {
+        System.out.print("Enter start time (HH:mm, e.g. 13:00): ");
+        String timeInput = InputValidation.getStringInput();
+        System.out.print("How many available slots to show? ");
+        int count = InputValidation.getIntInput();
+
+        try {
+            var slots = TimeSlotSearch.nextXAvailable(resource, java.time.LocalTime.parse(timeInput), count);
+            System.out.println("\nNext available slots:");
+            slots.forEach(System.out::println);
+        } catch (Exception e) {
+            System.out.println("⚠️ Invalid time format. Use HH:mm (e.g., 14:00).");
+        }
+    }
+
+    private static void showRangeAvailability(Resource resource) {
+        System.out.print("Enter start date (YYYY-MM-DD): ");
+        String startInput = InputValidation.getStringInput();
+        System.out.print("Enter end date (YYYY-MM-DD): ");
+        String endInput = InputValidation.getStringInput();
+
+        try {
+            var start = java.time.LocalDate.parse(startInput);
+            var end = java.time.LocalDate.parse(endInput);
+            var slots = TimeSlotSearch.viewInRange(resource, start, end);
+
+            System.out.println("\n📆 Available slots in selected range:");
+            slots.forEach(System.out::println);
+        } catch (Exception e) {
+            System.out.println("⚠️ Invalid date format. Use YYYY-MM-DD (e.g., 2025-11-11).");
+        }
+    }
+
 
 
 

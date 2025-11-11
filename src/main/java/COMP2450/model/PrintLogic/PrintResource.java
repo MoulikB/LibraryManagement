@@ -29,12 +29,13 @@ public class PrintResource {
 
         int index = 1;
         for (var slotValue : TimeSlots.values()) {
-            System.out.println(index + ". ");
+            System.out.print(index + ". ");
             if (resource.getUnavailableTimeSlots().contains(slotValue)) {
                 System.out.println(slotValue + " : Already Booked by another user.");
             } else {
                 System.out.println(slotValue);
             }
+            index++;
         }
     }
 
