@@ -24,7 +24,6 @@ public class BookResource {
      *
      * @param booking the booking to register
      * @throws BookingConflictException if a booking already exists for the same resource and time slot
-     * @throws NullPointerException     if the booking is null
      */
     public BookResource(Booking booking) throws BookingConflictException {
         Preconditions.checkNotNull(booking, "Booking cannot be null");
@@ -46,7 +45,6 @@ public class BookResource {
         while (!conflictFound && index < bookings.size()) {
             var currBooking = bookings.get(index);
 
-            // Use .equals() to compare time slots and resources safely
             if (currBooking.booking.getResource().equals(booking.getResource())
                     && currBooking.booking.getTimeSlot().equals(booking.getTimeSlot())) {
                 conflictFound = true;
