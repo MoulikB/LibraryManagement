@@ -19,7 +19,6 @@ public class PrintMedia {
      * including title, director, ID, genre, and its reviews.
      *
      * @param movie the movie to print
-     * @throws NullPointerException if movie is null
      */
     public static void printMovie(Movie movie) {
         Preconditions.checkNotNull(movie, "Movie cannot be null");
@@ -40,7 +39,6 @@ public class PrintMedia {
      * including title, author, ISBN, genre, and its reviews.
      *
      * @param book the book to print
-     * @throws NullPointerException if book is null
      */
     public static void printBook(Book book) {
         Preconditions.checkNotNull(book, "Book cannot be null");
@@ -60,7 +58,6 @@ public class PrintMedia {
      * Prints either a book or movie depending on media type.
      *
      * @param media the media item to print
-     * @throws NullPointerException if media is null
      */
     public static void printMedia(MediaInterface media) {
         Preconditions.checkNotNull(media, "Media cannot be null");
@@ -76,7 +73,6 @@ public class PrintMedia {
      * Prints all media items stored in a given library.
      *
      * @param library the library whose media should be printed
-     * @throws NullPointerException if library is null
      */
     public static void printAllMedia(Library library) {
         Preconditions.checkNotNull(library, "Library cannot be null");
@@ -90,7 +86,6 @@ public class PrintMedia {
      * Prints all movies stored in the given library.
      *
      * @param library the library to list movies from
-     * @throws NullPointerException if library is null
      */
     public static void printAllMovies(Library library) {
         Preconditions.checkNotNull(library, "Library cannot be null");
@@ -107,7 +102,6 @@ public class PrintMedia {
      * Prints all books stored in the given library.
      *
      * @param library the library to list books from
-     * @throws NullPointerException if library is null
      */
     public static void printAllBooks(Library library) {
         Preconditions.checkNotNull(library, "Library cannot be null");
@@ -125,7 +119,6 @@ public class PrintMedia {
      *
      * @param library  the library to search
      * @param director the director name to match
-     * @throws NullPointerException if library or director is null
      */
     public static void printByDirector(Library library, String director) {
         Preconditions.checkNotNull(library, "Library cannot be null");
@@ -147,7 +140,6 @@ public class PrintMedia {
      *
      * @param library the library to search
      * @param author  the author name to match
-     * @throws NullPointerException if library or author is null
      */
     public static void printByAuthor(Library library, String author) {
         Preconditions.checkNotNull(library, "Library cannot be null");

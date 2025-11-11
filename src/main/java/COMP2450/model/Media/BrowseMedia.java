@@ -19,7 +19,7 @@ public class BrowseMedia {
      * @param library the library to browse
      */
     public BrowseMedia(Library library) {
-        this.library = library;
+        BrowseMedia.library = library;
     }
 
     /**

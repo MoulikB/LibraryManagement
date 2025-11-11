@@ -18,7 +18,6 @@ public class Waitlist {
      *
      * @param media the media item to add the user to
      * @param user  the user requesting to be added
-     * @throws NullPointerException if media or user is null
      */
     public static void waitlistUser(MediaInterface media, User user) {
         Preconditions.checkNotNull(media, "Media cannot be null");

@@ -52,8 +52,7 @@ public class StudyRoom implements Resource {
 
     @Override
     public Library getLibrary() {
-        Library result = this.library;
-        return result;
+        return this.library;
     }
 
     /**
@@ -71,8 +70,7 @@ public class StudyRoom implements Resource {
      * @return a list of unavailable TimeSlots
      */
     public List<TimeSlots> getUnavailableTimeSlots() {
-        List<TimeSlots> result = unavailableTimeSlots;
-        return result;
+        return unavailableTimeSlots;
     }
 
 
