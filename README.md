@@ -100,7 +100,6 @@ class MediaGenres {
         +returnMedia() void
         +getTitle() String
         +getAvailableCopies() int
-        +getPublisher() String
         +getLibrary() Library
         +getMediaID() int
         +addCopies() void
