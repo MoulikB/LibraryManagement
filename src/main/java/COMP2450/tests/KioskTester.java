@@ -39,7 +39,7 @@ public class KioskTester {
             Resource room = new StudyRoom("R-201", testLibrary);
 
             // Register a user
-            User testUser = new User("tester", "password", 1, "tester@university.ca", 1234567890);
+            User testUser = new User("tester", "password", 1, "tester@university.ca", "1234567890");
             UserManagement.addUser(testUser);
 
             // --- Login Phase ---

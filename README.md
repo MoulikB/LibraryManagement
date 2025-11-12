@@ -175,16 +175,16 @@ classDiagram
         - password: String
         - id: int
         - email: String
-        - phone: int
+        - phone: String
         - finesDue: double
         - reviewsWritten: List<Review>
         - itemsIssued: List<MediaInterface>
-        + User(username: String, password: String, id: int, email: String, phone: int)
+        + User(username: String, password: String, id: int, email: String, phone: String)
         + checkInvariants(): void
         + getID(): int
         + getUsername(): String
         + getEmail(): String
-        + getPhone(): int
+        + getPhone(): String
         + addReview(review: Review): void
         + getReviews(): List<Review>
         + equals(otherUser: User): boolean

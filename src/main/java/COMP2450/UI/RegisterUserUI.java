@@ -27,8 +27,22 @@ public class RegisterUserUI {
         System.out.print("Enter your email address: ");
         String email = InputValidation.getStringInput();
 
+        while (!isValidEmail(email)) {
+            System.out.println("Invalid email address");
+            System.out.print("Enter your email: ");
+            email = InputValidation.getStringInput();
+        }
+
+
+
         System.out.print("Enter your phone number: ");
-        int phone = InputValidation.getIntInput();
+        String phone = InputValidation.getStringInput();
+
+        while (!isValidPhoneNumber(phone)) {
+            System.out.println("Invalid phone number");
+            System.out.print("Enter your phone number: ");
+            phone = InputValidation.getStringInput();
+        }
 
         User newUser = RegisterUser.createUser(username, password, email, phone);
 
@@ -39,5 +53,24 @@ public class RegisterUserUI {
         }
 
         return newUser;
+    }
+
+    /**
+     * Check if email is valid
+     * @param email to check
+     * @return true if it contains @ and . in the specific format below
+     */
+    private static boolean isValidEmail(String email) {
+        boolean output = email != null;
+        return output && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+    }
+
+    /**
+     * Check if phone is valid
+     * @param phoneNumber to check
+     * @return true if 10 numbers
+     */
+    private static boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber.length() == 10 && phoneNumber.matches("[0-9]{10}");
     }
 }

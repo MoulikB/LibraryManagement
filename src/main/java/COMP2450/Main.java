@@ -148,7 +148,7 @@ public class Main {
         String email = InputValidation.getStringInput();
 
         System.out.print("Enter your phone number (input has to be an integer greater than 0) :");
-        int phone = InputValidation.getIntInput();
+        String phone = InputValidation.getStringInput();
 
 
         if (UserManagement.addUser(new User(username,password, id , email, phone))) {

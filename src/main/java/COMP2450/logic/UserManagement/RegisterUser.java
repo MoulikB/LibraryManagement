@@ -19,14 +19,15 @@ public class RegisterUser {
      * @param phone The user's phone number
      * @return A User object if registration is successful, null otherwise
      */
-    public static User createUser(String username, String password, String email, int phone) {
+    public static User createUser(String username, String password, String email, String phone) {
         User outputUser = null;
 
         try {
             Preconditions.checkArgument(username != null && !username.isEmpty(), "Username can't be empty");
             Preconditions.checkArgument(password != null && !password.isEmpty(), "Password can't be empty");
             Preconditions.checkArgument(email != null && !email.isEmpty(), "Email can't be empty");
-            Preconditions.checkArgument(phone > 0, "Phone number must be positive");
+            Preconditions.checkArgument(phone != null && !phone.isEmpty(), "Phone number can't be empty");
+
 
             User user = new User(username, password, UserManagement.nextID, email, phone);
             boolean added = UserManagement.addUser(user);
@@ -43,4 +44,7 @@ public class RegisterUser {
 
         return outputUser;
     }
+
+
+
 }

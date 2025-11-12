@@ -1,6 +1,5 @@
 package COMP2450.domain;
 
-import COMP2450.UI.KioskUI;
 import COMP2450.domain.Media.Book;
 import COMP2450.domain.Media.MediaInterface;
 import COMP2450.domain.Media.Movie;
@@ -20,7 +19,7 @@ public class User {
     private final String password;
     private final int id;
     private final String email;
-    private final int phone;
+    private final String phone;
     private final List<Review> reviewsWritten;
 
     private double finesDue;  // how much is owed (if any)
@@ -35,12 +34,12 @@ public class User {
      * @param username the name of the yser (name can't be empty or null)
      * If checks pass, the user is registered in userDB.
      */
-    public User(String username, String password, int id, String email,int phone)  {
+    public User(String username, String password, int id, String email, String phone)  {
         Preconditions.checkArgument(username!= null && !username.isEmpty(), "Username cannot be empty");
         Preconditions.checkArgument(password!=null && !password.isEmpty(), "Password cannot be empty");
         Preconditions.checkArgument(id > 0, "ID cannot be less than 1");
         Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cannot be empty");
-        Preconditions.checkArgument(phone > 0, "Phone number cannot be negative has to be in format : (1234567890)");
+        Preconditions.checkArgument(phone != null && !phone.isEmpty(), "Phone number cannot be negative has to be in format : (1234567890)");
         this.username = username;
         this.password = password;
         this.id = id;
@@ -58,7 +57,7 @@ public class User {
         Preconditions.checkArgument(password!=null && !password.isEmpty(), "Password cannot be empty");
         Preconditions.checkArgument(id > 0, "ID cannot be less than 1");
         Preconditions.checkArgument(email != null && !email.isEmpty(), "Email cannot be empty");
-        Preconditions.checkArgument(phone > 0, "Phone number cannot be negative has to be in format : (1234567890)");
+        Preconditions.checkArgument(phone != null && !phone.isEmpty(), "Phone number cannot be negative has to be in format : (1234567890)");
     }
 
     /** Get the user's ID.
@@ -89,7 +88,7 @@ public class User {
      *
      * @return phone
      */
-    public int getPhone() {
+    public String getPhone() {
         return this.phone;
     }
 
