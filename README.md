@@ -614,14 +614,19 @@ flowchart TD
         home[[Main Menu]]
         exit[[Exit Program]]
 
+        login_error[[Invalid Credentials]]
+        register_error[[Registration Failed]]
+
         start --> login
         start --> register
         login --> login_result
-        register --> register_result
         login_result -- Yes --> simulate --> home
-        login_result -- No --> login
+        login_result -- No --> login_error --> login
+
+        register --> register_result
         register_result -- Yes --> simulate --> home
-        register_result -- No --> register
+        register_result -- No --> register_error --> register
+
         start --> exit
     end
 
@@ -648,17 +653,28 @@ flowchart TD
         browse --> author[[View by Author]]
         browse --> title[[Search by Title]]
         browse --> back1[[Back to Main Menu]]
+
+        title --> title_error[[Title Not Found]]
+        title_error --> browse
+
         back1 --> home
     end
 
 %% ========= BORROW MEDIA =========
     subgraph BORROW_MEDIA["Borrow Media Flow"]
         borrow --> find_media[[Enter Media ID]]
-        find_media --> available{Available?}
+        find_media --> id_valid{Media ID Valid?}
+
+        invalid_id[[Invalid Media ID]]
+        id_valid -- No --> invalid_id --> borrow
+
+        id_valid -- Yes --> available{Available?}
         available -- Yes --> borrow_success[[Borrow Successful]]
+
         available -- No --> waitlist_choice{Join Waitlist?}
         waitlist_choice -- Yes --> waitlist_added[[Added to Waitlist]]
         waitlist_choice -- No --> waitlist_declined[[Not Added]]
+
         borrow_success --> borrow_return[[Return to Main Menu]]
         waitlist_added --> borrow_return
         waitlist_declined --> borrow_return
@@ -669,7 +685,13 @@ flowchart TD
     subgraph RETURN_MEDIA["Return Media Flow"]
         returnm --> show_borrowed[[Show Borrowed Media]]
         show_borrowed --> enter_id[[Enter Media ID]]
-        enter_id --> confirm_return[[Return Media]]
+        enter_id --> valid_return{Valid Return?}
+
+        invalid_return[[Media Not Issued / Invalid Return]]
+        valid_return -- No --> invalid_return --> returnm
+
+        valid_return -- Yes --> confirm_return[[Return Media]]
+
         confirm_return --> review_prompt[[Leave a Review?]]
         review_prompt -- Yes --> review_yes[[Add Comment and Rating]]
         review_prompt -- No --> skip_review[[Skip Review]]
@@ -680,76 +702,108 @@ flowchart TD
     end
 
 %% ========= RESOURCES & BOOKINGS =========
-subgraph BOOKING["Book Library Resources"]
-bookres --> resource_name[[Enter Resource Name]]
-resource_name --> exists{Resource Exists?}
-exists -- No --> return_booking[[Return to Main Menu]]
-exists -- Yes --> resource_menu[[Resource Options]]
+    subgraph BOOKING["Book Library Resources"]
+        bookres --> resource_name[[Enter Resource Name]]
+        resource_name --> exists{Resource Exists?}
 
-resource_menu --> today[[Book for Today]]
-resource_menu --> future[[Book for Future Date <= 2 Weeks]]
-resource_menu --> two_week[[View All Available 2 Weeks]]
-resource_menu --> nextx[[Next X Available After Time]]
-resource_menu --> range[[View in Date Range]]
-resource_menu --> back2[[Back to Main Menu]]
+        no_res[[Resource Not Found]]
+        exists -- No --> no_res --> return_booking2[[Return to Main Menu]] --> home
 
-today --> confirm_today[[Confirm Booking]]
-future --> confirm_future[[Confirm Booking]]
-confirm_today --> return_booking
-confirm_future --> return_booking
-two_week --> return_booking
-nextx --> return_booking
-range --> return_booking
-back2 --> return_booking
-return_booking --> home
-end
+        exists -- Yes --> resource_menu[[Resource Options]]
+
+        resource_menu --> today[[Book for Today]]
+        resource_menu --> future[[Book for Future Date <= 2 Weeks]]
+        resource_menu --> two_week[[View All Available 2 Weeks]]
+        resource_menu --> nextx[[Next X Available After Time]]
+        resource_menu --> range[[View in Date Range]]
+        resource_menu --> back2[[Back to Main Menu]]
+
+        today --> booking_conflict_today{Conflict?}
+        booking_error_today[[Time Slot Already Booked]]
+        booking_conflict_today -- Yes --> booking_error_today --> return_booking
+        booking_conflict_today -- No --> confirm_today[[Confirm Booking]]
+
+        future --> booking_conflict_future{Conflict?}
+        booking_error_future[[Time Slot Already Booked]]
+        booking_conflict_future -- Yes --> booking_error_future --> return_booking
+        booking_conflict_future -- No --> confirm_future[[Confirm Booking]]
+
+        confirm_today --> return_booking
+        confirm_future --> return_booking
+        two_week --> return_booking
+        nextx --> return_booking
+        range --> return_booking
+        back2 --> return_booking
+
+        return_booking --> home
+    end
 
 %% ========= MAP PATHFINDER =========
-subgraph MAP["Library Map Pathfinder"]
-map --> dest[[Choose Destination Symbol]]
-dest --> path_found{Path Found?}
-path_found -- Yes --> show_path[[Display Path]]
-path_found -- No --> show_error[[No Path Found]]
-show_path --> return_map[[Return to Main Menu]]
-show_error --> return_map
-return_map --> home
-end
+    subgraph MAP["Library Map Pathfinder"]
+        map --> dest[[Choose Destination Symbol]]
+        dest --> valid_dest{Valid Destination?}
+        invalid_dest[[Invalid Destination Symbol]]
+        valid_dest -- No --> invalid_dest --> map
+
+        valid_dest -- Yes --> path_found{Path Found?}
+        path_found -- Yes --> show_path[[Display Path]]
+        path_found -- No --> show_error[[No Path Found]]
+
+        show_path --> return_map[[Return to Main Menu]]
+        show_error --> return_map
+        return_map --> home
+    end
 
 %% ========= FIND MEDIA ON MAP =========
-subgraph MEDIA_MAP["Find Media on Map"]
-media_map --> title_input[[Enter Media Title]]
-title_input --> found{Media Found?}
-found -- Yes --> section[[Show Section Symbol and Genre]]
-section --> show_media_path[[Find Path on Map]]
-found -- No --> not_found[[Media Not Found]]
-show_media_path --> return_media_map[[Return to Main Menu]]
-not_found --> return_media_map
-return_media_map --> home
-end
+    subgraph MEDIA_MAP["Find Media on Map"]
+        media_map --> title_input[[Enter Media Title]]
+        title_input --> valid_title{Valid Title?}
+
+        invalid_title[[Invalid Title Entered]]
+        valid_title -- No --> invalid_title --> media_map
+
+        valid_title -- Yes --> found{Media Found?}
+        found -- Yes --> section[[Show Section Symbol and Genre]]
+        found -- No --> not_found[[Media Not Found]]
+
+        section --> show_media_path[[Find Path on Map]]
+        show_media_path --> return_media_map[[Return to Main Menu]]
+        not_found --> return_media_map
+        return_media_map --> home
+    end
 
 %% ========= FINES SYSTEM =========
-subgraph FINES["Check and Pay Fines"]
-check_fine --> check_issue{Any Media Issued?}
-check_issue -- No --> no_issue[[No Media Issued]]
-check_issue -- Yes --> calc_fine[[Calculate Overdue Fines]]
-calc_fine --> fine_amount{Fines Due?}
-fine_amount -- No --> no_fine[[No Overdue Fines]]
-fine_amount -- Yes --> due_display[[Display Fine Amount]]
+    subgraph FINES["Check and Pay Fines"]
+        check_fine --> check_issue{Any Media Issued?}
+        check_issue -- No --> no_issue[[No Media Issued]]
+        check_issue -- Yes --> calc_fine[[Calculate Overdue Fines]]
 
-pay_fine --> pay_prompt[[Enter Payment Details]]
-pay_prompt --> pay_result{Payment Successful?}
-pay_result -- Yes --> return_overdue[[Return Overdue Media]]
-return_overdue --> fines_cleared[[Clear All Fines]]
-pay_result -- No --> cancel_pay[[Payment Cancelled]]
-fines_cleared --> return_fine[[Return to Main Menu]]
-cancel_pay --> return_fine
-no_issue --> return_fine
-no_fine --> return_fine
-due_display --> return_fine
-return_fine --> home
-end
+        calc_fine --> fine_amount{Fines Due?}
+        fine_amount -- No --> no_fine[[No Overdue Fines]]
+        fine_amount -- Yes --> due_display[[Display Fine Amount]]
+
+        pay_fine --> pay_prompt[[Enter Payment Details]]
+        pay_prompt --> payment_valid{Valid Payment Info?}
+
+        payment_invalid[[Invalid Payment Information]]
+        payment_valid -- No --> payment_invalid --> pay_fine
+
+        payment_valid -- Yes --> pay_result{Payment Successful?}
+        pay_result -- Yes --> return_overdue[[Return Overdue Media]]
+        pay_result -- No --> cancel_pay[[Payment Cancelled]]
+
+        return_overdue --> fines_cleared[[Clear All Fines]]
+
+        fines_cleared --> return_fine[[Return to Main Menu]]
+        cancel_pay --> return_fine
+        no_issue --> return_fine
+        no_fine --> return_fine
+        due_display --> return_fine
+        return_fine --> home
+    end
 
 %% ========= LOGOUT =========
-logout --> WELCOME
+    logout --> WELCOME
+
 
 ```
