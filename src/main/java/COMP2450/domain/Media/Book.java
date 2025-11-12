@@ -126,12 +126,6 @@ public class Book implements MediaInterface {
         return totalCopies;
     }
 
-    /**
-     * @return Get the publisher name.
-     */
-    public String getPublisher () {
-        return publisher;
-    }
 
     /**
      * @return Get the library this book belongs to.
@@ -231,6 +225,14 @@ public class Book implements MediaInterface {
      */
     public List<User> getWaitlist() {
         return waitlist;
+    }
+
+    /**
+     *
+     * @return the number of days media has been issued
+     */
+    public int getIssuedDay() {
+        return issuedDays;
     }
 
     /**

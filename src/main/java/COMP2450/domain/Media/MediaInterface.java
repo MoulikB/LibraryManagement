@@ -48,4 +48,6 @@ public interface MediaInterface {
     void removeFromWaitlist(User user);
 
     List<User> getWaitlist();
+
+    int getIssuedDay();
 }

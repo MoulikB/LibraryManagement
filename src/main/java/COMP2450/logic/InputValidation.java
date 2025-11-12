@@ -18,7 +18,13 @@ public class InputValidation {
      * @return the line of text entered by the user
      */
     public static String getStringInput() {
-        return scnr.nextLine();
+        String input;
+        input = scnr.nextLine();
+        while (input.isEmpty()) {
+            System.out.println("Please enter a valid non empty string : ");
+            input = scnr.nextLine();
+        }
+        return input;
     }
 
     /**

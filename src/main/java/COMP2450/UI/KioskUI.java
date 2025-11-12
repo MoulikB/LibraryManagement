@@ -1,9 +1,7 @@
 package COMP2450.UI;
 
 import COMP2450.domain.*;
-import COMP2450.domain.Media.Book;
 import COMP2450.domain.Media.MediaInterface;
-import COMP2450.domain.Media.Movie;
 import COMP2450.domain.Resources.Resource;
 import COMP2450.logic.*;
 import COMP2450.logic.Borrow.*;
@@ -215,13 +213,7 @@ public class KioskUI {
             List<MediaInterface> toReturn = new ArrayList<>();
 
             for (var media : user.getItemsIssued()) {
-                boolean overdue = false;
-
-                if (media.getMediaType().equals("Book") && ((Book) media).issuedDays > 5) {
-                    overdue = true;
-                } else if (media.getMediaType().equals("Movie") && ((Movie) media).issuedDays > 5) {
-                    overdue = true;
-                }
+                boolean overdue = media.getIssuedDay() > 5;
 
                 if (overdue) {
                     toReturn.add(media);
@@ -256,16 +248,16 @@ public class KioskUI {
 
         if (user.getItemsIssued().isEmpty()) {
             System.out.println("ℹ️ You have no issued media — no fines to check.");
-            return;
-        }
-
-        double amount = user.calculateFinesDue();
-
-        if (amount <= 0) {
-            System.out.println("✅ No overdue fines. Everything is returned on time.");
         } else {
-            System.out.printf("⚠️ Current outstanding fines: $%.2f%n", amount);
-            System.out.println("Use 'Pay Fines' if you'd like to clear your balance.");
+
+            double amount = user.calculateFinesDue();
+
+            if (amount <= 0) {
+                System.out.println("✅ No overdue fines. Everything is returned on time.");
+            } else {
+                System.out.printf("⚠️ Current outstanding fines: $%.2f%n", amount);
+                System.out.println("Use 'Pay Fines' if you'd like to clear your balance.");
+            }
         }
     }
 
@@ -321,25 +313,26 @@ public class KioskUI {
 
         if (media == null) {
             System.out.println("❌ Media not found.");
-            return;
-        }
 
-        try {
-            BorrowMedia.issueUser(media, user);
-            System.out.println("✅ Media borrowed successfully!");
-        } catch (OverdueMediaException e) {
-            System.out.println("⚠️  You have overdue items. Please return them first.");
-        } catch (UnavailableMediaException e) {
-            System.out.print("No copies available. Join waitlist? (Y/N): ");
+        } else {
+
             try {
-                if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
-                    Waitlist.waitlistUser(media, user);
-                    System.out.println("📋 Added to waitlist.");
-                } else {
-                    System.out.println("Okay. Returning to menu.");
+                BorrowMedia.issueUser(media, user);
+                System.out.println("✅ Media borrowed successfully!");
+            } catch (OverdueMediaException e) {
+                System.out.println("⚠️  You have overdue items. Please return them first.");
+            } catch (UnavailableMediaException e) {
+                System.out.print("No copies available. Join waitlist? (Y/N): ");
+                try {
+                    if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
+                        Waitlist.waitlistUser(media, user);
+                        System.out.println("📋 Added to waitlist.");
+                    } else {
+                        System.out.println("Okay. Returning to menu.");
+                    }
+                } catch (WaitListedAlready x) {
+                    System.out.println("Already waitlisted.");
                 }
-            } catch (WaitListedAlready x) {
-                System.out.println("Already waitlisted.");
             }
         }
     }
@@ -358,21 +351,21 @@ public class KioskUI {
 
         if (media == null || !user.getItemsIssued().contains(media)) {
             System.out.println("❌ Media not found or not issued.");
-            return;
-        }
+        } else {
 
-        media.returnMedia();
-        System.out.println("✅ Media returned successfully.");
-        System.out.println("Would you like to leave a review? [Y/N]");
+            media.returnMedia();
+            System.out.println("✅ Media returned successfully.");
+            System.out.println("Would you like to leave a review? [Y/N]");
 
-        if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
-            System.out.println("Enter a small comment: ");
-            String comment = InputValidation.getStringInput();
-            System.out.println("Enter a star rating out of 10: ");
-            int rating = InputValidation.getIntInput();
+            if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
+                System.out.println("Enter a small comment: ");
+                String comment = InputValidation.getStringInput();
+                System.out.println("Enter a star rating out of 10: ");
+                int rating = InputValidation.getIntInput();
 
-            new Review(user, media, comment, rating);
-            System.out.println("Review has been successfully added.");
+                new Review(user, media, comment, rating);
+                System.out.println("Review has been successfully added.");
+            }
         }
     }
 
@@ -392,29 +385,33 @@ public class KioskUI {
         Resource resource = library.getResource(resourceName);
         if (resource == null) {
             System.out.println("❌ Resource not found.");
-            return;
-        }
-        String[] choices = {
-                "Book a specific time slot (today)",
-                "Book a resource for a future date (within 2 weeks)",
-                "View all available slots (next 2 weeks)",
-                "View next X available slots after a time",
-                "View available slots in a date range",
-                "Go Back"
-        };
-        while (true) {
-            int choice = promptMenu(choices);
 
-            switch (choice) {
-                case 1 -> handleBooking(resource, user, LocalDate.now());
-                case 2 -> handleFutureBooking(resource, user);
-                case 3 -> System.out.println(TimeSlotSearch.viewNextTwoWeeks(resource));
-                case 4 -> showNextXAfterTime(resource);
-                case 5 -> showRangeAvailability(resource);
-                case 6 -> { return; }
-                default -> System.out.println("Invalid choice. Try again.");
+        } else
+            {
+                String[] choices = {
+                        "Book a specific time slot (today)",
+                        "Book a resource for a future date (within 2 weeks)",
+                        "View all available slots (next 2 weeks)",
+                        "View next X available slots after a time",
+                        "View available slots in a date range",
+                        "Go Back"
+                };
+                while (true) {
+                    int choice = promptMenu(choices);
+
+                    switch (choice) {
+                        case 1 -> handleBooking(resource, user, LocalDate.now());
+                        case 2 -> handleFutureBooking(resource, user);
+                        case 3 -> System.out.println(TimeSlotSearch.viewNextTwoWeeks(resource));
+                        case 4 -> showNextXAfterTime(resource);
+                        case 5 -> showRangeAvailability(resource);
+                        case 6 -> {
+                            return;
+                        }
+                        default -> System.out.println("Invalid choice. Try again.");
+                    }
+                }
             }
-        }
     }
 
     private static void handleBooking(Resource resource, User user, LocalDate date) {
@@ -431,15 +428,15 @@ public class KioskUI {
 
         if (slotChoice < 0 || slotChoice >= slots.length) {
             System.out.println("Invalid slot number.");
-            return;
-        }
+        } else {
 
-        try {
-            new BookResource(new Booking(resource, user, slots[slotChoice]));
-            System.out.println("✅ Booked " + resource.getResourceName() +
-                    " on " + date + " for " + slots[slotChoice]);
-        } catch (BookingConflictException e) {
-            System.out.println("⚠️ Booking conflict: Already booked by another user.");
+            try {
+                new BookResource(new Booking(resource, user, slots[slotChoice]));
+                System.out.println("✅ Booked " + resource.getResourceName() +
+                        " on " + date + " for " + slots[slotChoice]);
+            } catch (BookingConflictException e) {
+                System.out.println("⚠️ Booking conflict: Already booked by another user.");
+            }
         }
     }
 
@@ -456,22 +453,23 @@ public class KioskUI {
 
             if (chosenDate.isBefore(today) || chosenDate.isAfter(today.plusDays(13))) {
                 System.out.println("⚠️ Date must be within the next 14 days.");
-                return;
+            } else {
+
+                PrintResource.printBookingAdjusted(resource);
+                System.out.print("Select a slot number: ");
+                int slotChoice = InputValidation.getIntInput() - 1;
+                TimeSlots[] slots = TimeSlots.values();
+
+                if (slotChoice < 0 || slotChoice >= slots.length) {
+                    System.out.println("Invalid slot number.");
+
+                } else {
+
+                    new BookResource(new Booking(resource, user, slots[slotChoice]));
+                    System.out.println("✅ Booked " + resource.getResourceName() +
+                            " on " + chosenDate + " for " + slots[slotChoice]);
+                }
             }
-
-            PrintResource.printBookingAdjusted(resource);
-            System.out.print("Select a slot number: ");
-            int slotChoice = InputValidation.getIntInput() - 1;
-            TimeSlots[] slots = TimeSlots.values();
-
-            if (slotChoice < 0 || slotChoice >= slots.length) {
-                System.out.println("Invalid slot number.");
-                return;
-            }
-
-            new BookResource(new Booking(resource, user, slots[slotChoice]));
-            System.out.println("✅ Booked " + resource.getResourceName() +
-                    " on " + chosenDate + " for " + slots[slotChoice]);
         } catch (Exception e) {
             System.out.println("⚠️ Invalid date format. Use YYYY-MM-DD.");
         }
@@ -508,7 +506,10 @@ public class KioskUI {
             var slots = TimeSlotSearch.viewInRange(resource, start, end);
 
             System.out.println("\n📆 Available slots in selected range:");
-            slots.forEach(System.out::println);
+            for (var slot : slots) {
+                System.out.println(slot);
+            }
+
         } catch (Exception e) {
             System.out.println("⚠️ Invalid date format. Use YYYY-MM-DD.");
         }
@@ -530,15 +531,15 @@ public class KioskUI {
         String input = InputValidation.getStringInput().trim().toUpperCase();
         if (input.isEmpty()) {
             System.out.println("❌ Input cannot be empty.");
-            return;
-        }
+        } else {
 
-        try {
-            pathFinder.runForTarget(input.charAt(0));
-            System.out.println("✅ Path found!");
-            PrintMap.printMap(pathFinder.getMap());
-        } catch (IllegalArgumentException e) {
-            System.out.println("❌ Please enter a valid character.");
+            try {
+                pathFinder.runForTarget(input.charAt(0));
+                System.out.println("✅ Path found!");
+                PrintMap.printMap(pathFinder.getMap());
+            } catch (IllegalArgumentException e) {
+                System.out.println("❌ Please enter a valid character.");
+            }
         }
     }
 

@@ -211,6 +211,14 @@ public class Movie implements MediaInterface {
     }
 
     /**
+     *
+     * @return the number of days the media has been issued
+     */
+    public int getIssuedDay() {
+        return issuedDays;
+    }
+
+    /**
      * Removes the user from waitlist if media is issued.
      * @param user the user being removed
      */
