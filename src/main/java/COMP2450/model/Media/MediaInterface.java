@@ -44,5 +44,7 @@ public interface MediaInterface {
 
     void addWaitlist(User user);
 
+    void removeFromWaitlist(User user);
+
     List<User> getWaitlist();
 }

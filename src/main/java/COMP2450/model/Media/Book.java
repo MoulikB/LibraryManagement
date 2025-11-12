@@ -226,6 +226,7 @@ public class Book implements MediaInterface {
                 this.borrowMedia(user);
                 output = true;
                 user.issue(this);
+                this.removeFromWaitlist(user);
             }
         } else {
             throw new UnavailableMediaException("Media is not available");
@@ -254,6 +255,19 @@ public class Book implements MediaInterface {
      */
     public List<User> getWaitlist() {
         return waitlist;
+    }
+
+    /**
+     * Removes the user from waitlist if media is issued.
+     * @param user the user being removed
+     */
+    public void removeFromWaitlist(User user) {
+        checkInvariants();
+        if (this.getWaitlist().contains(user)) {
+            this.getWaitlist().remove(user);
+            System.out.println("Removed from waitlist!");
+        }
+        checkInvariants();
     }
 
 }

@@ -169,10 +169,6 @@ public class Kiosk {
             try {
                 BorrowMedia.issueUser(media, user);
                 System.out.println("✅ Media borrowed successfully!");
-                if (media.getWaitlist().contains(user)) {
-                    media.getWaitlist().remove(user);
-                    System.out.println("Removed from waitlist!");
-                }
             } catch (OverdueMediaException e) {
                 System.out.println("⚠️  You have overdue items. Please return them first.");
             } catch (UnavailableMediaException e) {
