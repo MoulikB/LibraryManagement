@@ -8,6 +8,8 @@ date: 30 September 2025
 # Domain model
 This repository contains a domain model and an initial implementation of our Library System.
 It maintains a simple library and user database management and manages users, media (books and movies) along with resources (computers and study rooms) and a booking system for said resources.
+Phase 2:
+Added a kiosk that allows user to perform basic functions and find they way to different resources
 
 ## Resources
 

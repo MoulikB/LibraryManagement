@@ -28,9 +28,6 @@ public class Map {
                 "| R             T            F          |".toCharArray(),
                 "| N             P            3          |".toCharArray(),
                 "|                                       |".toCharArray(),
-                "| |----D----|   |----D----|             |".toCharArray(),
-                "| | Study1  |   | Study2  |             |".toCharArray(),
-                "| |---------|   |---------|             |".toCharArray(),
                 "|                                       |".toCharArray(),
                 "|                                       |".toCharArray(),
                 "|               K                       |".toCharArray(),  // K on open floor
