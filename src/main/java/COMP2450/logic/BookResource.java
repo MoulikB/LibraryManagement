@@ -48,17 +48,17 @@ public class BookResource {
         while (!conflictFound && index < bookings.size()) {
             var currBooking = bookings.get(index);
 
-            if (currBooking.booking.getResource().equals(booking.getResource())
-                    && currBooking.booking.getTimeSlot().equals(booking.getTimeSlot())) {
+            if (currBooking.booking.getResource().equals(booking.getResource()) &&
+                    currBooking.booking.getTimeSlot().equals(booking.getTimeSlot())) {
                 conflictFound = true;
             }
+
 
             index++;
         }
 
         if (conflictFound) {
-            throw new BookingConflictException("A booking has already been made for this time slot.");
+            throw new BookingConflictException("A booking has already been made for this timeslot");
         }
-        Preconditions.checkNotNull(booking, "Booking cannot be null");
     }
 }
