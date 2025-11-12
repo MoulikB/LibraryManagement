@@ -38,21 +38,19 @@ public class PathFinder {
      * from the kiosk ('K') to a given target symbol.
      *
      * @param targetChar the destination character on the map (for example, 'T', 'L', or 'C')
-     * @return true if a valid path is found, false otherwise
+     * @throws IllegalArgumentException if an invalid character is entered
      */
-    public boolean runForTarget(char targetChar) {
-        boolean result;
+    public void runForTarget(char targetChar) throws IllegalArgumentException {
+
         Coordinate start  = findChar(START_CHAR);
         Coordinate target = findChar(targetChar);
 
         if (start == null || target == null) {
-            System.out.println("❌ Start or target not found on the map.");
-            result = false;
+            throw new IllegalArgumentException("Invalid character");
         } else {
-            result = dfsAndMarkPath(start, target);
+            dfsAndMarkPath(start, target);
         }
 
-        return result;
     }
 
     /**
@@ -190,14 +188,7 @@ public class PathFinder {
         }
     }
 
-    /**
-     * Prints the current map to the console,
-     * showing the library layout and any marked path.
-     */
-    public void printMap() {
-        System.out.println("\n=== LIBRARY MAP WITH PATH ===");
-        for (char[] row : map) {
-            System.out.println(new String(row));
-        }
+    public char[][] getMap() {
+        return map;
     }
 }

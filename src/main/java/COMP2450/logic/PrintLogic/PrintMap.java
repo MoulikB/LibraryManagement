@@ -41,4 +41,23 @@ public class PrintMap {
         System.out.println("P️  : Printing Lab");
         System.out.println("3  : 3D Printing Room");
     }
+
+    /**
+     * Method responsible for printing a 2D map and its legends.
+     * @param inputMap the map being provided (cannot be null)
+     *
+     **/
+    public static void printMap(char[][] inputMap) {
+        Preconditions.checkNotNull(inputMap);
+        for (char[] chars : inputMap) {
+            for (char c : chars) {
+                System.out.print(c);
+            }
+            System.out.println();
+        }
+
+        printLegend();
+
+        Preconditions.checkNotNull(inputMap);
+    }
 }
