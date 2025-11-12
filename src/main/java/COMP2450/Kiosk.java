@@ -1,6 +1,6 @@
 package COMP2450;
 
-import COMP2450.UI.UI;
+import COMP2450.UI.KioskUI;
 import COMP2450.domain.Library;
 import COMP2450.domain.User;
 import COMP2450.logic.LibraryBuilder;
@@ -27,9 +27,9 @@ public class Kiosk {
 
         while (running) {
             if (user == null) {
-                user = UI.showWelcomeScreen(library);
+                user = KioskUI.showWelcomeScreen(library);
             } else {
-                boolean stayInMenu = UI.showUserMenu(library, user);
+                boolean stayInMenu = KioskUI.showUserMenu(library, user);
                 if (!stayInMenu) {
                     logout();
                 }

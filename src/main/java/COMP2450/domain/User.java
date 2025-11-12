@@ -1,5 +1,6 @@
 package COMP2450.domain;
 
+import COMP2450.UI.KioskUI;
 import COMP2450.domain.Media.Book;
 import COMP2450.domain.Media.MediaInterface;
 import COMP2450.domain.Media.Movie;
@@ -216,6 +217,15 @@ public class User {
     public String getPassword() {
         return this.password;
     }
+
+    /**
+     * Clear a users fines and gives them a clean slate
+     */
+    public void clearFines() {
+        this.finesDue = 0;
+
+    }
+
 
 }
 

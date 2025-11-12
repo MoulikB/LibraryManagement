@@ -169,19 +169,35 @@ class Review {
 User "1" -- "0.." Review : writes >
 
 %% ===== Users =====
-class User {
-    -username: String
-    -id: int
-    -finesDue: double
-    -itemsIssued: ArrayList<int>
-    -reviewsWritten: ArrayList<Review>
-    +User(username, id)
-    +addReview(review: Review) void
-    +getReviews(): ArrayList<Review>
-    +getUsername() String
-    +getID() int
-    +equals(other: Object) boolean
-}
+    class User {
+        - username: String
+        - password: String
+        - id: int
+        - email: String
+        - phone: int
+        - finesDue: double
+        - reviewsWritten: List<Review>
+        - itemsIssued: List<MediaInterface>
+        + User(username: String, password: String, id: int, email: String, phone: int)
+        + checkInvariants(): void
+        + getID(): int
+        + getUsername(): String
+        + getEmail(): String
+        + getPhone(): int
+        + addReview(review: Review): void
+        + getReviews(): List<Review>
+        + equals(otherUser: User): boolean
+        + getItemsIssued(): List<MediaInterface>
+        + issue(media: MediaInterface): void
+        + calculateFinesDue(): double
+        + checkBooksFines(): void
+        + checkMovieFines(): void
+        + checkBookFines(book: Book): void
+        + checkMovieFines(movie: Movie): void
+        + getPassword(): String
+        + clearFines(): void
+    }
+
 
 class UserManagement {
     -users: ArrayList<User>
@@ -305,49 +321,53 @@ Computer "1" <-- "0..*" Booking : maintains
 StudyRoom "1" <-- "1" Library : located at
 Computer "1" <-- "1" Library : located at
 
-%% ===== User Interface (UI) Layer =====
-    class Kiosk {
-        - user: User
+%% ===== User Interface (KioskUI) Layer =====
+    class KioskUI {
         - library: Library
-        + main(args: String[]): void
-        - runKiosk(): void
-        - showWelcomeScreen(): void
-        - showUserMenu(): void
-        - logout(): void
-        - browseMedia(): void
-        - borrowMedia(): void
-        - returnMedia(): void
-        - viewResources(): void
-        - bookResource(): void
-        - handleBooking(resource: Resource, date: LocalDate): void
-        - handleFutureBooking(resource: Resource): void
-        - showDailyAvailability(resource: Resource): void
-        - showTwoWeekAvailability(resource: Resource): void
+        - user: User
+        + showWelcomeScreen(library: Library): User
+        + showUserMenu(library: Library, user: User): boolean
+        - incrementIssuedDaysForAllUsers(): void
+        - browseMedia(library: Library): void
+        - borrowMedia(library: Library, user: User): void
+        - returnMedia(library: Library, user: User): void
+        - viewResources(library: Library): void
+        - bookResource(library: Library, user: User): void
+        - handleBooking(resource: Resource, user: User, date: LocalDate): void
+        - handleFutureBooking(resource: Resource, user: User): void
         - showNextXAfterTime(resource: Resource): void
         - showRangeAvailability(resource: Resource): void
-        - findPathOnMap(): void
+        - findPathOnMap(library: Library): void
+        - findMediaOnMap(library: Library): void
+        - checkFines(user: User): void
+        - payFine(user: User): void
+        - clearFines(user: User): void
         - promptMenu(options: String[]): int
     }
 
-    class LogIn {
-        + loginUser(): User
-        - isInvalid(input: String): boolean
+    class LogInUI {
+        + promptLogin(): User
     }
 
-    class RegisterUser {
-        + registerUser(): User
+    class RegisterUserUI {
+        + promptRegister(): User
     }
 
-    Kiosk "1" --> "1" Library : accesses
-    Kiosk "1" --> "1" User : activeUser
-    Kiosk "1" --> "1" BorrowMedia : uses
-    Kiosk "1" --> "1" Waitlist : uses
-    Kiosk "1" --> "1" BookResource : uses
-    Kiosk "1" --> "1" LogIn : uses
-    Kiosk "1" --> "1" RegisterUser : uses
-    Kiosk "1" --> "1" Resource : books
-    LogIn "1" --> "1" UserManagement : validates
-    RegisterUser "1" --> "1" UserManagement : registers
+    KioskUI --> Library : uses
+    KioskUI --> User : activeUser
+    KioskUI --> BorrowMedia : uses
+    KioskUI --> Waitlist : uses
+    KioskUI --> BookResource : uses
+    KioskUI --> LogInUI : uses
+    KioskUI --> RegisterUserUI : uses
+    KioskUI --> Resource : books
+    KioskUI --> PathFinder : navigates
+    KioskUI --> PrintMap : prints
+    KioskUI --> PrintMedia : displays
+    KioskUI --> PrintResource : lists
+    KioskUI --> TimeSlotSearch : checks
+    LogInUI --> UserManagement : validates
+    RegisterUserUI --> UserManagement : registers
 
 %% ===== Pathfinding Subsystem =====
     class PathFinder {
@@ -580,119 +600,155 @@ The following diagram shows the flow for the `Kiosk` interface
 This flow illustrates how users navigate between menus —
 
 ```mermaid
-
 flowchart TD
 
 %% ========= WELCOME SCREEN =========
-subgraph WELCOME["WELCOME / LOGIN / REGISTER"]
-    start[[Start Kiosk]]
-    login[[Log In]]
-    register[[Register New User]]
-    login_result{Valid credentials?}
-    register_result{Registration successful?}
-    home[[COMP2450.Main Menu]]
-    exit[[Exit Program]]
+    subgraph WELCOME["WELCOME / LOGIN / REGISTER"]
+        start[[Start Kiosk]]
+        login[[Log In]]
+        register[[Register New User]]
+        login_result{Valid credentials?}
+        register_result{Registration successful?}
+        simulate[[Simulate +1 Day on Login]]
+        home[[Main Menu]]
+        exit[[Exit Program]]
 
-    start --> login
-    start --> register
-    login --> login_result
-    register --> register_result
-    login_result -- Yes --> home
-    login_result -- No --> login
-    register_result -- Yes --> home
-    register_result -- No --> register
-    start --> exit
-end
+        start --> login
+        start --> register
+        login --> login_result
+        register --> register_result
+        login_result -- Yes --> simulate --> home
+        login_result -- No --> login
+        register_result -- Yes --> simulate --> home
+        register_result -- No --> register
+        start --> exit
+    end
 
 %% ========= MAIN MENU =========
-subgraph MAIN["USER MAIN MENU"]
-    home --> browse[[Browse Media]]
-    home --> borrow[[Borrow Media]]
-    home --> returnm[[Return Media]]
-    home --> viewres[[View Resources]]
-    home --> bookres[[Book Resource]]
-    home --> map[[Find Path on Map]]
-    home --> logout[[Log Out]]
-end
+    subgraph MAIN["USER MAIN MENU"]
+        home --> browse[[Browse Media]]
+        home --> borrow[[Borrow Media]]
+        home --> returnm[[Return Media]]
+        home --> viewres[[View Resources]]
+        home --> bookres[[Book a Resource]]
+        home --> map[[Find Path on Map]]
+        home --> media_map[[Find Media on Map]]
+        home --> check_fine[[Check Fines]]
+        home --> pay_fine[[Pay Fines]]
+        home --> logout[[Log Out]]
+    end
 
 %% ========= MEDIA BROWSING =========
-subgraph BROWSE_MEDIA["Browse Media Options"]
-    browse --> all[[Browse All Media]]
-    browse --> movies[[Browse All Movies]]
-    browse --> books[[Browse All Books]]
-    browse --> director[[View by Director]]
-    browse --> author[[View by Author]]
-    browse --> title[[Search by Title]]
-    browse --> back1[[Back to COMP2450.Main Menu]]
-    back1 --> return_browse[[Return to COMP2450.Main Menu]]
-    return_browse --> home
-end
+    subgraph BROWSE_MEDIA["Browse Media Options"]
+        browse --> all[[Browse All Media]]
+        browse --> movies[[Browse All Movies]]
+        browse --> books[[Browse All Books]]
+        browse --> director[[View by Director]]
+        browse --> author[[View by Author]]
+        browse --> title[[Search by Title]]
+        browse --> back1[[Back to Main Menu]]
+        back1 --> home
+    end
 
-%% ========= BORROWING MEDIA =========
-subgraph BORROW_MEDIA["Borrow Media"]
-    borrow --> find_media[[Enter Media ID]]
-    find_media --> available{Available?}
-    available -- Yes --> borrow_success[[Borrow Success]]
-    available -- No --> waitlist_choice{Join Waitlist?}
-    waitlist_choice -- Yes --> waitlist_added[[Added to Waitlist]]
-    waitlist_choice -- No --> waitlist_declined[[Not Added to Waitlist]]
-    borrow_success --> post_borrow[[Return to Menu]]
-    waitlist_added --> post_borrow
-    waitlist_declined --> post_borrow
-    post_borrow --> return_borrow[[Return to COMP2450.Main Menu]]
-    return_borrow --> home
-end
+%% ========= BORROW MEDIA =========
+    subgraph BORROW_MEDIA["Borrow Media Flow"]
+        borrow --> find_media[[Enter Media ID]]
+        find_media --> available{Available?}
+        available -- Yes --> borrow_success[[Borrow Successful]]
+        available -- No --> waitlist_choice{Join Waitlist?}
+        waitlist_choice -- Yes --> waitlist_added[[Added to Waitlist]]
+        waitlist_choice -- No --> waitlist_declined[[Not Added]]
+        borrow_success --> borrow_return[[Return to Main Menu]]
+        waitlist_added --> borrow_return
+        waitlist_declined --> borrow_return
+        borrow_return --> home
+    end
 
 %% ========= RETURN MEDIA =========
-subgraph RETURN_MEDIA["Return Media"]
-    returnm --> show_borrowed[[Show Borrowed Media]]
-    show_borrowed --> enter_id[[Enter Media ID]]
-    enter_id --> confirm_return[[Return Media]]
-    confirm_return --> review_prompt[[Leave a Review?]]
-    review_prompt -- Yes --> review_yes[[Add Comment and Rating]]
-    review_prompt -- No --> skip_review[[Skip Review]]
-    review_yes --> review_done[[Review Submitted]]
-    review_done --> return_return[[Return to COMP2450.Main Menu]]
-    skip_review --> return_return
-    return_return --> home
-end
+    subgraph RETURN_MEDIA["Return Media Flow"]
+        returnm --> show_borrowed[[Show Borrowed Media]]
+        show_borrowed --> enter_id[[Enter Media ID]]
+        enter_id --> confirm_return[[Return Media]]
+        confirm_return --> review_prompt[[Leave a Review?]]
+        review_prompt -- Yes --> review_yes[[Add Comment and Rating]]
+        review_prompt -- No --> skip_review[[Skip Review]]
+        review_yes --> review_done[[Review Submitted]]
+        review_done --> return_return[[Return to Main Menu]]
+        skip_review --> return_return
+        return_return --> home
+    end
 
 %% ========= RESOURCES & BOOKINGS =========
 subgraph BOOKING["Book Library Resources"]
-    bookres --> resource_name[[Enter Resource Name]]
-    resource_name --> exists{Resource Exists?}
-    exists -- No --> return_booking[[Return to COMP2450.Main Menu]]
-    exists -- Yes --> resource_menu[[Resource Options]]
+bookres --> resource_name[[Enter Resource Name]]
+resource_name --> exists{Resource Exists?}
+exists -- No --> return_booking[[Return to Main Menu]]
+exists -- Yes --> resource_menu[[Resource Options]]
 
-    resource_menu --> today[[Book for Today]]
-    resource_menu --> future[[Book Future Date <= 2 Weeks]]
-    resource_menu --> two_week[[View All Available 2 Weeks]]
-    resource_menu --> nextx[[Next X After Time]]
-    resource_menu --> range[[View in Date Range]]
-    resource_menu --> back2[[Back to COMP2450.Main Menu]]
+resource_menu --> today[[Book for Today]]
+resource_menu --> future[[Book for Future Date <= 2 Weeks]]
+resource_menu --> two_week[[View All Available 2 Weeks]]
+resource_menu --> nextx[[Next X Available After Time]]
+resource_menu --> range[[View in Date Range]]
+resource_menu --> back2[[Back to Main Menu]]
 
-    today --> confirm_today[[Confirm Booking]]
-    future --> confirm_future[[Confirm Booking]]
-    confirm_today --> return_booking
-    confirm_future --> return_booking
-    two_week --> return_booking
-    nextx --> return_booking
-    range --> return_booking
-    back2 --> return_booking
-    return_booking --> home
+today --> confirm_today[[Confirm Booking]]
+future --> confirm_future[[Confirm Booking]]
+confirm_today --> return_booking
+confirm_future --> return_booking
+two_week --> return_booking
+nextx --> return_booking
+range --> return_booking
+back2 --> return_booking
+return_booking --> home
 end
 
 %% ========= MAP PATHFINDER =========
 subgraph MAP["Library Map Pathfinder"]
-    map --> dest[[Choose Destination Symbol]]
-    dest --> path_found{Path Found?}
-    path_found -- Yes --> show_path[[Display Path]]
-    path_found -- No --> show_error[[No Path Found]]
-    show_path --> return_map[[Return to COMP2450.Main Menu]]
-    show_error --> return_map
-    return_map --> home
+map --> dest[[Choose Destination Symbol]]
+dest --> path_found{Path Found?}
+path_found -- Yes --> show_path[[Display Path]]
+path_found -- No --> show_error[[No Path Found]]
+show_path --> return_map[[Return to Main Menu]]
+show_error --> return_map
+return_map --> home
+end
+
+%% ========= FIND MEDIA ON MAP =========
+subgraph MEDIA_MAP["Find Media on Map"]
+media_map --> title_input[[Enter Media Title]]
+title_input --> found{Media Found?}
+found -- Yes --> section[[Show Section Symbol and Genre]]
+section --> show_media_path[[Find Path on Map]]
+found -- No --> not_found[[Media Not Found]]
+show_media_path --> return_media_map[[Return to Main Menu]]
+not_found --> return_media_map
+return_media_map --> home
+end
+
+%% ========= FINES SYSTEM =========
+subgraph FINES["Check and Pay Fines"]
+check_fine --> check_issue{Any Media Issued?}
+check_issue -- No --> no_issue[[No Media Issued]]
+check_issue -- Yes --> calc_fine[[Calculate Overdue Fines]]
+calc_fine --> fine_amount{Fines Due?}
+fine_amount -- No --> no_fine[[No Overdue Fines]]
+fine_amount -- Yes --> due_display[[Display Fine Amount]]
+
+pay_fine --> pay_prompt[[Enter Payment Details]]
+pay_prompt --> pay_result{Payment Successful?}
+pay_result -- Yes --> return_overdue[[Return Overdue Media]]
+return_overdue --> fines_cleared[[Clear All Fines]]
+pay_result -- No --> cancel_pay[[Payment Cancelled]]
+fines_cleared --> return_fine[[Return to Main Menu]]
+cancel_pay --> return_fine
+no_issue --> return_fine
+no_fine --> return_fine
+due_display --> return_fine
+return_fine --> home
 end
 
 %% ========= LOGOUT =========
 logout --> WELCOME
+
 ```

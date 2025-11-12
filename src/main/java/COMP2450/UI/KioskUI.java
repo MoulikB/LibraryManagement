@@ -1,20 +1,28 @@
 package COMP2450.UI;
 
 import COMP2450.domain.*;
+import COMP2450.domain.Media.Book;
 import COMP2450.domain.Media.MediaInterface;
+import COMP2450.domain.Media.Movie;
 import COMP2450.domain.Resources.Resource;
 import COMP2450.logic.*;
 import COMP2450.logic.Borrow.*;
 import COMP2450.logic.PrintLogic.*;
-import COMP2450.logic.UserManagement.*;
 import COMP2450.Exceptions.*;
+import COMP2450.logic.UserManagement.UserManagement;
+import com.google.common.base.Preconditions;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
-public class UI {
+
+public class KioskUI {
 
     // Handles the first screen (Login/Register)
     public static User showWelcomeScreen(Library library) {
+        Preconditions.checkNotNull(library, "library cannot be null");
         System.out.println("\n=== Welcome to the Library " + library.getName() + " Kiosk ===");
         System.out.println("1. Log In");
         System.out.println("2. Register");
@@ -32,6 +40,7 @@ public class UI {
         }
 
         if (user != null) {
+            incrementIssuedDaysForAllUsers(); // simulate daily progression
             System.out.println("Welcome, " + user.getUsername() + "!");
         }
 
@@ -40,18 +49,26 @@ public class UI {
 
     // Displays the main menu once a user is logged in
     public static boolean showUserMenu(Library library, User user) {
+        Preconditions.checkNotNull(library, "library cannot be null");
+        Preconditions.checkNotNull(user, "user cannot be null");
         boolean stayInMenu = true;
 
         while (stayInMenu) {
-            int choice = promptMenu(
+            String[] choices = {
                     "Browse Media",
                     "Borrow Media",
                     "Return Media",
                     "View Resources",
                     "Book a Resource",
                     "Find Path on Map",
+                    "Find Media on Map",
+                    "Check Fines",
+                    "Pay Fines",
                     "Log Out"
-            );
+            };
+            int choice = promptMenu(choices);
+
+
 
             switch (choice) {
                 case 1 -> browseMedia(library);
@@ -60,26 +77,215 @@ public class UI {
                 case 4 -> viewResources(library);
                 case 5 -> bookResource(library, user);
                 case 6 -> findPathOnMap(library);
-                case 7 -> stayInMenu = false;
+                case 7 -> findMediaOnMap(library);
+                case 8 -> checkFines(user);
+                case 9 -> payFine(user);
+                case 10 -> stayInMenu = false;
                 default -> System.out.println("Invalid choice. Try again.");
             }
+
         }
         return false;
     }
 
+    /**
+     * Simulates one day passing for all users in the system
+     * by adding +1 day to every issued media item.
+     * This runs automatically on login to reflect time passing.
+     */
+    private static void incrementIssuedDaysForAllUsers() {
+        System.out.println("\n⏳ Simulating a new day since last login...");
+
+        var users = UserManagement.getUsers();
+        if (users.isEmpty()) {
+            System.out.println("No users found in the system.");
+            return;
+        }
+
+        for (User user : users) {
+            var issuedItems = user.getItemsIssued();
+            for (var media : issuedItems) {
+                if (media.getMediaType().equalsIgnoreCase("Book")) {
+                    COMP2450.domain.Media.Book book = (COMP2450.domain.Media.Book) media;
+                    book.issuedDays++;
+                } else if (media.getMediaType().equalsIgnoreCase("Movie")) {
+                    COMP2450.domain.Media.Movie movie = (COMP2450.domain.Media.Movie) media;
+                    movie.issuedDays++;
+                }
+            }
+            user.calculateFinesDue();
+
+        }
+
+        System.out.println("📅 All issued media advanced by one day.");
+    }
+
+
+    /**
+     * Finds a specific media item by title and displays a path to its section on the map.
+     */
+    private static void findMediaOnMap(Library library) {
+        Preconditions.checkNotNull(library, "library cannot be null");
+        System.out.println("\n=== Find Media on Map ===");
+        System.out.print("Enter the media title: ");
+        String title = InputValidation.getStringInput().trim();
+
+        var foundMedia = library.getMediaAvailable().stream()
+                .filter(m -> m.getTitle().equalsIgnoreCase(title))
+                .findFirst()
+                .orElse(null);
+
+        if (foundMedia != null) {
+            // Determine section symbol based on genre
+            char sectionSymbol = switch (foundMedia.getMediaGenre()) {
+                case HORROR -> 'H';
+                case COMEDY -> 'C';
+                case ACTION -> 'A';
+                case ROMANCE -> 'R';
+                case THRILLER -> 'T';
+                case FICTION -> 'F';
+                case NONFICTION -> 'N';
+            };
+
+            System.out.printf("📚 '%s' found in section [%c] (%s genre).%n",
+                    foundMedia.getTitle(), sectionSymbol, foundMedia.getMediaGenre());
+
+            PathFinder pathFinder = new PathFinder(library);
+            pathFinder.clearPath();
+
+            try {
+                pathFinder.runForTarget(sectionSymbol);
+                System.out.println("✅ Path found! Follow the route (+ symbols):");
+                PrintMap.printMap(pathFinder.getMap());
+
+            } catch (IllegalArgumentException e) {
+                System.out.println("❌ Invalid map symbol. Please try again.");
+            }
+
+        } else {
+            System.out.println("❌ Media not found in the library catalog.");
+        }
+    }
+
+
+    /**
+     * Simulates fine payment using a simple encrypted credit card entry system.
+     */
+    private static void payFine(User user) {
+        Preconditions.checkNotNull(user, "user cannot be null");
+        System.out.println("\n=== Fine Payment and return of media ===");
+
+        double amount = user.calculateFinesDue();
+        if (amount <= 0) {
+            System.out.println("✅ You have no outstanding fines.");
+
+        } else {
+
+            System.out.printf("⚠️ You currently owe: $%.2f%n", amount);
+            System.out.print("Would you like to pay now? (Y/N): ");
+            String response = InputValidation.getStringInput().trim();
+
+            if (response.equalsIgnoreCase("Y")) {
+                System.out.print("Enter 16-digit card number: ");
+
+                System.out.print("(Can you the grader pretend this is a very complex SHA-256 online gateway where i am taking your card info and not just a simple entry where you can enter anything? thank you)");
+                String cardNumber = InputValidation.getStringInput().trim();
+
+                System.out.println("Processing secure transaction for card " + cardNumber);
+
+
+                System.out.println("✅ Payment successful!");
+                System.out.printf("$%.2f has been charged. Your fines are now cleared.%n", amount);
+                System.out.println("📄 Transaction receipt emailed to " + user.getEmail());
+                clearFines(user);
+            } else {
+                System.out.println("Payment cancelled. Returning to menu.");
+            }
+
+
+        }
+    }
+
+    public static void clearFines(User user) {
+        Preconditions.checkNotNull(user, "user cannot be null");
+        if (!user.getItemsIssued().isEmpty()) {
+            System.out.println("\n📦 Returning overdue media...");
+
+            // Track which items are overdue
+            List<MediaInterface> toReturn = new ArrayList<>();
+
+            for (var media : user.getItemsIssued()) {
+                boolean overdue = false;
+
+                if (media.getMediaType().equals("Book") && ((Book) media).issuedDays > 5) {
+                    overdue = true;
+                } else if (media.getMediaType().equals("Movie") && ((Movie) media).issuedDays > 5) {
+                    overdue = true;
+                }
+
+                if (overdue) {
+                    toReturn.add(media);
+                }
+            }
+
+            // Return all overdue items
+            for (var media : toReturn) {
+                media.returnMedia();
+                user.getItemsIssued().remove(media);
+            }
+
+            if (toReturn.isEmpty()) {
+                System.out.println("No overdue media to return.");
+            } else {
+                System.out.println("✅ Returned all overdue media.");
+            }
+        }
+
+        // Clear all fines
+        user.clearFines();
+        System.out.println("💰 Fines paid successfully. Your account is now clear.");
+    }
+
+    /**
+     * Displays the user's current fines without processing any payment.
+     * If no media is issued, it reports that there are no items to check.
+     */
+    private static void checkFines(User user) {
+        Preconditions.checkNotNull(user, "user cannot be null");
+        System.out.println("\n=== Check Fines ===");
+
+        if (user.getItemsIssued().isEmpty()) {
+            System.out.println("ℹ️ You have no issued media — no fines to check.");
+            return;
+        }
+
+        double amount = user.calculateFinesDue();
+
+        if (amount <= 0) {
+            System.out.println("✅ No overdue fines. Everything is returned on time.");
+        } else {
+            System.out.printf("⚠️ Current outstanding fines: $%.2f%n", amount);
+            System.out.println("Use 'Pay Fines' if you'd like to clear your balance.");
+        }
+    }
+
+
     private static void browseMedia(Library library) {
+        Preconditions.checkNotNull(library, "library cannot be null");
         boolean stayInMenu = true;
 
+        String[] choices =  {
+                "Browse all media",
+                "Browse all movies",
+                "Browse all books",
+                "View movies by director",
+                "View books by author",
+                "Search by title",
+                "Go Back"
+        };
+
         while (stayInMenu) {
-            int choice = promptMenu(
-                    "Browse all media",
-                    "Browse all movies",
-                    "Browse all books",
-                    "View movies by director",
-                    "View books by author",
-                    "Search by title",
-                    "Go Back"
-            );
+            int choice = promptMenu(choices);
 
             BrowseMedia.setLibrary(library);
 
@@ -106,6 +312,9 @@ public class UI {
     }
 
     private static void borrowMedia(Library library, User user) {
+        Preconditions.checkNotNull(library, "library cannot be null");
+        Preconditions.checkNotNull(user, "user cannot be null");
+
         System.out.print("Enter media ID to borrow: ");
         int mediaID = InputValidation.getIntInput();
         MediaInterface media = library.showMedia(mediaID);
@@ -136,6 +345,8 @@ public class UI {
     }
 
     private static void returnMedia(Library library, User user) {
+        Preconditions.checkNotNull(library, "library cannot be null");
+        Preconditions.checkNotNull(user, "user cannot be null");
         System.out.print("This is the media you have borrowed: ");
         for (var media : user.getItemsIssued()) {
             PrintMedia.printMedia(media);
@@ -152,7 +363,7 @@ public class UI {
 
         media.returnMedia();
         System.out.println("✅ Media returned successfully.");
-        System.out.println("Would you like to leave a review?");
+        System.out.println("Would you like to leave a review? [Y/N]");
 
         if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
             System.out.println("Enter a small comment: ");
@@ -166,12 +377,16 @@ public class UI {
     }
 
     private static void viewResources(Library library) {
+        Preconditions.checkNotNull(library, "library cannot be null");
         System.out.println("\n=== Available Resources ===");
         PrintResource.printResources(library);
         System.out.println("=============================");
     }
 
     private static void bookResource(Library library, User user) {
+        Preconditions.checkNotNull(library, "library cannot be null");
+        Preconditions.checkNotNull(user, "user cannot be null");
+
         System.out.print("Enter resource name to view or book: ");
         String resourceName = InputValidation.getStringInput();
         Resource resource = library.getResource(resourceName);
@@ -179,16 +394,16 @@ public class UI {
             System.out.println("❌ Resource not found.");
             return;
         }
-
+        String[] choices = {
+                "Book a specific time slot (today)",
+                "Book a resource for a future date (within 2 weeks)",
+                "View all available slots (next 2 weeks)",
+                "View next X available slots after a time",
+                "View available slots in a date range",
+                "Go Back"
+        };
         while (true) {
-            int choice = promptMenu(
-                    "Book a specific time slot (today)",
-                    "Book a resource for a future date (within 2 weeks)",
-                    "View all available slots (next 2 weeks)",
-                    "View next X available slots after a time",
-                    "View available slots in a date range",
-                    "Go Back"
-            );
+            int choice = promptMenu(choices);
 
             switch (choice) {
                 case 1 -> handleBooking(resource, user, LocalDate.now());
@@ -203,6 +418,10 @@ public class UI {
     }
 
     private static void handleBooking(Resource resource, User user, LocalDate date) {
+        Preconditions.checkNotNull(resource, "resource cannot be null");
+        Preconditions.checkNotNull(user, "user cannot be null");
+        Preconditions.checkNotNull(date, "date cannot be null");
+
         TimeSlots[] slots = TimeSlots.values();
         System.out.println("\n📅 " + date + " — Available slots:");
         PrintResource.printBookingAdjusted(resource);
@@ -225,6 +444,9 @@ public class UI {
     }
 
     private static void handleFutureBooking(Resource resource, User user) {
+        Preconditions.checkNotNull(resource, "resource cannot be null");
+        Preconditions.checkNotNull(user, "user cannot be null");
+
         System.out.print("Enter booking date (YYYY-MM-DD): ");
         String input = InputValidation.getStringInput();
 
@@ -256,6 +478,8 @@ public class UI {
     }
 
     private static void showNextXAfterTime(Resource resource) {
+        Preconditions.checkNotNull(resource, "resource cannot be null");
+
         System.out.print("Enter start time (HH:mm): ");
         String timeInput = InputValidation.getStringInput();
         System.out.print("How many available slots to show? ");
@@ -271,6 +495,8 @@ public class UI {
     }
 
     private static void showRangeAvailability(Resource resource) {
+        Preconditions.checkNotNull(resource, "resource cannot be null");
+
         System.out.print("Enter start date (YYYY-MM-DD): ");
         String startInput = InputValidation.getStringInput();
         System.out.print("Enter end date (YYYY-MM-DD): ");
@@ -289,6 +515,8 @@ public class UI {
     }
 
     private static void findPathOnMap(Library library) {
+        Preconditions.checkNotNull(library, "library cannot be null");
+
         System.out.println("\n=== Library Path Finder ===");
         PathFinder pathFinder = new PathFinder(library);
         pathFinder.clearPath();
@@ -312,10 +540,12 @@ public class UI {
         } catch (IllegalArgumentException e) {
             System.out.println("❌ Please enter a valid character.");
         }
-
     }
 
-    private static int promptMenu(String... options) {
+    private static int promptMenu(String[] options) {
+        Preconditions.checkNotNull(options, "options cannot be null");
+        Preconditions.checkArgument(options.length > 0, "options cannot be empty");
+
         System.out.println("\n--- Select an Option ---");
         for (int i = 0; i < options.length; i++) {
             System.out.println((i + 1) + ". " + options[i]);

@@ -15,12 +15,8 @@ public class PrintMap {
      **/
     public static void printMap(Map inputMap) {
         Preconditions.checkNotNull(inputMap);
-        for (char[] chars : inputMap.getMap()) {
-            for (char c : chars) {
-                System.out.print(c);
-            }
-            System.out.println();
-        }
+
+        printMap(inputMap.getMap());
 
         printLegend();
 
