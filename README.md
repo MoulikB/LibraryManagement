@@ -465,7 +465,7 @@ subgraph WELCOME["WELCOME / LOGIN / REGISTER"]
     register[[Register New User]]
     login_result{Valid credentials?}
     register_result{Registration successful?}
-    home[[Main Menu]]
+    home[[COMP2450.Main Menu]]
     exit[[Exit Program]]
 
     start --> login
@@ -498,8 +498,8 @@ subgraph BROWSE_MEDIA["Browse Media Options"]
     browse --> director[[View by Director]]
     browse --> author[[View by Author]]
     browse --> title[[Search by Title]]
-    browse --> back1[[Back to Main Menu]]
-    back1 --> return_browse[[Return to Main Menu]]
+    browse --> back1[[Back to COMP2450.Main Menu]]
+    back1 --> return_browse[[Return to COMP2450.Main Menu]]
     return_browse --> home
 end
 
@@ -514,7 +514,7 @@ subgraph BORROW_MEDIA["Borrow Media"]
     borrow_success --> post_borrow[[Return to Menu]]
     waitlist_added --> post_borrow
     waitlist_declined --> post_borrow
-    post_borrow --> return_borrow[[Return to Main Menu]]
+    post_borrow --> return_borrow[[Return to COMP2450.Main Menu]]
     return_borrow --> home
 end
 
@@ -527,7 +527,7 @@ subgraph RETURN_MEDIA["Return Media"]
     review_prompt -- Yes --> review_yes[[Add Comment and Rating]]
     review_prompt -- No --> skip_review[[Skip Review]]
     review_yes --> review_done[[Review Submitted]]
-    review_done --> return_return[[Return to Main Menu]]
+    review_done --> return_return[[Return to COMP2450.Main Menu]]
     skip_review --> return_return
     return_return --> home
 end
@@ -536,7 +536,7 @@ end
 subgraph BOOKING["Book Library Resources"]
     bookres --> resource_name[[Enter Resource Name]]
     resource_name --> exists{Resource Exists?}
-    exists -- No --> return_booking[[Return to Main Menu]]
+    exists -- No --> return_booking[[Return to COMP2450.Main Menu]]
     exists -- Yes --> resource_menu[[Resource Options]]
 
     resource_menu --> today[[Book for Today]]
@@ -544,7 +544,7 @@ subgraph BOOKING["Book Library Resources"]
     resource_menu --> two_week[[View All Available 2 Weeks]]
     resource_menu --> nextx[[Next X After Time]]
     resource_menu --> range[[View in Date Range]]
-    resource_menu --> back2[[Back to Main Menu]]
+    resource_menu --> back2[[Back to COMP2450.Main Menu]]
 
     today --> confirm_today[[Confirm Booking]]
     future --> confirm_future[[Confirm Booking]]
@@ -563,7 +563,7 @@ subgraph MAP["Library Map Pathfinder"]
     dest --> path_found{Path Found?}
     path_found -- Yes --> show_path[[Display Path]]
     path_found -- No --> show_error[[No Path Found]]
-    show_path --> return_map[[Return to Main Menu]]
+    show_path --> return_map[[Return to COMP2450.Main Menu]]
     show_error --> return_map
     return_map --> home
 end
