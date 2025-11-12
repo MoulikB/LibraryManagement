@@ -26,7 +26,7 @@ public class UI {
         if (option == 1) {
             user = LogInUI.promptLogin();
         } else if (option == 2) {
-            user = RegisterUser.registerUser();
+            user = RegisterUserUI.promptRegister();
         } else {
             System.out.println("Invalid option. Try again.");
         }
@@ -122,11 +122,15 @@ public class UI {
             System.out.println("⚠️  You have overdue items. Please return them first.");
         } catch (UnavailableMediaException e) {
             System.out.print("No copies available. Join waitlist? (Y/N): ");
-            if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
-                Waitlist.waitlistUser(media, user);
-                System.out.println("📋 Added to waitlist.");
-            } else {
-                System.out.println("Okay. Returning to menu.");
+            try {
+                if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
+                    Waitlist.waitlistUser(media, user);
+                    System.out.println("📋 Added to waitlist.");
+                } else {
+                    System.out.println("Okay. Returning to menu.");
+                }
+            } catch (WaitListedAlready x) {
+                System.out.println("Already waitlisted.");
             }
         }
     }
@@ -291,7 +295,9 @@ public class UI {
 
         System.out.println("Choose a destination symbol:");
         PrintMap.printLegend();
-        System.out.print("Enter symbol (e.g., T): ");
+        System.out.print("Enter from one of the above symbols: ");
+
+        System.out.println();
 
         String input = InputValidation.getStringInput().trim().toUpperCase();
         if (input.isEmpty()) {

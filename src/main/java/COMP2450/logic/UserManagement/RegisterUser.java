@@ -2,55 +2,42 @@ package COMP2450.logic.UserManagement;
 
 import COMP2450.domain.User;
 import com.google.common.base.Preconditions;
-import COMP2450.logic.InputValidation;
 
 /**
  * RegisterUser
- * Handles the user registration process, taking input and validating it
- * before adding the user to the system.
+ * Handles user creation, validation, and addition to the user database.
+ * No user input or printing occurs here.
  */
 public class RegisterUser {
 
     /**
-     * Registers a new user by prompting for username, password, email, and phone number.
-     * Returns the created user if registration succeeds, or null if it fails.
+     * Validates input and creates a new user if possible.
      *
-     * @return the registered User object, or null if registration was unsuccessful
+     * @param username The desired username
+     * @param password The desired password
+     * @param email The user's email address
+     * @param phone The user's phone number
+     * @return A User object if registration is successful, null otherwise
      */
-    public static User registerUser() {
-        System.out.print("Welcome to the Registration process ");
+    public static User createUser(String username, String password, String email, int phone) {
+        try {
+            Preconditions.checkArgument(username != null && !username.isEmpty(), "Username can't be empty");
+            Preconditions.checkArgument(password != null && !password.isEmpty(), "Password can't be empty");
+            Preconditions.checkArgument(email != null && !email.isEmpty(), "Email can't be empty");
+            Preconditions.checkArgument(phone > 0, "Phone number must be positive");
 
-        System.out.print("Enter Your Username: ");
-        String username = InputValidation.getStringInput();
+            User user = new User(username, password, UserManagement.nextID, email, phone);
+            boolean added = UserManagement.addUser(user);
 
-        System.out.print("Enter Your Password: ");
-        String password = InputValidation.getStringInput();
+            if (added) {
+                UserManagement.nextID++;
+                return user;
+            }
 
-        System.out.print("Enter Your Email Address: ");
-        String email = InputValidation.getStringInput();
-
-        System.out.print("Enter Your Number: ");
-        int number = InputValidation.getIntInput();
-
-        Preconditions.checkArgument(username != null && !username.isEmpty(), "Username can't be null or empty");
-        Preconditions.checkArgument(password != null && !password.isEmpty(), "Password can't be null or empty");
-        Preconditions.checkArgument(email != null && !email.isEmpty(), "Email can't be null or empty");
-        Preconditions.checkArgument(number > 0, "Number must be a valid positive integer");
-
-        User result;
-        User user = new User(username, password, UserManagement.nextID, email, number);
-
-        boolean added = UserManagement.addUser(user);
-
-        if (added) {
-            System.out.println("✅ User registered successfully!");
-            UserManagement.nextID++;
-            result = user;
-        } else {
-            System.out.println("❌ User already exists. Please try logging in.");
-            result = null;
+        } catch (IllegalArgumentException e) {
+            System.out.println("⚠️ Invalid input: " + e.getMessage());
         }
 
-        return result;
+        return null;
     }
 }

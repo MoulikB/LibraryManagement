@@ -1,5 +1,6 @@
 package COMP2450.logic.Borrow;
 
+import COMP2450.Exceptions.WaitListedAlready;
 import COMP2450.domain.Media.MediaInterface;
 import COMP2450.domain.User;
 import com.google.common.base.Preconditions;
@@ -19,7 +20,7 @@ public class Waitlist {
      * @param media the media item to add the user to
      * @param user  the user requesting to be added
      */
-    public static void waitlistUser(MediaInterface media, User user) {
+    public static void waitlistUser(MediaInterface media, User user) throws WaitListedAlready {
         Preconditions.checkNotNull(media, "Media cannot be null");
         Preconditions.checkNotNull(user, "User cannot be null");
 
@@ -29,7 +30,7 @@ public class Waitlist {
         if (!alreadyListed) {
             media.addWaitlist(user);
         } else {
-            System.out.println("Already listed user");
+            throw new WaitListedAlready("Already listed user");
         }
     }
 }
