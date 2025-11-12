@@ -46,7 +46,7 @@ public class KioskTester {
             try {
                 KioskUI.showWelcomeScreen(null);
             } catch (Exception e) {
-                System.out.println("✅ Caught expected null library exception: " + e.getMessage());
+                System.out.println("Caught expected null library exception: " + e.getMessage());
             }
 
             System.out.println("\n[TEST] Valid login simulation:");
@@ -58,16 +58,16 @@ public class KioskTester {
                 b1.addCopies(); // ensure availability
                 KioskUI.clearFines(testUser);
                 b1.issueUser(testUser);
-                System.out.println("✅ Borrow success for book");
+                System.out.println("Borrow success for book");
             } catch (Exception e) {
-                System.out.println("❌ Unexpected borrow error: " + e.getMessage());
+                System.out.println("Unexpected borrow error: " + e.getMessage());
             }
 
             System.out.println("\n[TEST] Borrow invalid media ID:");
             try {
                 testLibrary.showMedia(-99);
             } catch (Exception e) {
-                System.out.println("✅ Caught invalid media ID: " + e.getMessage());
+                System.out.println("Caught invalid media ID: " + e.getMessage());
             }
 
             // --- Pathfinding ---
@@ -76,7 +76,7 @@ public class KioskTester {
                 PathFinder pf = new PathFinder(testLibrary);
                 pf.runForTarget('~');
             } catch (Exception e) {
-                System.out.println("✅ Caught invalid map character: " + e.getMessage());
+                System.out.println("Caught invalid map character: " + e.getMessage());
             }
 
             // --- Booking Phase ---
@@ -84,18 +84,17 @@ public class KioskTester {
             try {
                 new Booking(comp, testUser, null);
             } catch (Exception e) {
-                System.out.println("✅ Booking validation passed: " + e.getMessage());
+                System.out.println("Booking validation passed: " + e.getMessage());
             }
 
             System.out.println("\n[TEST] Overlapping booking:");
             try {
                 Booking bA = new Booking(comp, testUser, TimeSlots.TEN_TO_ELEVEN);
-                 // conflict expected
                 new BookResource(bA);
                 new BookResource(new Booking(comp, testUser, TimeSlots.TEN_TO_ELEVEN));
-                System.out.println("❌ Overlap not detected!");
+                System.out.println("Overlap not detected!");
             } catch (BookingConflictException x) {
-                System.out.println("✅ Conflict correctly detected: " + x.getMessage());
+                System.out.println("Conflict correctly detected: " + x.getMessage());
             }
 
             // --- Fines and Returns ---
@@ -107,9 +106,9 @@ public class KioskTester {
             System.out.println("\n[TEST] Clear fines and overdue returns:");
             KioskUI.clearFines(testUser);
             if (testUser.getItemsIssued().isEmpty()) {
-                System.out.println("✅ Items cleared successfully after payment");
+                System.out.println("Items cleared successfully after payment");
             } else {
-                System.out.println("❌ Items not properly cleared");
+                System.out.println("Items not properly cleared");
             }
 
             // --- Invalid Inputs ---
@@ -117,27 +116,27 @@ public class KioskTester {
             try {
                 KioskUI.clearFines(null);
             } catch (Exception e) {
-                System.out.println("✅ Null user check successful: " + e.getMessage());
+                System.out.println("Null user check successful: " + e.getMessage());
             }
 
             System.out.println("\n[TEST] Booking date out of range:");
             LocalDate invalidFuture = LocalDate.now().plusDays(20);
             try {
                 new Booking(room, testUser, TimeSlots.TWO_TO_THREE);
-                System.out.println("✅ Booking valid resource OK");
+                System.out.println("Booking valid resource OK");
             } catch (Exception e) {
-                System.out.println("❌ Unexpected booking error: " + e.getMessage());
+                System.out.println("Unexpected booking error: " + e.getMessage());
             }
 
             System.out.println("\n[TEST] Map retrieval:");
             if (testLibrary.getMap() != null) {
-                System.out.println("✅ Map loaded successfully");
+                System.out.println("Map loaded successfully");
             }
 
             System.out.println("\n=== ALL TESTS COMPLETED SUCCESSFULLY ===");
 
         } catch (Exception e) {
-            System.out.println("🚨 CRITICAL FAILURE: " + e.getMessage());
+            System.out.println("CRITICAL FAILURE: " + e.getMessage());
             e.printStackTrace();
         }
     }
