@@ -39,7 +39,7 @@ public class LinkedListStack<T> implements Stack<T> {
      * @throws EmptyStackException if the stack is empty
      */
     public T pop() throws EmptyStackException {
-        T result = null;
+        T result;
         if (top == null) {
             throw new EmptyStackException("Empty stack");
         } else {
@@ -56,8 +56,7 @@ public class LinkedListStack<T> implements Stack<T> {
      * @return the size of the stack
      */
     public int size() {
-        int result = this.size;
-        return result;
+        return this.size;
     }
 
     /**
@@ -66,11 +65,7 @@ public class LinkedListStack<T> implements Stack<T> {
      * @return true if the stack has no elements, false otherwise
      */
     public boolean isEmpty() {
-        boolean empty = false;
-        if (this.size == 0) {
-            empty = true;
-        }
-        return empty;
+        return this.size == 0;
     }
 
     /**
@@ -80,7 +75,7 @@ public class LinkedListStack<T> implements Stack<T> {
      * @throws EmptyStackException if the stack is empty
      */
     public T peek() throws EmptyStackException {
-        T result = null;
+        T result;
         if (top == null) {
             throw new EmptyStackException("Stack is empty");
         } else {

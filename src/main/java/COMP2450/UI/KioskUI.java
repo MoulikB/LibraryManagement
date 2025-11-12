@@ -125,13 +125,10 @@ public class KioskUI {
     private static void findMediaOnMap(Library library) {
         Preconditions.checkNotNull(library, "library cannot be null");
         System.out.println("\n=== Find Media on Map ===");
-        System.out.print("Enter the media title: ");
-        String title = InputValidation.getStringInput().trim();
+        System.out.print("Enter the media ID: ");
+        int id = InputValidation.getIntInput();
 
-        var foundMedia = library.getMediaAvailable().stream()
-                .filter(m -> m.getTitle().equalsIgnoreCase(title))
-                .findFirst()
-                .orElse(null);
+        var foundMedia = library.showMedia(id);
 
         if (foundMedia != null) {
             // Determine section symbol based on genre
@@ -145,7 +142,7 @@ public class KioskUI {
                 case NONFICTION -> 'N';
             };
 
-            System.out.printf("📚 '%s' found in section [%c] (%s genre).%n",
+            System.out.printf(" '%s' found in section [%c] (%s genre).%n",
                     foundMedia.getTitle(), sectionSymbol, foundMedia.getMediaGenre());
 
             PathFinder pathFinder = new PathFinder(library);
@@ -184,10 +181,21 @@ public class KioskUI {
             String response = InputValidation.getStringInput().trim();
 
             if (response.equalsIgnoreCase("Y")) {
-                System.out.print("Enter 16-digit card number: ");
+                System.out.print("(Can you the grader pretend this is a very complex SHA-256 online gateway where i am taking your card info and not just a simple entry where you can enter any 16 digits? thank you) ");
+                System.out.print("Enter 16-digit Credit/Debit card number: ");
 
-                System.out.print("(Can you the grader pretend this is a very complex SHA-256 online gateway where i am taking your card info and not just a simple entry where you can enter anything? thank you)");
                 String cardNumber = InputValidation.getStringInput().trim();
+
+                while (cardNumber.length() != 16) {
+                    System.out.println("Invalid please try again.");
+                    System.out.print("Enter 16-digit card number: ");
+                    cardNumber = InputValidation.getStringInput().trim();
+                    try {
+                        Integer.parseInt(cardNumber);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid please only enter numbers.");
+                    }
+                }
 
                 System.out.println("Processing secure transaction for card " + cardNumber);
 

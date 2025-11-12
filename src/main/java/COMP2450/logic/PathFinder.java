@@ -3,6 +3,7 @@ package COMP2450.logic;
 import COMP2450.domain.Library;
 import COMP2450.domain.Pathfinder.Coordinate;
 import COMP2450.domain.Pathfinder.LinkedListStack;
+import com.google.common.base.Preconditions;
 
 /**
  * PathFinder
@@ -16,7 +17,6 @@ public class PathFinder {
     private static final char FLOOR_CHAR = ' ';
     private static final char START_CHAR = 'K';
 
-    private final Library library;
     private final char[][] map;
 
     /**
@@ -26,10 +26,7 @@ public class PathFinder {
      * @throws IllegalArgumentException if the library is null
      */
     public PathFinder(Library library) {
-        if (library == null) {
-            throw new IllegalArgumentException("Library cannot be null");
-        }
-        this.library = library;
+        Preconditions.checkNotNull(library);
         this.map = library.getMap().getMap();
     }
 
@@ -59,9 +56,11 @@ public class PathFinder {
      *
      * @param start  starting coordinate (the kiosk)
      * @param target target coordinate (chosen destination)
-     * @return true if a path is found
      */
-    private boolean dfsAndMarkPath(Coordinate start, Coordinate target) {
+    private void dfsAndMarkPath(Coordinate start, Coordinate target) {
+        Preconditions.checkNotNull(start);
+        Preconditions.checkNotNull(target);
+
         boolean found = false;
         final int rows = map.length;
         final int cols = map[0].length;
@@ -116,7 +115,6 @@ public class PathFinder {
             }
         }
 
-        return found;
     }
 
     /**
@@ -144,6 +142,8 @@ public class PathFinder {
      * @return true if the cell is walkable
      */
     private boolean isWalkable(int r, int c, int rows, int cols, boolean[][] visited, Coordinate target) {
+        Preconditions.checkNotNull(target);
+        Preconditions.checkNotNull(visited);
         boolean walkable = false;
         if (inBounds(r, c, rows, cols)) {
             if (!visited[r][c]) {

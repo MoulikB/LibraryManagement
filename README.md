@@ -51,35 +51,35 @@ classDiagram
         +library: Library
     }
 
-Library "1" *-- "1" Map : layout  %% composition (Map exists for one Library)
-Library "1"  --o "0..*" Resource : resources  %% aggregation
-Library "1" --o "0..*" MediaInterface : catalog  %% aggregation
+    Library "1" *-- "1" Map : layout  %% composition (Map exists for one Library)
+    Library "1"  --o "0..*" Resource : resources  %% aggregation
+    Library "1" --o "0..*" MediaInterface : catalog  %% aggregation
 
 %% ===== Media hierarchy =====
-class MediaInterface {
-    <<interface>>
-    +getMediaType() String
-    +getCreator() String
-    +getMediaGenre() MediaGenres
-    +borrowMedia() boolean
-    +returnMedia() void
-    +getTitle() String
-    +getMediaID() int
-    +addCopies() void
-    +addReview(review: Review) void
-    +getReviews() ArrayList<Review>
-}
+    class MediaInterface {
+        <<interface>>
+        +getMediaType() String
+        +getCreator() String
+        +getMediaGenre() MediaGenres
+        +borrowMedia() boolean
+        +returnMedia() void
+        +getTitle() String
+        +getMediaID() int
+        +addCopies() void
+        +addReview(review: Review) void
+        +getReviews() ArrayList<Review>
+    }
 
-class MediaGenres {
-  <<enumeration>>
-  HORROR
-  COMEDY
-  ACTION
-  ROMANCE
-  THRILLER
-  FICTION
-  NONFICTION
-}
+    class MediaGenres {
+        <<enumeration>>
+        HORROR
+        COMEDY
+        ACTION
+        ROMANCE
+        THRILLER
+        FICTION
+        NONFICTION
+    }
 
     class Book {
         -title: String
@@ -150,24 +150,24 @@ class MediaGenres {
 
 
 
-MediaInterface <|.. Book : an instance of
-MediaInterface <|.. Movie : an instance of
-Book "1" --> "1" Library : belongs to
-Movie "1" --> "1" Library : belongs to
-Book "1" --> "1" MediaGenres : describes
-Movie "1" --> "1" MediaGenres : describes
+    MediaInterface <|.. Book : an instance of
+    MediaInterface <|.. Movie : an instance of
+    Book "1" --> "1" Library : belongs to
+    Movie "1" --> "1" Library : belongs to
+    Book "1" --> "1" MediaGenres : describes
+    Movie "1" --> "1" MediaGenres : describes
 
 %% ===== Reviews =====
-class Review {
-  <<record>>
-  +user: User
-  +media: MediaInterface
-  +comment: String
-  +stars: int
-  +toString() : String
-}
+    class Review {
+        <<record>>
+        +user: User
+        +media: MediaInterface
+        +comment: String
+        +stars: int
+        +toString() : String
+    }
 
-User "1" -- "0.." Review : writes >
+    User "1" -- "0.." Review : writes >
 
 %% ===== Users =====
     class User {
@@ -200,64 +200,64 @@ User "1" -- "0.." Review : writes >
     }
 
 
-class UserManagement {
-    -users: ArrayList<User>
-    +UserManagement()
-    +addUser(user: User) void
-    +removeUser(id: int) void
-    +userExists(id: int) User
-    +getUser(id: int) User
-    +getUsers() String
-    +reset() void
-}
-UserManagement "1" --> "0..*" User : manages  %% aggregation
+    class UserManagement {
+        -users: ArrayList<User>
+        +UserManagement()
+        +addUser(user: User) void
+        +removeUser(id: int) void
+        +userExists(id: int) User
+        +getUser(id: int) User
+        +getUsers() String
+        +reset() void
+    }
+    UserManagement "1" --> "0..*" User : manages  %% aggregation
 
 %% ===== Libraries collection =====
-class LibraryManagement {
-    +libraries: ArrayList<Library>
-    +addLIbrary(library: Library) void
-    +getLibraries() ArrayList<Library>
-    +findLibrary(name: String) Library
-    +reset() void }
-        
+    class LibraryManagement {
+        +libraries: ArrayList<Library>
+        +addLIbrary(library: Library) void
+        +getLibraries() ArrayList<Library>
+        +findLibrary(name: String) Library
+        +reset() void }
 
-LibraryManagement "1" --> "0..*" Library : catalogs
+
+    LibraryManagement "1" --> "0..*" Library : catalogs
 
 %% ===== Bookable Resources =====
-class Resource {
-  <<interface>>
-  +getResourceName() String
-  +isAvailable(timeSlot: String) boolean
-  +addBooking(booking: Booking) void
-}
+    class Resource {
+        <<interface>>
+        +getResourceName() String
+        +isAvailable(timeSlot: String) boolean
+        +addBooking(booking: Booking) void
+    }
 
 
-class StudyRoom {
-    -roomNumber: String
-    -bookings: ArrayList<Booking>
-    -library: Library
-    +StudyRoom(roomNumber: String, library: Library)
-    +getResourceName() String
-    +isAvailable(timeSlot: String) boolean
-    +addBooking(booking: Booking) void
-    +getBookings() ArrayList<Booking>
-}
+    class StudyRoom {
+        -roomNumber: String
+        -bookings: ArrayList<Booking>
+        -library: Library
+        +StudyRoom(roomNumber: String, library: Library)
+        +getResourceName() String
+        +isAvailable(timeSlot: String) boolean
+        +addBooking(booking: Booking) void
+        +getBookings() ArrayList<Booking>
+    }
 
-class Computer {
-    -computerId: String
-    -bookings: ArrayList<Booking>
-    -library: Library
-    +Computer(computerId: String, library: Library)
-    +getResourceName() String
-    +isAvailable(timeSlot: String) boolean
-    +addBooking(booking: Booking) void
-    +getBookings() ArrayList<Booking>
-}
+    class Computer {
+        -computerId: String
+        -bookings: ArrayList<Booking>
+        -library: Library
+        +Computer(computerId: String, library: Library)
+        +getResourceName() String
+        +isAvailable(timeSlot: String) boolean
+        +addBooking(booking: Booking) void
+        +getBookings() ArrayList<Booking>
+    }
 
-class TimeSlots {
-  <<utility>>
-  +ONE_HOUR_SLOTS: List<String>
-}
+    class TimeSlots {
+        <<utility>>
+        +ONE_HOUR_SLOTS: List<String>
+    }
 
 
 %% ===== Resource & Booking Management =====
@@ -314,13 +314,13 @@ class TimeSlots {
 
 
 
-Resource <|.. StudyRoom
-Resource <|.. Computer
-Booking "1" --> "1" Resource : books
-StudyRoom "1" <-- "0..*" Booking : maintains
-Computer "1" <-- "0..*" Booking : maintains
-StudyRoom "1" <-- "1" Library : located at
-Computer "1" <-- "1" Library : located at
+    Resource <|.. StudyRoom
+    Resource <|.. Computer
+    Booking "1" --> "1" Resource : books
+    StudyRoom "1" <-- "0..*" Booking : maintains
+    Computer "1" <-- "0..*" Booking : maintains
+    StudyRoom "1" <-- "1" Library : located at
+    Computer "1" <-- "1" Library : located at
 
 %% ===== User Interface (KioskUI) Layer =====
     class KioskUI {
@@ -397,63 +397,63 @@ Computer "1" <-- "1" Library : located at
     }
 
     class Stack {
-<<interface>>
-+ push(item: T): void
-+ pop(): Object
-+ size(): int
-+ isEmpty(): boolean
-+ peek(): Object
-}
+        <<interface>>
+        + push(item: T): void
+        + pop(): Object
+        + size(): int
+        + isEmpty(): boolean
+        + peek(): Object
+    }
 
-class LinkedListStack {
-- top: Node<T>
-- size: int
-+ push(item: T): void
-+ pop(): T
-+ size(): int
-+ isEmpty(): boolean
-+ peek(): T
-}
+    class LinkedListStack {
+        - top: Node<T>
+        - size: int
+        + push(item: T): void
+        + pop(): T
+        + size(): int
+        + isEmpty(): boolean
+        + peek(): T
+    }
 
-class EmptyStackException {
-+ EmptyStackException(message: String)
-}
+    class EmptyStackException {
+        + EmptyStackException(message: String)
+    }
 
-PathFinder --> Library : uses
-PathFinder --> Coordinate : uses
-PathFinder --> LinkedListStack : uses
-LinkedListStack --> Stack : implements
-LinkedListStack --> EmptyStackException : throws
+    PathFinder --> Library : uses
+    PathFinder --> Coordinate : uses
+    PathFinder --> LinkedListStack : uses
+    LinkedListStack --> Stack : implements
+    LinkedListStack --> EmptyStackException : throws
 
 
 
     class Kiosk {
-- user : User
-- library : Library
-+ main(args : String[]) void
-- runKiosk() void
-- logout() void
-}
-
-Kiosk --> User
-Kiosk --> Library
-Kiosk --> UI
-Kiosk --> LibraryBuilder
-
-class RegisterUserUI {
-    + promptRegister() User 
+        - user : User
+        - library : Library
+        + main(args : String[]) void
+        - runKiosk() void
+        - logout() void
     }
 
-RegisterUserUI --> RegisterUser
-RegisterUserUI --> InputValidation
-RegisterUserUI --> User
-class LogInUI {
-    + promptLogin() User 
+    Kiosk --> User
+    Kiosk --> Library
+    Kiosk --> UI
+    Kiosk --> LibraryBuilder
+
+    class RegisterUserUI {
+        + promptRegister() User
     }
 
-LogInUI --> LogIn
-LogInUI --> InputValidation
-LogInUI --> User
+    RegisterUserUI --> RegisterUser
+    RegisterUserUI --> InputValidation
+    RegisterUserUI --> User
+    class LogInUI {
+        + promptLogin() User
+    }
+
+    LogInUI --> LogIn
+    LogInUI --> InputValidation
+    LogInUI --> User
 
     class TimeSlotSearch {
         - MAX_DAYS_AHEAD : int
@@ -465,7 +465,7 @@ LogInUI --> User
 
     TimeSlotSearch --> Resource
     TimeSlotSearch --> TimeSlots
-    
+
     class LibraryBuilder {
         + initializeLibrary() Library
         - addMedia(library : Library) void
@@ -479,7 +479,7 @@ LogInUI --> User
     LibraryBuilder --> Computer
     LibraryBuilder --> MediaGenres
 
-class BookResource {
+    class BookResource {
         + booking : Booking
         + bookings : ArrayList<BookResource>
         + BookResource(booking : Booking)
@@ -496,7 +496,7 @@ class BookResource {
     BorrowMedia --> User
     BorrowMedia --> UnavailableMediaException
     BorrowMedia --> OverdueMediaException
-    
+
     class Waitlist {
         + waitlistUser(media : MediaInterface, user : User) void
     }
@@ -512,17 +512,17 @@ class BookResource {
         + equals(other : Coordinate) boolean
     }
 
-    
+
 
 
 %% ===== Invariant properties  =====
-note for LogInUI "Invariant properties:\n- Username and password must not be blank or null "
-note for BookResource "Invariant properties:\n- booking != null for all instances.\n- No two bookings share the same resource/time slot."
-note for Kiosk "Invariant properties:\n- library != null after initialization\n- user == null or valid User\n"
-note for LibraryBuilder "Invariant properties:\n- Returned Library is never null.\n- All media/resources added are valid.\n"
-note for BorrowMedia "Invariant properties:\n- media != null and user != null."
-note for Coordinate "Invariant properties:\n- x, y immutable after construction.\n- x >= 0 and y >= 0"
-note for Library "Invariant properties:\n<ul>\n    
+    note for LogInUI "Invariant properties:\n- Username and password must not be blank or null "
+    note for BookResource "Invariant properties:\n- booking != null for all instances.\n- No two bookings share the same resource/time slot."
+    note for Kiosk "Invariant properties:\n- library != null after initialization\n- user == null or valid User\n"
+    note for LibraryBuilder "Invariant properties:\n- Returned Library is never null.\n- All media/resources added are valid.\n"
+    note for BorrowMedia "Invariant properties:\n- media != null and user != null."
+    note for Coordinate "Invariant properties:\n- x, y immutable after construction.\n- x >= 0 and y >= 0"
+    note for Library "Invariant properties:\n<ul>\n    
 <li>name != null</li>\n    
 <li>name.length() > 0</li>\n    
 <li>description != null</li>\n    
@@ -532,11 +532,11 @@ note for Library "Invariant properties:\n<ul>\n
 <li>loop: all mediaAvailable items are unique (no duplicate object references)</li>\n    
 <li>loop: all resources have unique names</li>\n</ul>"
 
-note for Map "Invariant properties:\n<ul>\n    
+    note for Map "Invariant properties:\n<ul>\n    
 <li>map != null</li>\n    
 <li>library != null</li>\n</ul>"
 
-note for Book "Invariant properties:\n<ul>\n    
+    note for Book "Invariant properties:\n<ul>\n    
 <li>title != null</li>\n   
 <li>author != null</li>\n    
 <li>publisher != null</li>\n    
@@ -544,20 +544,20 @@ note for Book "Invariant properties:\n<ul>\n
 <li>genre != null</li>\n    
 <li>totalCopies >= 0</li>\n</ul>"
 
-note for Movie "Invariant properties:\n<ul>\n    
+    note for Movie "Invariant properties:\n<ul>\n    
 <li>title != null</li>\n    
 <li>director != null</li>\n    
 <li>library != null</li>\n    
 <li>genre != null</li>\n   
  <li>totalCopies >= 0</li>\n</ul>"
 
-note for Review "Invariant properties:\n<ul>\n    
+    note for Review "Invariant properties:\n<ul>\n    
 <li>user != null</li>\n    
 <li>media != null</li>\n    
 <li>comment != null</li>\n    
 <li>stars >= 1 && stars <= 10</li>\n</ul>"
 
-note for User "Invariant properties:\n<ul>\n    
+    note for User "Invariant properties:\n<ul>\n    
 <li>username != null</li>\n    
 <li>username.length() > 0</li>\n    
 <li>id > 0</li>\n   
@@ -565,33 +565,33 @@ note for User "Invariant properties:\n<ul>\n
 <li>itemsIssued != null</li>\n    
 <li>loop: all issued item IDs are valid</li>\n</ul>"
 
-note for UserManagement "Invariant properties:\n<ul>\n    
+    note for UserManagement "Invariant properties:\n<ul>\n    
 <li>users != null</li>\n    
 <li>loop: all user IDs are unique</li>\n</ul>"
 
-note for LibraryManagement "Invariant properties:\n<ul>\n    
+    note for LibraryManagement "Invariant properties:\n<ul>\n    
 <li>libraries != null</li>\n    
 <li>loop: all libraries have unique names</li>\n</ul>"
 
-note for StudyRoom "Invariant properties:\n<ul>\n    
+    note for StudyRoom "Invariant properties:\n<ul>\n    
 <li>roomNumber != null</li>\n    
 <li>bookings != null</li>\n    
 <li>library != null</li>\n   
 <li>loop: each timeSlot appears at most once in bookings</li>\n</ul>"
 
-note for Computer "Invariant properties:\n<ul>\n    
+    note for Computer "Invariant properties:\n<ul>\n    
 <li>computerId != null</li>\n    
 <li>bookings != null</li>\n    
 <li>library != null</li>\n    
 <li>loop: each timeSlot appears at most once in bookings</li>\n</ul>"
 
-note for Booking "Invariant properties:\n<ul>\n    
+    note for Booking "Invariant properties:\n<ul>\n    
 <li>resource != null</li>\n    
 <li>memberName != null && memberName.length() > 0</li>\n    
 <li>timeSlot != null</li>\n    
 <li>timeSlot ∈ TimeSlots.ONE_HOUR_SLOTS</li>\n</ul>"
 
-note for TimeSlots "Invariant properties:\n<ul>\n    
+    note for TimeSlots "Invariant properties:\n<ul>\n    
 <li>ONE_HOUR_SLOTS != null</li>\n    
 <li>loop: all time slots are valid and unique</li>\n</ul>"
 
