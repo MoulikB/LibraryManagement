@@ -2,6 +2,7 @@ package COMP2450.logic;
 
 import COMP2450.domain.Library;
 import COMP2450.logic.PrintLogic.PrintMedia;
+import com.google.common.base.Preconditions;
 
 /**
  * BrowseMedia
@@ -33,6 +34,7 @@ public class BrowseMedia {
      * Displays all books available in the current library.
      */
     public static void showAllBooks() {
+        Preconditions.checkNotNull(library, "Library cannot be null");
         System.out.println("Here is all the books available at this library:");
         PrintMedia.printAllBooks(library);
     }
@@ -43,6 +45,7 @@ public class BrowseMedia {
      * @param director the director name to search for
      */
     public static void printByDirector(String director) {
+        Preconditions.checkNotNull(director, "Director cannot be null");
         System.out.printf("Here is all the movies by %s available at this library:%n", director);
         PrintMedia.printByDirector(library, director);
     }
@@ -53,6 +56,7 @@ public class BrowseMedia {
      * @param author the author name to search for
      */
     public static void printByAuthor(String author) {
+        Preconditions.checkNotNull(author, "Author cannot be null");
         System.out.printf("Here is all the books by %s available at this library:%n", author);
         PrintMedia.printByAuthor(library, author);
     }
@@ -63,6 +67,7 @@ public class BrowseMedia {
      * @param toSearch the keyword or title fragment to search for
      */
     public static void searchMedia(String toSearch) {
+        Preconditions.checkNotNull(toSearch, "ToSearch cannot be null");
         for (var media : library.getMediaAvailable()) {
             if (media.getTitle().toLowerCase().contains(toSearch.toLowerCase())) {
                 PrintMedia.printMedia(media);
@@ -71,6 +76,7 @@ public class BrowseMedia {
     }
 
     public static void setLibrary(Library library) {
+        Preconditions.checkNotNull(library, "Library cannot be null");
         BrowseMedia.library = library;
     }
 }

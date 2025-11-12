@@ -14,7 +14,7 @@ public class Map {
     public Library library;
 
     /**
-     Constructor : Creates map, for phase 1 we are using a default map
+     Constructor : Creates map, we are using a default map
      @param library The library this map belongs to
      */
     public Map(Library library) {

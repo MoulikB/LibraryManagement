@@ -117,6 +117,7 @@ public class TimeSlotSearch {
      * @return the start time of that slot
      */
     private static LocalTime parseStartTime(TimeSlots slot) {
+        Preconditions.checkNotNull(slot, "Slot cannot be null");
         String time = slot.getLabel().substring(0, 5);
         return LocalTime.parse(time);
     }

@@ -166,33 +166,6 @@ public class Book implements MediaInterface {
     }
 
     /**
-     * Check if this media already exists in its library (same mediaID).
-     * Returns true if found, false otherwise.
-     * @param media  The media we are searching for (can not be null and has to be an instance of book)
-     * @return whether the media exists
-     */
-    public boolean mediaExists(MediaInterface media) {
-        checkInvariants();
-        Preconditions.checkNotNull(media);
-        Preconditions.checkArgument(media instanceof Book);
-        boolean mediaExists = false;
-        Library library = media.getLibrary();
-
-        List<MediaInterface> mediaAvailable = library.getMediaAvailable();
-        int index = 0;
-        while (!mediaExists && index < mediaAvailable.size()) {
-            if (library.getMediaAvailable().get(index) instanceof Book) {
-                if (mediaAvailable.get(index).getMediaID() == media.getMediaID()) {
-                    mediaExists = true;
-                }
-            }
-            index++;
-        }
-        checkInvariants();
-        return mediaExists;
-    }
-
-    /**
      * Add a review to the shared reviews list.
      * @param review A review for the media (must not be null)
      */
@@ -266,10 +239,7 @@ public class Book implements MediaInterface {
      */
     public void removeFromWaitlist(User user) {
         checkInvariants();
-        if (this.getWaitlist().contains(user)) {
-            this.getWaitlist().remove(user);
-            System.out.println("Removed from waitlist!");
-        }
+        this.getWaitlist().remove(user);
         checkInvariants();
     }
 

@@ -1,7 +1,7 @@
 package COMP2450.logic.UserManagement;
 
 import COMP2450.domain.User;
-import COMP2450.logic.UserManagement.UserManagement;
+import com.google.common.base.Preconditions;
 
 import java.util.List;
 
@@ -19,19 +19,17 @@ public class LogIn {
      * @return User object if credentials match, otherwise null
      */
     public static User authenticate(String username, String password) {
-        if (username == null || password == null ||
-                username.isBlank() || password.isBlank()) {
-            return null;
-        }
-
+        Preconditions.checkNotNull(username, "Username cannot be null");
+        Preconditions.checkNotNull(password, "Password cannot be null");
+        User outputUser = null;
         List<User> users = UserManagement.getUsers();
 
         for (User currUser : users) {
             if (currUser.getUsername().equals(username)
                     && currUser.getPassword().equals(password)) {
-                return currUser;
+                outputUser =  currUser;
             }
         }
-        return null;
+        return outputUser;
     }
 }

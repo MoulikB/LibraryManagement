@@ -40,8 +40,6 @@ public interface MediaInterface {
 
     List<Review> getReviews();
 
-    boolean mediaExists(MediaInterface media);
-
 
     boolean issueUser(User user) throws UnavailableMediaException;
 

@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * TimeSlots
- * Utility class defining canonical one-hour booking slots,
+ * Utility class defining  one-hour booking slots,
  * used to standardize scheduling across all resources.
  */
 
@@ -23,6 +23,7 @@ public enum TimeSlots {
     TimeSlots(String label) {
         this.label = label;
     }
+
     /**
      * @return A human-readable label for this time slot (e.g., "09:00–10:00").
      */
@@ -38,7 +39,7 @@ public enum TimeSlots {
     /**
      * Converts a string to the matching TimeSlots value, ignoring case and spacing.
      * @param input A string label or enum name (can not be null)
-     * @return The matching TimeSlots constant, or {@code null} if none match.
+     * @return The matching TimeSlots constant, or null if none match.
      */
     public static TimeSlots fromString(String input) {
         Preconditions.checkArgument(input != null && !input.isEmpty(), "Input cannot be null or empty");

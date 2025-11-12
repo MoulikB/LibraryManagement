@@ -67,7 +67,7 @@ public class Library {
         return mediaAvailable;
     }
 
-    /** Get/set the library name.
+    /** Get the library name.
      *
      * @return library.name
      */
@@ -94,7 +94,7 @@ public class Library {
         return map;
     }
 
-    /** Get all resources (computers, study rooms, etc.).
+    /** Get all resources .
      *
      * @return list of all resources
      */

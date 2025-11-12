@@ -79,44 +79,75 @@ class MediaGenres {
   NONFICTION
 }
 
-class Book {
-    -title: String
-    -author: String
-    -publisher: String
-    -mediaID: int
-    -library: Library
-    -genre: MediaGenres
-    -totalCopies: int
-    +Book(title, author, publisher, genre, isbn, library)
-    +getMediaType() String
-    +getCreator() String
-    +getMediaGenre() MediaGenres
-    +borrowMedia() boolean
-    +returnMedia() void
-    +getTitle() String
-    +getMediaID() int
-    +addCopies() void
-    +toString() String
-}
+    class Book {
+        -title: String
+        -author: String
+        -publisher: String
+        -mediaID: int
+        -library: Library
+        -genre: MediaGenres
+        -totalCopies: int
+        -issuedDays: int
+        -reviews: List<Review>
+        -currentlyIssuedTo: List<User>
+        -waitlist: List<User>
+        +Book(title: String, author: String, publisher: String, genre: MediaGenres, isbn: int, library: Library)
+        +checkInvariants() void
+        +getMediaType() String
+        +getCreator() String
+        +getMediaGenre() MediaGenres
+        +borrowMedia(user: User) void
+        +returnMedia() void
+        +getTitle() String
+        +getAvailableCopies() int
+        +getPublisher() String
+        +getLibrary() Library
+        +getMediaID() int
+        +addCopies() void
+        +setLibrary(library: Library) void
+        +mediaExists(media: MediaInterface) boolean
+        +addReview(review: Review) void
+        +getReviews() List<Review>
+        +issueUser(user: User) boolean
+        +addWaitlist(user: User) void
+        +getWaitlist() List<User>
+        +removeFromWaitlist(user: User) void
+    }
 
-class Movie {
-    -title: String
-    -director: String
-    -mediaID: int
-    -library: Library
-    -genre: MediaGenres
-    -totalCopies: int
-    +Movie(title, director, mediaID, library, genre)
-    +getMediaType() String
-    +getCreator() String
-    +getMediaGenre() MediaGenres
-    +borrowMedia() boolean
-    +returnMedia() void
-    +getTitle() String
-    +getMediaID() int
-    +addCopies() void
-    +toString() String
-}
+    class Movie {
+        -title: String
+        -director: String
+        -mediaID: int
+        -library: Library
+        -genre: MediaGenres
+        -issuedDays: int
+        -totalCopies: int
+        -reviews: List<Review>
+        -currentlyIssuedTo: List<User>
+        -waitlist: List<User>
+        +Movie(title: String, director: String, mediaID: int, library: Library, genre: MediaGenres)
+        +checkInvariants() void
+        +getMediaType() String
+        +getCreator() String
+        +getMediaGenre() MediaGenres
+        +borrowMedia(user: User) void
+        +returnMedia() void
+        +getTitle() String
+        +getAvailableCopies() int
+        +getLibrary() Library
+        +getMediaID() int
+        +addCopies() void
+        +mediaExists(media: MediaInterface) boolean
+        +addReview(review: Review) void
+        +getReviews() List<Review>
+        +issueUser(user: User) boolean
+        +addWaitlist(user: User) void
+        +getWaitlist() List<User>
+        +removeFromWaitlist(user: User) void
+    }
+
+
+
 
 MediaInterface <|.. Book : an instance of
 MediaInterface <|.. Movie : an instance of
@@ -375,7 +406,101 @@ LinkedListStack --> EmptyStackException : throws
 
 
 
-%% ===== Invariants  =====
+    class Kiosk {
+- user : User
+- library : Library
++ main(args : String[]) void
+- runKiosk() void
+- logout() void
+}
+
+Kiosk --> User
+Kiosk --> Library
+Kiosk --> UI
+Kiosk --> LibraryBuilder
+
+class RegisterUserUI {
+    + promptRegister() User 
+    }
+
+RegisterUserUI --> RegisterUser
+RegisterUserUI --> InputValidation
+RegisterUserUI --> User
+class LogInUI {
+    + promptLogin() User 
+    }
+
+LogInUI --> LogIn
+LogInUI --> InputValidation
+LogInUI --> User
+
+    class TimeSlotSearch {
+        - MAX_DAYS_AHEAD : int
+        + viewNextTwoWeeks(resource : Resource) List<String>
+        + viewInRange(resource : Resource, start : LocalDate, end : LocalDate) List<String>
+        + nextXAvailable(resource : Resource, afterTime : LocalTime, x : int) List<String>
+        - parseStartTime(slot : TimeSlots) LocalTime
+    }
+
+    TimeSlotSearch --> Resource
+    TimeSlotSearch --> TimeSlots
+    
+    class LibraryBuilder {
+        + initializeLibrary() Library
+        - addMedia(library : Library) void
+        - addResources(library : Library) void
+    }
+
+    LibraryBuilder --> Library
+    LibraryBuilder --> Book
+    LibraryBuilder --> Movie
+    LibraryBuilder --> StudyRoom
+    LibraryBuilder --> Computer
+    LibraryBuilder --> MediaGenres
+
+class BookResource {
+        + booking : Booking
+        + bookings : ArrayList<BookResource>
+        + BookResource(booking : Booking)
+        + checkBooking() void
+    }
+    BookResource --> Booking
+    BookResource --> BookingConflictException
+
+    class BorrowMedia {
+        + issueUser(media : MediaInterface, user : User) void
+    }
+
+    BorrowMedia --> MediaInterface
+    BorrowMedia --> User
+    BorrowMedia --> UnavailableMediaException
+    BorrowMedia --> OverdueMediaException
+    
+    class Waitlist {
+        + waitlistUser(media : MediaInterface, user : User) void
+    }
+
+    Waitlist --> MediaInterface
+    Waitlist --> User
+    class Coordinate {
+        - x : int
+        - y : int
+        + Coordinate(x : int, y : int)
+        + getX() int
+        + getY() int
+        + equals(other : Coordinate) boolean
+    }
+
+    
+
+
+%% ===== Invariant properties  =====
+note for LogInUI "Invariant properties:\n- Username and password must not be blank or null "
+note for BookResource "Invariant properties:\n- booking != null for all instances.\n- No two bookings share the same resource/time slot."
+note for Kiosk "Invariant properties:\n- library != null after initialization\n- user == null or valid User\n"
+note for LibraryBuilder "Invariant properties:\n- Returned Library is never null.\n- All media/resources added are valid.\n"
+note for BorrowMedia "Invariant properties:\n- media != null and user != null."
+note for Coordinate "Invariant properties:\n- x, y immutable after construction.\n- x >= 0 and y >= 0"
 note for Library "Invariant properties:\n<ul>\n    
 <li>name != null</li>\n    
 <li>name.length() > 0</li>\n    
@@ -451,8 +576,8 @@ note for TimeSlots "Invariant properties:\n<ul>\n
 
 ``` 
 
-The following Mermaid diagram shows the user flow for the `Kiosk` interface —  
-from login to browsing, borrowing, booking, and pathfinding.
+The following diagram shows the flow for the `Kiosk` interface
+This flow illustrates how users navigate between menus —
 
 ```mermaid
 

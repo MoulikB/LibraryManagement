@@ -30,7 +30,13 @@ public class InputValidation {
         while (true) {
             String s = scnr.nextLine().trim();
             try {
-                return Integer.parseInt(s);
+                int i = Integer.parseInt(s);
+                if (i > 0) {
+                    return Integer.parseInt(s);
+                }
+                else  {
+                    throw new NumberFormatException();
+                }
             } catch (NumberFormatException e) {
                 System.out.print("Enter a valid integer: ");
             }

@@ -4,6 +4,12 @@ import COMP2450.UI.UI;
 import COMP2450.domain.Library;
 import COMP2450.domain.User;
 import COMP2450.logic.LibraryBuilder;
+import com.google.common.base.Preconditions;
+
+/**
+ * Kiosk
+ * Acts as the main entry point and controller of the Library Management System.
+ */
 
 public class Kiosk {
     private static User user = null;
@@ -11,7 +17,9 @@ public class Kiosk {
 
     public static void main(String[] args) {
         library = LibraryBuilder.initializeLibrary();
+        Preconditions.checkNotNull(library);
         runKiosk();
+        Preconditions.checkNotNull(library);
     }
 
     private static void runKiosk() {

@@ -20,6 +20,8 @@ public class RegisterUser {
      * @return A User object if registration is successful, null otherwise
      */
     public static User createUser(String username, String password, String email, int phone) {
+        User outputUser = null;
+
         try {
             Preconditions.checkArgument(username != null && !username.isEmpty(), "Username can't be empty");
             Preconditions.checkArgument(password != null && !password.isEmpty(), "Password can't be empty");
@@ -29,15 +31,16 @@ public class RegisterUser {
             User user = new User(username, password, UserManagement.nextID, email, phone);
             boolean added = UserManagement.addUser(user);
 
+
             if (added) {
                 UserManagement.nextID++;
-                return user;
+                outputUser = user;
             }
 
         } catch (IllegalArgumentException e) {
             System.out.println("⚠️ Invalid input: " + e.getMessage());
         }
 
-        return null;
+        return outputUser;
     }
 }

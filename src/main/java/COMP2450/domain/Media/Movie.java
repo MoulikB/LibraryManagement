@@ -9,7 +9,6 @@ import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Movie
@@ -27,7 +26,7 @@ public class Movie implements MediaInterface {
     int totalCopies = 0;
     static List<Review> reviews = new ArrayList<>();
     static List<User> currentlyIssuedTo = new ArrayList<>();
-    static Stack<User> waitlist = new Stack<>();
+    static List<User> waitlist = new ArrayList<>();
 
 
     /**
@@ -145,33 +144,6 @@ public class Movie implements MediaInterface {
     }
 
     /**
-     * Check if this media already exists in its library (same mediaID).
-     * Returns true if found, false otherwise.
-     * @param media The media we are searching for (can not be null and has to be an instance of movie)
-     * @return whether the media exists
-     */
-    public boolean mediaExists(MediaInterface media) {
-        checkInvariants();
-        Preconditions.checkNotNull(media);
-        Preconditions.checkArgument(media instanceof Movie);
-        boolean mediaExists = false;
-        Library library = media.getLibrary();
-
-        List<MediaInterface> mediaAvailable = library.getMediaAvailable();
-        int index = 0;
-        while (!mediaExists && index < mediaAvailable.size()) {
-            if (library.getMediaAvailable().get(index) instanceof Movie) {
-                if (mediaAvailable.get(index).getMediaID() == media.getMediaID()) {
-                    mediaExists = true;
-                }
-            }
-            index++;
-        }
-        checkInvariants();
-        return mediaExists;
-    }
-
-    /**
      * Add a review to the shared reviews list.
      * @param review the review to be added (can not be null)
      */
@@ -244,10 +216,7 @@ public class Movie implements MediaInterface {
      */
     public void removeFromWaitlist(User user) {
         checkInvariants();
-        if (this.getWaitlist().contains(user)) {
-            this.getWaitlist().remove(user);
-            System.out.println("Removed from waitlist!");
-        }
+        this.getWaitlist().remove(user);
         checkInvariants();
     }
 

@@ -21,7 +21,7 @@ public class Coordinate {
     }
 
     /**
-     * Returns the x value (row index) of this coordinate.
+     * Returns the x value of this coordinate.
      *
      * @return the x position
      */
@@ -30,7 +30,7 @@ public class Coordinate {
     }
 
     /**
-     * Returns the y value (column index) of this coordinate.
+     * Returns the y value of this coordinate.
      *
      * @return the y position
      */
