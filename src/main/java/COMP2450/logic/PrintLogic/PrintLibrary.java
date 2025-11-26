@@ -29,12 +29,10 @@ public class PrintLibrary {
      **/
     public static void printLibraryList() {
         Preconditions.checkNotNull(LibraryManagement.getLibraries() , "List of Libraries is null");
-        LibraryManagement.checkInvariants();
         for (var library : LibraryManagement.getLibraries()) {
             Preconditions.checkNotNull(library, "Library is null");
             printLibrary(library);
         }
-        LibraryManagement.checkInvariants();
     }
 
     /**

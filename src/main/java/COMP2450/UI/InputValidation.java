@@ -1,4 +1,4 @@
-package COMP2450.logic;
+package COMP2450.UI;
 
 import java.util.Scanner;
 
@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class InputValidation {
 
 
-    final static Scanner scnr = new Scanner(System.in);
+    private final static Scanner scnr = new Scanner(System.in);
 
     /**
      * Reads a full line of user input as a String.

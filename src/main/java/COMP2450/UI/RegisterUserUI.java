@@ -1,7 +1,6 @@
 package COMP2450.UI;
 
 import COMP2450.domain.User;
-import COMP2450.logic.InputValidation;
 import COMP2450.logic.UserManagement.RegisterUser;
 
 /**
