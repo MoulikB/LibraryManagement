@@ -52,7 +52,7 @@ public class User {
     /**
      * Check the invariants for our domain model object and throw an error if violated
      */
-    public void checkInvariants() {
+    private void checkInvariants() {
         Preconditions.checkArgument(username!= null && !username.isEmpty(), "Username cannot be empty");
         Preconditions.checkArgument(password!=null && !password.isEmpty(), "Password cannot be empty");
         Preconditions.checkArgument(id > 0, "ID cannot be less than 1");

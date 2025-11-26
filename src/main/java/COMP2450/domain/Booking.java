@@ -35,7 +35,7 @@ public class Booking {
     /**
      * Check the invariants for our domain model object and throw an error if violated
      */
-    public void checkInvariants() {
+    private void checkInvariants() {
         Preconditions.checkNotNull(resource, "resource can't be null");
         Preconditions.checkArgument(user != null, "member name can't be null or empty");
         Preconditions.checkNotNull(timeSlot, "TimeSlots can't be null");

@@ -59,7 +59,7 @@ public class Book implements MediaInterface {
     /**
      * Check the invariants for our domain model object and throw an error if violated
      */
-    public void checkInvariants() {
+    private void checkInvariants() {
         Preconditions.checkArgument(this.title != null && !this.title.isEmpty(), "title can't be null");
         Preconditions.checkArgument(this.author != null && !this.author.isEmpty(), "author can't be null");
         Preconditions.checkArgument(this.publisher != null && !this.publisher.isEmpty(), "publisher can't be null");

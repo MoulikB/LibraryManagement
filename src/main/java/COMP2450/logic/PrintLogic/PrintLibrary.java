@@ -17,13 +17,11 @@ public class PrintLibrary {
      */
     public static void printLibrary(Library library) {
         Preconditions.checkNotNull(library, "Library is null");
-        library.checkInvariants();
         System.out.println( "Library : " + library.getName());
 
         PrintMedia.printAllMedia(library);
 
         Preconditions.checkNotNull(library, "Library is null");
-        library.checkInvariants();
     }
 
     /**
@@ -34,9 +32,7 @@ public class PrintLibrary {
         LibraryManagement.checkInvariants();
         for (var library : LibraryManagement.getLibraries()) {
             Preconditions.checkNotNull(library, "Library is null");
-            library.checkInvariants();
             printLibrary(library);
-            library.checkInvariants();
         }
         LibraryManagement.checkInvariants();
     }

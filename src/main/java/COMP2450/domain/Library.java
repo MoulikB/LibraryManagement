@@ -41,7 +41,7 @@ public class Library {
     /**
      * Check the invariants for our domain model object and throw an error if violated
      */
-    public void checkInvariants(){
+    private void checkInvariants(){
         Preconditions.checkArgument(name!=null && !name.isEmpty(), "Library name cannot be null or empty");
         Preconditions.checkArgument(mediaAvailable!=null, "Library media cannot be null or empty");
         Preconditions.checkArgument(resources!=null, "Library resources cannot be null or empty");

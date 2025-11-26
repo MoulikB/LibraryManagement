@@ -56,7 +56,7 @@ public class Movie implements MediaInterface {
     /**
      * Check the invariants for our domain model object and throw an error if violated
      */
-    public void checkInvariants() {
+    private void checkInvariants() {
         Preconditions.checkArgument(title!= null && !title.isEmpty(), "Title cannot be null , or empty" );
         Preconditions.checkArgument(director != null && !director.isEmpty(), "Director cannot be null or empty" );
         Preconditions.checkArgument(mediaID > 0,"Media ID cannot be less than 1" );
