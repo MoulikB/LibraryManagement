@@ -1,5 +1,7 @@
 package COMP2450.domain.Pathfinder;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Coordinate
  * Represents a single (x, y) position on the library map.
@@ -16,6 +18,7 @@ public class Coordinate {
      * @param y the column index
      */
     public Coordinate(int x, int y) {
+        Preconditions.checkArgument(x >= 0 && y >= 0, "Coordinate x or y should be positive.");
         this.x = x;
         this.y = y;
     }

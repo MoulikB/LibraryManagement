@@ -33,7 +33,7 @@ public class Library {
         this.name = name;
         this.mediaAvailable = new ArrayList<>();
         this.resources = new ArrayList<>();
-        map = new Map(this);
+        map = new Map();
         checkInvariants();
         LibraryManagement.addLibrary(this);
     }

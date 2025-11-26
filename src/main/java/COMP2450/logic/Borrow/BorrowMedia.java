@@ -33,11 +33,8 @@ public class BorrowMedia {
             throw new OverdueMediaException("Please pay your overdue fines first.");
         }
 
-        boolean issued = media.issueUser(user);
+        media.issueUser(user);
 
-        if (!issued) {
-            throw new UnavailableMediaException("No more copies available.");
-        }
         Preconditions.checkNotNull(media, "Media cannot be null");
         Preconditions.checkNotNull(user, "User cannot be null");
     }

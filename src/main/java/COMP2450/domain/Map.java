@@ -11,15 +11,12 @@ import com.google.common.base.Preconditions;
 
 public class Map {
     private final char[][] map;
-    public Library library;
 
     /**
      Constructor : Creates map, we are using a default map
-     @param library The library this map belongs to
+
      */
-    public Map(Library library) {
-        Preconditions.checkNotNull(library, "library cannot be null");
-        this.library = library;
+    public Map() {
         map = new char[][]{
                 "+---------------------------------------+".toCharArray(),
                 "| L                                    D|".toCharArray(),
@@ -40,6 +37,7 @@ public class Map {
     }
 
     public char[][] getMap() {
+        Preconditions.checkNotNull(map, "map is null");
         return map;
     }
 

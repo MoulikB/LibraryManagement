@@ -9,7 +9,7 @@ public class LinkedListStack<T> implements Stack<T> {
         Node<T> next;
 
         private Node(T data) {
-            Preconditions.checkNotNull(data);
+            Preconditions.checkNotNull(data , "Data pushed cannot be null");
             this.data = data;
         }
     }
@@ -24,7 +24,7 @@ public class LinkedListStack<T> implements Stack<T> {
      * @throws NullPointerException if item is null
      */
     public void push(T item) {
-        Preconditions.checkNotNull(item);
+        Preconditions.checkNotNull(item , "Object is null");
         Node<T> newNode = new Node<>(item);
         Node<T> prevTop = top;
         top = newNode;
@@ -47,6 +47,7 @@ public class LinkedListStack<T> implements Stack<T> {
             top = top.next;
             size--;
         }
+        Preconditions.checkNotNull(result, "Empty stack");
         return result;
     }
 
@@ -56,6 +57,7 @@ public class LinkedListStack<T> implements Stack<T> {
      * @return the size of the stack
      */
     public int size() {
+        Preconditions.checkArgument(size >= 0, "Stack size must be greater than or equal to 0");
         return this.size;
     }
 
@@ -81,6 +83,7 @@ public class LinkedListStack<T> implements Stack<T> {
         } else {
             result = top.data;
         }
+        Preconditions.checkNotNull(result, "Empty stack");
         return result;
     }
 }

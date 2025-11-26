@@ -164,20 +164,19 @@ public class Movie implements MediaInterface {
      * Issues this media item to a user if available or if they are first in the waitlist.
      *
      * @param user the user requesting the media
-     * @return true if the media was successfully issued, false otherwise
      * @throws UnavailableMediaException if the media is not available for this user
      */
-    public boolean issueUser(User user) throws UnavailableMediaException {
+    public void issueUser(User user) throws UnavailableMediaException {
         checkInvariants();
         Preconditions.checkNotNull(user, "User cannot be null");
 
-        boolean output = false;
+
 
         // Only allow issuing if the waitlist is empty or user is first in line
         if (waitlist.isEmpty() || waitlist.get(0).equals(user)) {
             if (this.getAvailableCopies() >= 1) {
                 this.borrowMedia(user);
-                output = true;
+
                 user.issue(this);
                 this.removeFromWaitlist(user);
             }
@@ -186,7 +185,7 @@ public class Movie implements MediaInterface {
         }
 
         checkInvariants();
-        return output;
+
     }
 
     /**

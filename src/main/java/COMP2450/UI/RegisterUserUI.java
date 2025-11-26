@@ -24,23 +24,23 @@ public class RegisterUserUI {
         System.out.print("Enter your password: ");
         String password = InputValidation.getStringInput();
 
-        System.out.print("Enter your email address: ");
+        System.out.print("Enter your email address ( Ex. Grader@umanitoba.ca ) :  ");
         String email = InputValidation.getStringInput();
 
         while (!isValidEmail(email)) {
-            System.out.println("Invalid email address");
-            System.out.print("Enter your email: ");
+            System.out.println("Invalid email address. Make sure you follow the above format. ");
+            System.out.print("Enter your email address ( Ex. Grader@umanitoba.ca ) :  ");
             email = InputValidation.getStringInput();
         }
 
 
 
-        System.out.print("Enter your phone number: ");
+        System.out.print("Enter your phone number Ex. 0123456789 : ");
         String phone = InputValidation.getStringInput();
 
         while (!isValidPhoneNumber(phone)) {
-            System.out.println("Invalid phone number");
-            System.out.print("Enter your phone number: ");
+            System.out.println("Invalid phone number. Has to be 10 digits without any other characters like : 0123456789");
+            System.out.print("Enter your phone number Ex. 0123456789 : ");
             phone = InputValidation.getStringInput();
         }
 

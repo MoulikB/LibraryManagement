@@ -41,7 +41,7 @@ public interface MediaInterface {
     List<Review> getReviews();
 
 
-    boolean issueUser(User user) throws UnavailableMediaException;
+    void issueUser(User user) throws UnavailableMediaException;
 
     void addWaitlist(User user);
 
