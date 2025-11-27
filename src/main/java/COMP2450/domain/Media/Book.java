@@ -23,11 +23,11 @@ public class Book implements MediaInterface {
     private final int mediaID;
     private Library library;
     private final MediaGenres genre;
-    static List<Review> reviews = new ArrayList<>();
-    int totalCopies = 0;
-    public int issuedDays = 1;
-    static List<User> currentlyIssuedTo = new ArrayList<>();
-    static List<User> waitlist = new ArrayList<>();
+    private static List<Review> reviews = new ArrayList<>();
+    private int totalCopies = 0;
+    private int issuedDays = 1;
+    private static List<User> currentlyIssuedTo = new ArrayList<>();
+    private static List<User> waitlist = new ArrayList<>();
 
     /**
      * Constructor: makes a new Book and adds it to the given library with some preconditions
@@ -241,4 +241,9 @@ public class Book implements MediaInterface {
         checkInvariants();
     }
 
+    public void setIssuedDay(int  num) {
+        checkInvariants();
+        issuedDays = num;
+        checkInvariants();
+    }
 }

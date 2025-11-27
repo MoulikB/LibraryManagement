@@ -14,7 +14,7 @@ import java.util.List;
 
 public class LibraryManagement {
 
-    public static List<Library> libraries;
+    private static List<Library> libraries;
 
     /**
      * Constructor : libraries keeps track of all Library objects in the program.

@@ -22,11 +22,11 @@ public class Movie implements MediaInterface {
     private final int mediaID;
     private final Library library;
     private final MediaGenres genre;
-    public int issuedDays = 1;
-    int totalCopies = 0;
-    static List<Review> reviews = new ArrayList<>();
-    static List<User> currentlyIssuedTo = new ArrayList<>();
-    static List<User> waitlist = new ArrayList<>();
+    private int issuedDays = 1;
+    private int totalCopies = 0;
+    private static List<Review> reviews = new ArrayList<>();
+    private static List<User> currentlyIssuedTo = new ArrayList<>();
+    private static List<User> waitlist = new ArrayList<>();
 
 
     /**
@@ -225,6 +225,11 @@ public class Movie implements MediaInterface {
         checkInvariants();
         this.getWaitlist().remove(user);
         checkInvariants();
+    }
+
+    public void setIssuedDay(int issuedDay) {
+        this.issuedDays = issuedDay;
+
     }
 
 }

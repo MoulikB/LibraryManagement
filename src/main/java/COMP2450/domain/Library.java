@@ -14,11 +14,11 @@ import java.util.List;
 
 public class Library {
 
-    String name;
-    List<MediaInterface> mediaAvailable;
-    Map map;
-    List<Resource> resources;
-    public static LibraryManagement libraryManagement = new LibraryManagement();
+    private String name;
+    private List<MediaInterface> mediaAvailable;
+    private Map map;
+    private List<Resource> resources;
+    private static LibraryManagement libraryManagement = new LibraryManagement();
 
 
     /**

@@ -100,7 +100,7 @@ public class KioskTester {
 
             // --- Fines and Returns ---
             System.out.println("\n[TEST] Fines after overdue:");
-            b1.issuedDays = 6; // simulate overdue
+            b1.setIssuedDay(6); // simulate overdue
             double fines = testUser.calculateFinesDue();
             System.out.println("Fines: " + fines + " (Expected >= 2.0)");
 

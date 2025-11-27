@@ -14,7 +14,7 @@ import java.util.List;
 
 public class UserManagement {
     private static List<User> users = new ArrayList<>();
-    public static int nextID = 1;
+    private static int nextID = 1;
 
     /**
      * Add a user to the list.
@@ -128,7 +128,13 @@ public class UserManagement {
         users = new ArrayList<>();
     }
 
+    public static void incrementID() {
+        nextID++;
+    }
 
+    public static int getNextID() {
+        return nextID;
+    }
 
 
 

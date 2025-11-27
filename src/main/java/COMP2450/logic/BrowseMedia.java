@@ -12,7 +12,7 @@ import com.google.common.base.Preconditions;
 public class BrowseMedia {
 
     /** Shared reference to the active library instance. */
-    public static Library library;
+    private  static Library library;
 
     /**
      * Displays all media items available in the current library.

@@ -29,12 +29,12 @@ public class RegisterUser {
             Preconditions.checkArgument(phone != null && !phone.isEmpty(), "Phone number can't be empty");
 
 
-            User user = new User(username, password, UserManagement.nextID, email, phone);
+            User user = new User(username, password, UserManagement.getNextID(), email, phone);
             boolean added = UserManagement.addUser(user);
 
 
             if (added) {
-                UserManagement.nextID++;
+                UserManagement.incrementID();
                 outputUser = user;
             }
 

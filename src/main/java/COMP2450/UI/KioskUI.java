@@ -105,10 +105,10 @@ public class KioskUI {
             for (var media : issuedItems) {
                 if (media.getMediaType().equalsIgnoreCase("Book")) {
                     COMP2450.domain.Media.Book book = (COMP2450.domain.Media.Book) media;
-                    book.issuedDays++;
+                    book.setIssuedDay(book.getIssuedDay() + 1);
                 } else if (media.getMediaType().equalsIgnoreCase("Movie")) {
                     COMP2450.domain.Media.Movie movie = (COMP2450.domain.Media.Movie) media;
-                    movie.issuedDays++;
+                    movie.setIssuedDay(movie.getIssuedDay()+ 1 );
                 }
             }
             user.calculateFinesDue();

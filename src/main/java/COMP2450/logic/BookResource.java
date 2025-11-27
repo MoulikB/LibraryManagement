@@ -14,10 +14,10 @@ import java.util.ArrayList;
 public class BookResource {
 
     /** The booking details for this resource. */
-    public Booking booking;
+    private Booking booking;
 
     /** Shared list of all active bookings in the system. */
-    public static ArrayList<BookResource> bookings = new ArrayList<>();
+    private static ArrayList<BookResource> bookings = new ArrayList<>();
 
     /**
      * Creates a new BookResource entry after validating that

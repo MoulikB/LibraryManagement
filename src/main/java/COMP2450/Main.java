@@ -280,9 +280,9 @@ public class Main {
         String name = InputValidation.getStringInput();
         Library library = LibraryManagement.findLibrary(name);
         if (library!=null){
-            for (Library dbLibrary : LibraryManagement.libraries) {
+            for (Library dbLibrary : LibraryManagement.getLibraries()) {
                 if (dbLibrary.equals(library)) {
-                    LibraryManagement.libraries.remove(dbLibrary);
+                    LibraryManagement.getLibraries().remove(dbLibrary);
                     System.out.println("Library " + name + " removed.");
                     break;
                 }

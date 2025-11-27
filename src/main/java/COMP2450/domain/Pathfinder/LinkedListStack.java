@@ -5,8 +5,8 @@ import com.google.common.base.Preconditions;
 public class LinkedListStack<T> implements Stack<T> {
 
     private static class Node<T> {
-        T data;
-        Node<T> next;
+        private T data;
+        private Node<T> next;
 
         private Node(T data) {
             Preconditions.checkNotNull(data , "Data pushed cannot be null");

@@ -192,7 +192,7 @@ public class User {
      * @param book the book to check for overdue status
      */
     public void checkBookFines(Book book) {
-        if (book.issuedDays > 5) {
+        if (book.getIssuedDay() > 5) {
             finesDue += 2;
         }
     }
@@ -203,7 +203,7 @@ public class User {
      * @param movie the movie to check for overdue status
      */
     public void checkMovieFines(Movie movie) {
-        if (movie.issuedDays > 5) {
+        if (movie.getIssuedDay() > 5) {
             finesDue += 2;
         }
     }
