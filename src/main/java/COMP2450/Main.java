@@ -9,7 +9,7 @@ import COMP2450.domain.Media.MediaInterface;
 import COMP2450.domain.Media.Movie;
 import COMP2450.domain.MediaGenres;
 import COMP2450.domain.Review;
-import COMP2450.logic.PrintLogic.*;
+import COMP2450.UI.PrintLogic.*;
 import COMP2450.domain.Resources.Computer;
 import COMP2450.domain.Resources.Resource;
 import COMP2450.domain.Resources.StudyRoom;

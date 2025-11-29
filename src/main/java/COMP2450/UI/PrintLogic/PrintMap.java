@@ -1,4 +1,4 @@
-package COMP2450.logic.PrintLogic;
+package COMP2450.UI.PrintLogic;
 
 import COMP2450.domain.Map;
 import com.google.common.base.Preconditions;

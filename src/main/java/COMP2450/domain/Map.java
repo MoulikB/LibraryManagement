@@ -36,9 +36,16 @@ public class Map {
         };
     }
 
+    /**
+     * Returns a defensive copy of the map so callers
+     * cannot mutate internal state.
+     */
     public char[][] getMap() {
-        Preconditions.checkNotNull(map, "map is null");
-        return map;
+        char[][] copy = new char[map.length][];
+        for (int i = 0; i < map.length; i++) {
+            copy[i] = map[i].clone();
+        }
+        return copy;
     }
 
 }

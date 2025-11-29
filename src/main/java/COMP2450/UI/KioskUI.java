@@ -5,7 +5,7 @@ import COMP2450.domain.Media.MediaInterface;
 import COMP2450.domain.Resources.Resource;
 import COMP2450.logic.*;
 import COMP2450.logic.Borrow.*;
-import COMP2450.logic.PrintLogic.*;
+import COMP2450.UI.PrintLogic.*;
 import COMP2450.Exceptions.*;
 import COMP2450.logic.UserManagement.UserManagement;
 import com.google.common.base.Preconditions;

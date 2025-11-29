@@ -1,7 +1,7 @@
 package COMP2450.logic;
 
 import COMP2450.domain.Library;
-import COMP2450.logic.PrintLogic.PrintMedia;
+import COMP2450.UI.PrintLogic.PrintMedia;
 import com.google.common.base.Preconditions;
 
 /**
