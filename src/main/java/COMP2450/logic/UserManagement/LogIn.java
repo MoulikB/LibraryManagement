@@ -12,6 +12,11 @@ import java.util.List;
  */
 public class LogIn {
 
+    public LogIn(String username, String password) {
+        Preconditions.checkNotNull(username, "Username cannot be null");
+        Preconditions.checkNotNull(password, "Password cannot be null");
+    }
+
     /**
      * Authenticates a username/password combination against stored users.
      * @param username input username

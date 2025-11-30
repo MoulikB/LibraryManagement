@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 
 public class LinkedListStack<T> implements Stack<T> {
 
-    private static class Node<T> {
+    private class Node<T> {
         private T data;
         private Node<T> next;
 

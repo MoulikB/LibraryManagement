@@ -41,7 +41,7 @@ public enum TimeSlots {
      * @param input A string label or enum name (can not be null)
      * @return The matching TimeSlots constant, or null if none match.
      */
-    public static TimeSlots fromString(String input) {
+    public TimeSlots fromString(String input) {
         Preconditions.checkArgument(input != null && !input.isEmpty(), "Input cannot be null or empty");
         TimeSlots outputSlot = null;
         for (TimeSlots slot : TimeSlots.values()) {

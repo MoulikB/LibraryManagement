@@ -10,6 +10,8 @@ import com.google.common.base.Preconditions;
  */
 public class RegisterUser {
 
+    public RegisterUser() {}
+
     /**
      * Validates input and creates a new user if possible.
      *
@@ -19,7 +21,7 @@ public class RegisterUser {
      * @param phone The user's phone number
      * @return A User object if registration is successful, null otherwise
      */
-    public static User createUser(String username, String password, String email, String phone) {
+    public User createUser(String username, String password, String email, String phone) {
         User outputUser = null;
 
         try {

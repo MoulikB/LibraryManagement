@@ -9,11 +9,15 @@ import COMP2450.logic.UserManagement.LogIn;
  */
 public class LogInUI {
 
+    public LogInUI() {
+
+    }
+
     /**
      * Displays the login prompt and delegates authentication to LogIn logic.
      * @return the logged-in User, or null if login fails or user cancels
      */
-    public static User promptLogin() {
+    public User promptLogin() {
         System.out.println("\n=== User Login ===");
 
         User result = null;

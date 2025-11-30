@@ -30,7 +30,8 @@ public class KioskUI {
         User user = null;
 
         if (option == 1) {
-            user = LogInUI.promptLogin();
+            LogInUI logOn = new LogInUI();
+            user = logOn.promptLogin();
         } else if (option == 2) {
             user = RegisterUserUI.promptRegister();
         } else {
@@ -286,24 +287,23 @@ public class KioskUI {
 
         while (stayInMenu) {
             int choice = promptMenu(choices);
-
-            BrowseMedia.setLibrary(library);
+            BrowseMedia browseMedia = new BrowseMedia(Library library);
 
             switch (choice) {
-                case 1 -> BrowseMedia.showAllMedia();
-                case 2 -> BrowseMedia.showAllMovies();
-                case 3 -> BrowseMedia.showAllBooks();
+                case 1 -> browseMedia.showAllMedia();
+                case 2 -> browseMedia.showAllMovies();
+                case 3 -> browseMedia.showAllBooks();
                 case 4 -> {
                     System.out.print("Enter director name: ");
-                    BrowseMedia.printByDirector(InputValidation.getStringInput());
+                    browseMedia.printByDirector(InputValidation.getStringInput());
                 }
                 case 5 -> {
                     System.out.print("Enter author name: ");
-                    BrowseMedia.printByAuthor(InputValidation.getStringInput());
+                    browseMedia.printByAuthor(InputValidation.getStringInput());
                 }
                 case 6 -> {
                     System.out.print("Enter media title: ");
-                    BrowseMedia.searchMedia(InputValidation.getStringInput());
+                    browseMedia.searchMedia(InputValidation.getStringInput());
                 }
                 case 7 -> stayInMenu = false;
                 default -> System.out.println("Invalid choice.");
@@ -325,7 +325,7 @@ public class KioskUI {
         } else {
 
             try {
-                BorrowMedia.issueUser(media, user);
+                BorrowMedia issueMedia = new BorrowMedia(user,media);
                 System.out.println("✅ Media borrowed successfully!");
             } catch (OverdueMediaException e) {
                 System.out.println("⚠️  You have overdue items. Please return them first.");
@@ -333,7 +333,7 @@ public class KioskUI {
                 System.out.print("No copies available. Join waitlist? (Y/N): ");
                 try {
                     if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
-                        Waitlist.waitlistUser(media, user);
+                        Waitlist wl = new Waitlist(media,user);
                         System.out.println("📋 Added to waitlist.");
                     } else {
                         System.out.println("Okay. Returning to menu.");

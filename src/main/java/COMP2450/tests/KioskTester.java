@@ -24,7 +24,8 @@ public class KioskTester {
         try {
             // --- Setup Phase ---
             Library testLibrary = new Library("EdgeCase Library");
-            LibraryManagement.addLibrary(testLibrary);
+            LibraryManagement libMag = new LibraryManagement();
+            libMag.addLibrary(testLibrary);
 
             // Add test media
             Book b1 = new Book("Haunted Nights", "A. Poe", "DarkPress", MediaGenres.HORROR, 111, testLibrary);

@@ -23,11 +23,11 @@ public class Book implements MediaInterface {
     private final int mediaID;
     private Library library;
     private final MediaGenres genre;
-    private static List<Review> reviews = new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
     private int totalCopies = 0;
     private int issuedDays = 1;
-    private static List<User> currentlyIssuedTo = new ArrayList<>();
-    private static List<User> waitlist = new ArrayList<>();
+    private List<User> currentlyIssuedTo = new ArrayList<>();
+    private List<User> waitlist = new ArrayList<>();
 
     /**
      * Constructor: makes a new Book and adds it to the given library with some preconditions

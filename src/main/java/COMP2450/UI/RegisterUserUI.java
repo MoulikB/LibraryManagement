@@ -42,8 +42,8 @@ public class RegisterUserUI {
             System.out.print("Enter your phone number Ex. 0123456789 : ");
             phone = InputValidation.getStringInput();
         }
-
-        User newUser = RegisterUser.createUser(username, password, email, phone);
+        RegisterUser registerUser = new RegisterUser();
+        User newUser = registerUser.createUser(username, password, email, phone);
 
         if (newUser != null) {
             System.out.println("✅ User registered successfully!");

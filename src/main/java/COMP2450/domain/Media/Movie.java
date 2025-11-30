@@ -24,9 +24,9 @@ public class Movie implements MediaInterface {
     private final MediaGenres genre;
     private int issuedDays = 1;
     private int totalCopies = 0;
-    private static List<Review> reviews = new ArrayList<>();
-    private static List<User> currentlyIssuedTo = new ArrayList<>();
-    private static List<User> waitlist = new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
+    private List<User> currentlyIssuedTo = new ArrayList<>();
+    private List<User> waitlist = new ArrayList<>();
 
 
     /**

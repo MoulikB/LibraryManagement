@@ -12,6 +12,12 @@ import com.google.common.base.Preconditions;
  */
 public class Waitlist {
 
+    public Waitlist(MediaInterface media , User user) {
+        Preconditions.checkNotNull(media, "Media cannot be null");
+        Preconditions.checkNotNull(user, "User cannot be null");
+        waitlistUser(media, user);
+    }
+
     /**
      * Adds a user to the waitlist for a specific media item,
      * if they are not already on it. This method runs silently
@@ -20,7 +26,7 @@ public class Waitlist {
      * @param media the media item to add the user to
      * @param user  the user requesting to be added
      */
-    public static void waitlistUser(MediaInterface media, User user) throws WaitListedAlready {
+    private void waitlistUser(MediaInterface media, User user) throws WaitListedAlready {
         Preconditions.checkNotNull(media, "Media cannot be null");
         Preconditions.checkNotNull(user, "User cannot be null");
 
