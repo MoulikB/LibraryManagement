@@ -2,6 +2,7 @@ package COMP2450.UI;
 
 import COMP2450.domain.User;
 import COMP2450.logic.UserManagement.RegisterUser;
+import COMP2450.logic.UserManagement.UserManagement;
 
 import java.util.Scanner;
 
@@ -17,7 +18,7 @@ public class RegisterUserUI {
      *
      * @return the registered User, or null if registration failed
      */
-    public static User promptRegister() {
+    public static User promptRegister(UserManagement userManagement) {
 
         InputValidation inputValidation = new InputValidation(new Scanner(System.in));
 
@@ -48,7 +49,7 @@ public class RegisterUserUI {
             phone = inputValidation.getStringInput();
         }
         RegisterUser registerUser = new RegisterUser();
-        User newUser = registerUser.createUser(username, password, email, phone);
+        User newUser = registerUser.createUser(username, password, email, phone , userManagement);
 
         if (newUser != null) {
             System.out.println("✅ User registered successfully!");

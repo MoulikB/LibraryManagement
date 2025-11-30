@@ -17,6 +17,8 @@ import java.time.LocalDate;
  */
 public class KioskTester {
 
+    private static final UserManagement USER_MANAGEMENT = new UserManagement();
+
     public static void main(String[] args) {
         System.out.println("=== BEGINNING AUTOMATED KIOSK TESTS ===");
 
@@ -38,7 +40,7 @@ public class KioskTester {
 
             // Register a user
             User testUser = new User("tester", "password", 1, "tester@university.ca", "1234567890");
-            UserManagement.addUser(testUser);
+            USER_MANAGEMENT.addUser(testUser);
 
             // --- Login Phase ---
             System.out.println("\n[TEST] Simulate login with null library:");

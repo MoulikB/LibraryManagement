@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class LogIn {
 
+
     public LogIn(String username, String password) {
         Preconditions.checkNotNull(username, "Username cannot be null");
         Preconditions.checkNotNull(password, "Password cannot be null");
@@ -23,11 +24,11 @@ public class LogIn {
      * @param password input password
      * @return User object if credentials match, otherwise null
      */
-    public static User authenticate(String username, String password) {
+    public static User authenticate(String username, String password , UserManagement userManagement) {
         Preconditions.checkNotNull(username, "Username cannot be null");
         Preconditions.checkNotNull(password, "Password cannot be null");
         User outputUser = null;
-        List<User> users = UserManagement.getUsers();
+        List<User> users = userManagement.getUsers();
 
         for (User currUser : users) {
             if (currUser.getUsername().equals(username)

@@ -10,6 +10,8 @@ import com.google.common.base.Preconditions;
  */
 public class RegisterUser {
 
+
+
     public RegisterUser() {}
 
     /**
@@ -21,7 +23,7 @@ public class RegisterUser {
      * @param phone The user's phone number
      * @return A User object if registration is successful, null otherwise
      */
-    public User createUser(String username, String password, String email, String phone) {
+    public User createUser(String username, String password, String email, String phone , UserManagement userManagement) {
         User outputUser = null;
 
         try {
@@ -32,7 +34,7 @@ public class RegisterUser {
 
 
             User user = new User(username, password, UserManagement.getNextID(), email, phone);
-            boolean added = UserManagement.addUser(user);
+            boolean added = userManagement.addUser(user);
 
 
             if (added) {

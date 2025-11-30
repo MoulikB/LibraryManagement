@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 public class UserManagement {
-    private static final List<User> USERS = new ArrayList<>();
+    private final List<User> USERS = new ArrayList<>();
     private static int nextID = 1;
 
     /**
@@ -21,7 +21,7 @@ public class UserManagement {
      * @param user to be added (cannot be null)
      * @return whether the user was added
      */
-    public static boolean addUser(User user) {
+    public boolean addUser(User user) {
         Preconditions.checkNotNull(user, "User cannot be null");
         checkInvariants();
         boolean output = false;
@@ -36,11 +36,11 @@ public class UserManagement {
     /**
      * Check the invariants for our domain model object and throw an error if violated
      */
-    public static void checkInvariants() {
+    public void checkInvariants() {
         Preconditions.checkNotNull(USERS);
     }
 
-    public static List<User> getUsers() {
+    public List<User> getUsers() {
         return USERS;
     }
 
@@ -49,7 +49,7 @@ public class UserManagement {
      * @param username the username we are checking for (can't be null or empty)
      * @return whether user exists
      */
-    public static boolean userExistsBoolean(String username) {
+    public boolean userExistsBoolean(String username) {
         checkInvariants();
         Preconditions.checkArgument(username != null && !username.isEmpty(), "Invalid ID");
         boolean userExists = false;

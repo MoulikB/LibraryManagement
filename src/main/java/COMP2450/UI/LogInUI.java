@@ -2,6 +2,7 @@ package COMP2450.UI;
 
 import COMP2450.domain.User;
 import COMP2450.logic.UserManagement.LogIn;
+import COMP2450.logic.UserManagement.UserManagement;
 
 import java.util.Scanner;
 
@@ -19,7 +20,7 @@ public class LogInUI {
      * Displays the login prompt and delegates authentication to LogIn logic.
      * @return the logged-in User, or null if login fails or user cancels
      */
-    public User promptLogin() {
+    public User promptLogin(UserManagement userManagement) {
         System.out.println("\n=== User Login ===");
 
         InputValidation inputValidation = new InputValidation(new Scanner(System.in));
@@ -39,7 +40,7 @@ public class LogInUI {
                 continue;
             }
 
-            result = LogIn.authenticate(username, password);
+            result = LogIn.authenticate(username, password , userManagement);
 
             if (result == null) {
                 System.out.println("❌ Invalid username or password.");

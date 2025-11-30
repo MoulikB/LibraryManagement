@@ -23,7 +23,6 @@ public class User {
 
     private double finesDue;  // how much is owed (if any)
     private final List<MediaInterface> itemsIssued = new ArrayList<>(); // media IDs issued
-    // Not using the above two in current implementation, will be added later when waitlist and mediaIssue class is added
 
     /**
      * Create a new User and add it to the shared user database.

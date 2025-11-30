@@ -19,6 +19,8 @@ import java.util.Scanner;
 
 public class KioskUI {
 
+    private static final UserManagement USER_MANAGEMENT = new UserManagement();
+
     // Handles the first screen (Login/Register)
     public static User showWelcomeScreen(Library library) {
         Preconditions.checkNotNull(library, "library cannot be null");
@@ -34,9 +36,9 @@ public class KioskUI {
 
         if (option == 1) {
             LogInUI logOn = new LogInUI();
-            user = logOn.promptLogin();
+            user = logOn.promptLogin(USER_MANAGEMENT);
         } else if (option == 2) {
-            user = RegisterUserUI.promptRegister();
+            user = RegisterUserUI.promptRegister(USER_MANAGEMENT);
         } else {
             System.out.println("Invalid option. Try again.");
         }
@@ -98,7 +100,7 @@ public class KioskUI {
     private static void incrementIssuedDaysForAllUsers() {
         System.out.println("\n⏳ Simulating a new day since last login...");
 
-        var users = UserManagement.getUsers();
+        var users = USER_MANAGEMENT.getUsers();
         if (users.isEmpty()) {
             System.out.println("No users found in the system.");
             return;
