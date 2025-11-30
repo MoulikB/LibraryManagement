@@ -6,7 +6,6 @@ import COMP2450.domain.*;
 import COMP2450.domain.Media.*;
 import COMP2450.domain.Resources.*;
 import COMP2450.logic.BookResource;
-import COMP2450.logic.LibraryManagement;
 import COMP2450.logic.PathFinder;
 import COMP2450.logic.UserManagement.UserManagement;
 
@@ -24,8 +23,6 @@ public class KioskTester {
         try {
             // --- Setup Phase ---
             Library testLibrary = new Library("EdgeCase Library");
-            LibraryManagement libMag = new LibraryManagement();
-            libMag.addLibrary(testLibrary);
 
             // Add test media
             Book b1 = new Book("Haunted Nights", "A. Poe", "DarkPress", MediaGenres.HORROR, 111, testLibrary);

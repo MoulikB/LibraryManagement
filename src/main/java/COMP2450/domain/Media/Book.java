@@ -23,11 +23,10 @@ public class Book implements MediaInterface {
     private final int mediaID;
     private Library library;
     private final MediaGenres genre;
-    private List<Review> reviews = new ArrayList<>();
+    private final List<Review> reviews = new ArrayList<>();
     private int totalCopies = 0;
     private int issuedDays = 1;
-    private List<User> currentlyIssuedTo = new ArrayList<>();
-    private List<User> waitlist = new ArrayList<>();
+    private final List<User> waitlist = new ArrayList<>();
 
     /**
      * Constructor: makes a new Book and adds it to the given library with some preconditions
@@ -99,7 +98,6 @@ public class Book implements MediaInterface {
         Preconditions.checkArgument(user != null, "user can't be null");
         checkInvariants();
         this.totalCopies--;
-        currentlyIssuedTo.add(user);
         checkInvariants();
     }
 
@@ -187,16 +185,18 @@ public class Book implements MediaInterface {
         checkInvariants();
         Preconditions.checkNotNull(user, "User cannot be null");
 
+        boolean userIsFirst = waitlist.isEmpty() || waitlist.get(0).equals(user);
+        boolean hasCopy = this.getAvailableCopies() >= 1;
+
 
         // Only allow issuing if the waitlist is empty or user is first in line
-        if (waitlist.isEmpty() || waitlist.get(0).equals(user)) {
-            if (this.getAvailableCopies() >= 1) {
-                this.borrowMedia(user);
-                user.issue(this);
-                this.removeFromWaitlist(user);
-            }
+        if (userIsFirst && hasCopy) {
+            this.borrowMedia(user);
+            user.issue(this);
+            this.removeFromWaitlist(user);
+            checkInvariants();
         } else {
-            throw new UnavailableMediaException("Media is not available");
+            throw new UnavailableMediaException("Media is not available for this user.");
         }
 
         checkInvariants();

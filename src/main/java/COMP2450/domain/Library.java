@@ -3,7 +3,6 @@ package COMP2450.domain;
 import COMP2450.domain.Media.MediaInterface;
 import COMP2450.domain.Resources.Resource;
 import com.google.common.base.Preconditions;
-import COMP2450.logic.LibraryManagement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +14,9 @@ import java.util.List;
 public class Library {
 
     private String name;
-    private List<MediaInterface> mediaAvailable;
-    private Map map;
-    private List<Resource> resources;
-    private static LibraryManagement libraryManagement = new LibraryManagement();
+    private final List<MediaInterface> mediaAvailable;
+    private final Map map;
+    private final List<Resource> resources;
 
 
     /**
@@ -35,7 +33,6 @@ public class Library {
         this.resources = new ArrayList<>();
         map = new Map();
         checkInvariants();
-        LibraryManagement.addLibrary(this);
     }
 
     /**
@@ -121,7 +118,7 @@ public class Library {
     public Resource getResource(String resourceName) {
         checkInvariants();
         Preconditions.checkArgument(resourceName!=null && !resourceName.isEmpty(),
-                "Resource name cannot be null or mepty");
+                "Resource name cannot be null or empty");
         Resource resourceFound = null;
         for (Resource resource : resources) {
             if (resource.getResourceName().equals(resourceName)) {
@@ -132,31 +129,11 @@ public class Library {
         return resourceFound;
     }
 
-    /**
-     * Remove a media item by its ID.
-     * @param mediaId the ID which we are searching for to remove (cant be less than 1)
-     */
-    public boolean removeMedia(int mediaId) {
-        Preconditions.checkArgument(mediaId > 0, "Media ID cannot be less than 1");
-        checkInvariants();
-        boolean removed = false;
-        int index = 0;
-        while (index < mediaAvailable.size() && !removed) {
-            if (mediaAvailable.get(index).getMediaID() == mediaId) {
-                mediaAvailable.remove(index);
-                removed = true;
-            }
-            index++;
-        }
-        checkInvariants();
-        return removed;
-
-    }
 
     /**
      * Find and return a media item by ID.
      * Prints a message if not found and returns null.
-     * @param mediaId the ID we are seaching for (cant be less than 1)
+     * @param mediaId the ID we are searching for (cant be less than 1)
      * @return media object
      */
     public MediaInterface showMedia(int mediaId) {
