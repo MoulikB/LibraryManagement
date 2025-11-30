@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
  */
 public class BrowseMedia {
 
-    public BrowseMedia() {
+    public BrowseMedia(Library library) {
         Preconditions.checkNotNull(library, "Library cannot be null");
         this.library = library;
     }

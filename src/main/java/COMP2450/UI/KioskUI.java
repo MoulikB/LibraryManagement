@@ -287,7 +287,7 @@ public class KioskUI {
 
         while (stayInMenu) {
             int choice = promptMenu(choices);
-            BrowseMedia browseMedia = new BrowseMedia(Library library);
+            BrowseMedia browseMedia = new BrowseMedia(library);
 
             switch (choice) {
                 case 1 -> browseMedia.showAllMedia();
