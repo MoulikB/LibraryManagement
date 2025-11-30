@@ -37,7 +37,7 @@ public class Booking {
      */
     private void checkInvariants() {
         Preconditions.checkNotNull(resource, "resource can't be null");
-        Preconditions.checkArgument(user != null, "member name can't be null or empty");
+        Preconditions.checkArgument(user != null, "member can't be null or empty");
         Preconditions.checkNotNull(timeSlot, "TimeSlots can't be null");
     }
 

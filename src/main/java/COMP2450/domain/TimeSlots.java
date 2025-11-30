@@ -35,11 +35,5 @@ public enum TimeSlots {
         return label;
     }
 
-    @Override
-    public String toString() {
-        Preconditions.checkNotNull(label, "label cannot be null");
-        Preconditions.checkArgument(!label.isEmpty(), "label cannot be empty");
-        return label;
-    }
 
 }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class BookResource {
 
-    /** The booking details for this resource. */
+    /** The booking record stored in this object. */
     private final Booking booking;
 
     /** Shared list of all active bookings in the system. */

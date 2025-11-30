@@ -62,7 +62,7 @@ public class Library {
 
     /** Add a media item (book/movie) to this library.
      *
-     * @param media the media to be added to the resources list (must not be null)
+     * @param media the media to be added to the media list (must not be null)
      */
     public void addMedia(MediaInterface media) {
         checkInvariants();
@@ -147,7 +147,7 @@ public class Library {
 
     /**
      * Find and return a media item by ID.
-     * Prints a message if not found and returns null.
+     * if not found returns null.
      * @param mediaId the ID we are searching for (cant be less than 1)
      * @return media object
      */

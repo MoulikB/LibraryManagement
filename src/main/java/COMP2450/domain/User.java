@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 /*
  * User
  * A registered library member with a unique ID, username, fines,
- * issued items, and a history of written reviews.
+ * and issued items
  */
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +25,10 @@ public class User {
     private final List<MediaInterface> itemsIssued = new ArrayList<>(); // media IDs issued
 
     /**
-     * Create a new User and add it to the shared user database.
+     * Create a new User
      * @param email the email of the yser (email can't be empty or null)
      * @param id the ID of the user (has to be greater than 0)
-     * @param phone the phone number of the user (has to be greater than 0)
+     * @param phone the phone number of the user (has to be a not null and non-empty string)
      * @param username the name of the yser (name can't be empty or null)
      * If checks pass, the user is registered in userDB.
      */
@@ -86,7 +86,7 @@ public class User {
      * Compare two users for equality.
      * @param otherUser the other user being compared to. ( can not be null)
      * - Returns true if they are the same object.
-     * - Otherwise, returns true if their IDs are equal.
+     * - Otherwise, returns true if their userNames are equal.
      * @return whether the users or equal
      */
     public boolean equals(User otherUser) {

@@ -9,8 +9,7 @@ import java.util.List;
 
 /**
  * StudyRoom
- * A room resource located in a library, identified by room number,
- * and maintaining non-overlapping bookings.
+ * A room resource located in a library, identified by room number
  */
 
 public class StudyRoom implements Resource {

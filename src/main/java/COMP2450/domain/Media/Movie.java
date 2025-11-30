@@ -29,7 +29,7 @@ public class Movie implements MediaInterface {
 
 
     /**
-     * Constructor: makes a new Movie and adds it to the given library.
+     * Constructor: makes a new Movie
      * @param library the library object this movie currently belongs to (can't be null)
      * @param genre the genre of the movie (can't be null)
      * @param director the director of the movie (can't be null)
@@ -87,7 +87,6 @@ public class Movie implements MediaInterface {
 
     /**
      * Borrow one copy.
-     * and add a copy to the list of all users who have borrowed it
      */
     public void borrowMedia(User user) {
         checkInvariants();

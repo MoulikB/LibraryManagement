@@ -7,8 +7,7 @@ import java.util.List;
 
 /**
  * Resource
- * Interface for in library bookable resources : study rooms or computers,
- * providing naming and booking availability checks.
+ * Interface for in library bookable resources : study rooms or computers
  */
 
 public interface Resource {

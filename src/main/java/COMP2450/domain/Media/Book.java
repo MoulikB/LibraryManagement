@@ -92,7 +92,6 @@ public class Book implements MediaInterface {
 
     /**
      * Borrow one copy.
-     * and add a copy to the list of all users who have borrowed it
      */
     public void borrowMedia(User user) {
         Preconditions.checkArgument(user != null, "user can't be null");
@@ -102,7 +101,7 @@ public class Book implements MediaInterface {
     }
 
     /**
-     * Try to return one copy.
+     * Return one copy.
      */
     public void returnMedia () {
         checkInvariants();

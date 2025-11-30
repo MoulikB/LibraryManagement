@@ -9,8 +9,7 @@ import java.util.List;
 
 /**
  * Computer
- * A computer resource located in a library, identified by computer ID,
- * and maintaining non-overlapping bookings.
+ * A computer resource located in a library, identified by computer ID
  */
 
 public class Computer implements Resource {

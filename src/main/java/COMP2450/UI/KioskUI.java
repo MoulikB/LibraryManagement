@@ -385,7 +385,7 @@ public class KioskUI {
                 System.out.println("Enter a star rating out of 10: ");
                 int rating = inputValidation.getIntInput();
 
-                new Review(user, media, comment, rating);
+                media.addReview(new Review(user, media, comment, rating));
                 System.out.println("Review has been successfully added.");
             }
         }

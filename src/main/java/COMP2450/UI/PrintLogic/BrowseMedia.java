@@ -1,7 +1,6 @@
-package COMP2450.logic;
+package COMP2450.UI.PrintLogic;
 
 import COMP2450.domain.Library;
-import COMP2450.UI.PrintLogic.PrintMedia;
 import com.google.common.base.Preconditions;
 
 /**
@@ -73,6 +72,7 @@ public class BrowseMedia {
      */
     public void searchMedia(String toSearch) {
         Preconditions.checkNotNull(toSearch, "ToSearch cannot be null");
+        System.out.println("Here is all the movies by " + toSearch + " available at this library: \n");
         for (var media : library.getMediaAvailable()) {
             if (media.getTitle().toLowerCase().contains(toSearch.toLowerCase())) {
                 PrintMedia.printMedia(media);

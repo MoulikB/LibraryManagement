@@ -6,13 +6,8 @@ import com.google.common.base.Preconditions;
 /**
  * RegisterUser
  * Handles user creation, validation, and addition to the user database.
- * No user input or printing occurs here.
  */
 public class RegisterUser {
-
-
-
-    public RegisterUser() {}
 
     /**
      * Validates input and creates a new user if possible.
@@ -21,6 +16,7 @@ public class RegisterUser {
      * @param password The desired password
      * @param email The user's email address
      * @param phone The user's phone number
+     * @param userManagement the user manager responsible for storing users
      * @return A User object if registration is successful, null otherwise
      */
     public User createUser(String username, String password, String email, String phone , UserManagement userManagement) {

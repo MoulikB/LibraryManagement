@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 /**
  * Waitlist
  * Handles adding users to a media item's waitlist.
- * If the user is already on the list, no changes are made.
+ * If the user is already on the list, throws an exception
  */
 public class Waitlist {
 
@@ -20,11 +20,11 @@ public class Waitlist {
 
     /**
      * Adds a user to the waitlist for a specific media item,
-     * if they are not already on it. This method runs silently
-     * — it does not print any confirmation messages.
+     * if they are not already on it.
      *
      * @param media the media item to add the user to
      * @param user  the user requesting to be added
+     * @throws WaitListedAlready if already present in waitlist
      */
     private void waitlistUser(MediaInterface media, User user) throws WaitListedAlready {
         Preconditions.checkNotNull(media, "Media cannot be null");

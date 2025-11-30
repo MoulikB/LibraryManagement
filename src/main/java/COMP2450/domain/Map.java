@@ -13,8 +13,7 @@ public class Map {
     private final char[][] map;
 
     /**
-     Constructor : Creates map, we are using a default map
-
+     Constructor : Creates map
      */
     public Map(char[][] map) {
         Preconditions.checkNotNull(map);

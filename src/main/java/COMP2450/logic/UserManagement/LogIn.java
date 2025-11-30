@@ -22,6 +22,7 @@ public class LogIn {
      * Authenticates a username/password combination against stored users.
      * @param username input username
      * @param password input password
+     * @param userManagement the user manager containing registered users
      * @return User object if credentials match, otherwise null
      */
     public static User authenticate(String username, String password , UserManagement userManagement) {

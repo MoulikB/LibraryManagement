@@ -7,13 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UserManagement
- * Manages the system’s USERS, allowing creation, removal, lookup,
- * and listing of all registered members.
+ Stores and manages the list of registered users.
+ Adds users, c hecks if a username exists, and generates user IDs
  */
 
 public class UserManagement {
-    private final List<User> USERS = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
     private static int nextID = 1;
 
     /**
@@ -27,7 +26,7 @@ public class UserManagement {
         boolean output = false;
         boolean exists = userExistsBoolean(user.getUsername());
         if (!exists) {
-            USERS.add(user);
+            users.add(user);
             output = true; // user successfully added
         }
         return output; // user already existed
@@ -37,11 +36,11 @@ public class UserManagement {
      * Check the invariants for our domain model object and throw an error if violated
      */
     public void checkInvariants() {
-        Preconditions.checkNotNull(USERS);
+        Preconditions.checkNotNull(users);
     }
 
     public List<User> getUsers() {
-        return USERS;
+        return users;
     }
 
     /**
@@ -54,8 +53,8 @@ public class UserManagement {
         Preconditions.checkArgument(username != null && !username.isEmpty(), "Invalid ID");
         boolean userExists = false;
         int i = 0;
-        while (!userExists && i < USERS.size()) {
-            if (USERS.get(i).getUsername().equals(username)) {
+        while (!userExists && i < users.size()) {
+            if (users.get(i).getUsername().equals(username)) {
                 userExists = true;
             }
             i++;
