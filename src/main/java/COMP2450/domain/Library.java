@@ -24,7 +24,6 @@ public class Library {
      * @param name the name of the library (checks that the name is not null)
      * - creates empty media/resources lists
      * - creates a Map for this library
-     * - registers this library in LibraryManagement
      */
     public Library(String name) {
         Preconditions.checkArgument(name!=null && !name.isEmpty(), "Library name cannot be null or empty");
