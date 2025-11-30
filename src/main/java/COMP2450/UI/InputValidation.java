@@ -1,5 +1,7 @@
 package COMP2450.UI;
 
+import com.google.common.base.Preconditions;
+
 import java.util.Scanner;
 
 /**
@@ -13,7 +15,9 @@ public class InputValidation {
     private final Scanner scnr;
 
     public InputValidation(Scanner scnr) {
+        Preconditions.checkNotNull(scnr);
         this.scnr = scnr;
+        Preconditions.checkNotNull(this.scnr);
     }
 
     /**
@@ -22,12 +26,14 @@ public class InputValidation {
      * @return the line of text entered by the user
      */
     public String getStringInput() {
+        Preconditions.checkNotNull(scnr);
         String input;
         input = scnr.nextLine();
         while (input.isEmpty()) {
-            System.out.println("Please enter a valid non empty string : ");
+            System.out.println("Please enter a valid non empty and not null string : ");
             input = scnr.nextLine();
         }
+        Preconditions.checkNotNull(scnr);
         return input;
     }
 
@@ -37,6 +43,7 @@ public class InputValidation {
      * @return the integer entered by the user
      */
     public int getIntInput() {
+        Preconditions.checkNotNull(scnr);
         while (true) {
             String s = scnr.nextLine().trim();
             try {
@@ -48,8 +55,9 @@ public class InputValidation {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException e) {
-                System.out.print("Enter a valid integer: ");
+                System.out.print("Enter a valid integer greater than 0: ");
             }
         }
+
     }
 }
