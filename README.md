@@ -47,8 +47,6 @@ classDiagram
     class Map {
         -map: char[][]
         +Map(library: Library)
-        +printMap() void
-        +library: Library
     }
 
     Library "1" *-- "1" Map : layout  %% composition (Map exists for one Library)
@@ -601,24 +599,25 @@ The following diagram shows the flow for the `Kiosk` interface
 This flow illustrates how users navigate between menus —
 
 ```mermaid
+%% ========== 1. WELCOME / LOGIN / REGISTER ==========
 flowchart TD
 
-%% ========= WELCOME SCREEN =========
     subgraph WELCOME["WELCOME / LOGIN / REGISTER"]
-        start[[Start Kiosk]]
-        login[[Log In]]
-        register[[Register New User]]
+        start([Start Kiosk])
+        login[Log In]
+        register[Register New User]
         login_result{Valid credentials?}
         register_result{Registration successful?}
-        simulate[[Simulate +1 Day on Login]]
-        home[[Main Menu]]
-        exit[[Exit Program]]
-
-        login_error[[Invalid Credentials]]
-        register_error[[Registration Failed]]
+        simulate[Simulate +1 Day]
+        home[Go to Main Menu]
+        exit([Exit Program])
+        login_error[Show 'Invalid Credentials']
+        register_error[Show 'Registration Failed']
 
         start --> login
         start --> register
+        start --> exit
+
         login --> login_result
         login_result -- Yes --> simulate --> home
         login_result -- No --> login_error --> login
@@ -626,184 +625,184 @@ flowchart TD
         register --> register_result
         register_result -- Yes --> simulate --> home
         register_result -- No --> register_error --> register
-
-        start --> exit
     end
 
-%% ========= MAIN MENU =========
-    subgraph MAIN["USER MAIN MENU"]
-        home --> browse[[Browse Media]]
-        home --> borrow[[Borrow Media]]
-        home --> returnm[[Return Media]]
-        home --> viewres[[View Resources]]
-        home --> bookres[[Book a Resource]]
-        home --> map[[Find Path on Map]]
-        home --> media_map[[Find Media on Map]]
-        home --> check_fine[[Check Fines]]
-        home --> pay_fine[[Pay Fines]]
-        home --> logout[[Log Out]]
+
+
+%% ========== 2. MAIN MENU ==========
+
+    subgraph MAIN_MENU["MAIN MENU"]
+        home2[Main Menu]
+
+        home2 --> browse[Browse Media]
+        home2 --> borrow[Borrow Media]
+        home2 --> returnm[Return Media]
+        home2 --> viewres[View Resources]
+        home2 --> bookres[Book a Resource]
+        home2 --> map[Find Path on Map]
+        home2 --> media_map[Find Media on Map]
+        home2 --> check_fine[Check Fines]
+        home2 --> pay_fine[Pay Fines]
+        home2 --> logout[Log Out]
     end
 
-%% ========= MEDIA BROWSING =========
-    subgraph BROWSE_MEDIA["Browse Media Options"]
-        browse --> all[[Browse All Media]]
-        browse --> movies[[Browse All Movies]]
-        browse --> books[[Browse All Books]]
-        browse --> director[[View by Director]]
-        browse --> author[[View by Author]]
-        browse --> title[[Search by Title]]
-        browse --> back1[[Back to Main Menu]]
 
-        title --> title_error[[Title Not Found]]
-        title_error --> browse
 
-        back1 --> home
+%% ========== 3. BROWSE MEDIA ==========
+
+
+    subgraph BROWSE_MEDIA["BROWSE MEDIA"]
+        browse2[Browse Media]
+
+        browse2 --> all[Browse All Media]
+        browse2 --> movies[Browse All Movies]
+        browse2 --> books[Browse All Books]
+        browse2 --> director[View by Director]
+        browse2 --> author[View by Author]
+
+        browse2 --> title_search[Search by Title]
+        title_search --> title_found{Title found?}
+        title_found -- No --> title_error[Show 'Title Not Found'] --> browse2
+        title_found -- Yes --> title_show[Display Matching Media] --> browse2
     end
 
-%% ========= BORROW MEDIA =========
-    subgraph BORROW_MEDIA["Borrow Media Flow"]
-        borrow --> find_media[[Enter Media ID]]
-        find_media --> id_valid{Media ID Valid?}
 
-        invalid_id[[Invalid Media ID]]
-        id_valid -- No --> invalid_id --> borrow
 
-        id_valid -- Yes --> available{Available?}
-        available -- Yes --> borrow_success[[Borrow Successful]]
+%% ========== 4. BORROW MEDIA ==========
 
-        available -- No --> waitlist_choice{Join Waitlist?}
-        waitlist_choice -- Yes --> waitlist_added[[Added to Waitlist]]
-        waitlist_choice -- No --> waitlist_declined[[Not Added]]
 
-        borrow_success --> borrow_return[[Return to Main Menu]]
-        waitlist_added --> borrow_return
-        waitlist_declined --> borrow_return
-        borrow_return --> home
+    subgraph BORROW_MEDIA["BORROW MEDIA"]
+        borrow2[Borrow Media]
+
+        borrow2 --> find_media[Enter Media ID]
+        find_media --> id_valid{Media ID valid?}
+
+        id_valid -- No --> invalid_id[Show 'Invalid Media ID'] --> borrow2
+
+        id_valid -- Yes --> available{Media available?}
+
+        available -- Yes --> borrow_success[Borrow Successful]
+
+        available -- No --> waitlist_choice{Join waitlist?}
+        waitlist_choice -- Yes --> waitlist_added[Added to Waitlist]
+        waitlist_choice -- No --> waitlist_declined[Not Added]
     end
 
-%% ========= RETURN MEDIA =========
-    subgraph RETURN_MEDIA["Return Media Flow"]
-        returnm --> show_borrowed[[Show Borrowed Media]]
-        show_borrowed --> enter_id[[Enter Media ID]]
-        enter_id --> valid_return{Valid Return?}
 
-        invalid_return[[Media Not Issued / Invalid Return]]
-        valid_return -- No --> invalid_return --> returnm
 
-        valid_return -- Yes --> confirm_return[[Return Media]]
+%% ========== 5. RETURN MEDIA ==========
 
-        confirm_return --> review_prompt[[Leave a Review?]]
-        review_prompt -- Yes --> review_yes[[Add Comment and Rating]]
-        review_prompt -- No --> skip_review[[Skip Review]]
-        review_yes --> review_done[[Review Submitted]]
-        review_done --> return_return[[Return to Main Menu]]
-        skip_review --> return_return
-        return_return --> home
+    subgraph RETURN_MEDIA["RETURN MEDIA"]
+        returnm2[Return Media]
+
+        returnm2 --> show_borrowed[Show Borrowed Media]
+        show_borrowed --> enter_id[Enter Media ID]
+        enter_id --> valid_return{Return valid?}
+
+        valid_return -- No --> invalid_return[Show 'Invalid Return'] --> returnm2
+
+        valid_return -- Yes --> confirm_return[Return Confirmed]
+
+        confirm_return --> review_prompt{Leave a review?}
+        review_prompt -- Yes --> review_yes[Submit Review]
+        review_prompt -- No --> skip_review[Skip Review]
     end
 
-%% ========= RESOURCES & BOOKINGS =========
-    subgraph BOOKING["Book Library Resources"]
-        bookres --> resource_name[[Enter Resource Name]]
-        resource_name --> exists{Resource Exists?}
 
-        no_res[[Resource Not Found]]
-        exists -- No --> no_res --> return_booking2[[Return to Main Menu]] --> home
 
-        exists -- Yes --> resource_menu[[Resource Options]]
+%% ========== 6. RESOURCE BOOKING ==========
 
-        resource_menu --> today[[Book for Today]]
-        resource_menu --> future[[Book for Future Date <= 2 Weeks]]
-        resource_menu --> two_week[[View All Available 2 Weeks]]
-        resource_menu --> nextx[[Next X Available After Time]]
-        resource_menu --> range[[View in Date Range]]
-        resource_menu --> back2[[Back to Main Menu]]
 
-        today --> booking_conflict_today{Conflict?}
-        booking_error_today[[Time Slot Already Booked]]
-        booking_conflict_today -- Yes --> booking_error_today --> return_booking
-        booking_conflict_today -- No --> confirm_today[[Confirm Booking]]
+    subgraph BOOKING["RESOURCE BOOKING"]
+        bookres2[Book Resource]
 
-        future --> booking_conflict_future{Conflict?}
-        booking_error_future[[Time Slot Already Booked]]
-        booking_conflict_future -- Yes --> booking_error_future --> return_booking
-        booking_conflict_future -- No --> confirm_future[[Confirm Booking]]
+        bookres2 --> resource_name[Enter Resource Name]
+        resource_name --> exists{Resource exists?}
 
-        confirm_today --> return_booking
-        confirm_future --> return_booking
-        two_week --> return_booking
-        nextx --> return_booking
-        range --> return_booking
-        back2 --> return_booking
+        exists -- No --> no_res[Show 'Resource Not Found']
 
-        return_booking --> home
+        exists -- Yes --> resource_menu[Show Booking Options]
+
+        resource_menu --> today[Book Today]
+        resource_menu --> future[Book Future Date]
+        resource_menu --> two_week[View 2 Weeks Availability]
+        resource_menu --> nextx[Next X Available]
+        resource_menu --> range[View in Date Range]
+        resource_menu --> back2[Back]
+
+        today --> conflict_today{Conflict?}
+        conflict_today -- Yes --> booked_today_err[Slot Already Booked]
+        conflict_today -- No --> confirm_today[Booking Confirmed]
+
+        future --> conflict_future{Conflict?}
+        conflict_future -- Yes --> booked_future_err[Slot Already Booked]
+        conflict_future -- No --> confirm_future[Booking Confirmed]
     end
 
-%% ========= MAP PATHFINDER =========
-    subgraph MAP["Library Map Pathfinder"]
-        map --> dest[[Choose Destination Symbol]]
-        dest --> valid_dest{Valid Destination?}
-        invalid_dest[[Invalid Destination Symbol]]
-        valid_dest -- No --> invalid_dest --> map
 
-        valid_dest -- Yes --> path_found{Path Found?}
-        path_found -- Yes --> show_path[[Display Path]]
-        path_found -- No --> show_error[[No Path Found]]
 
-        show_path --> return_map[[Return to Main Menu]]
-        show_error --> return_map
-        return_map --> home
+%% ========== 7. MAP PATHFINDER ==========
+  
+
+    subgraph MAP["MAP PATHFINDER"]
+        map2[Find Path]
+
+        map2 --> dest[Choose Destination Symbol]
+        dest --> valid_dest{Symbol valid?}
+
+        valid_dest -- No --> invalid_dest[Invalid Symbol] --> map2
+
+        valid_dest -- Yes --> path_found{Path found?}
+        path_found -- Yes --> show_path[Show Path]
+        path_found -- No --> show_error[No Path Found]
     end
 
-%% ========= FIND MEDIA ON MAP =========
-    subgraph MEDIA_MAP["Find Media on Map"]
-        media_map --> title_input[[Enter Media Title]]
-        title_input --> valid_title{Valid Title?}
 
-        invalid_title[[Invalid Title Entered]]
-        valid_title -- No --> invalid_title --> media_map
 
-        valid_title -- Yes --> found{Media Found?}
-        found -- Yes --> section[[Show Section Symbol and Genre]]
-        found -- No --> not_found[[Media Not Found]]
+%% ========== 8. FIND MEDIA ON MAP ==========
 
-        section --> show_media_path[[Find Path on Map]]
-        show_media_path --> return_media_map[[Return to Main Menu]]
-        not_found --> return_media_map
-        return_media_map --> home
+
+    subgraph MEDIA_MAP["FIND MEDIA ON MAP"]
+        media_map2[Find Media on Map]
+
+        media_map2 --> title_search2[Search by Title]
+        title_search2 --> found{Media found?}
+
+        found -- No --> not_found[Show 'Media Not Found']
+
+        found -- Yes --> section[Show Section Symbol + Genre]
+
+        section --> path_choice{Find path on map?}
+        path_choice -- Yes --> show_media_path[Show Path]
+        path_choice -- No --> no_path[Do Not Show Path]
     end
 
-%% ========= FINES SYSTEM =========
-    subgraph FINES["Check and Pay Fines"]
-        check_fine --> check_issue{Any Media Issued?}
-        check_issue -- No --> no_issue[[No Media Issued]]
-        check_issue -- Yes --> calc_fine[[Calculate Overdue Fines]]
 
-        calc_fine --> fine_amount{Fines Due?}
-        fine_amount -- No --> no_fine[[No Overdue Fines]]
-        fine_amount -- Yes --> due_display[[Display Fine Amount]]
 
-        pay_fine --> pay_prompt[[Enter Payment Details]]
-        pay_prompt --> payment_valid{Valid Payment Info?}
+%% ========== 9. FINES SYSTEM ==========
 
-        payment_invalid[[Invalid Payment Information]]
-        payment_valid -- No --> payment_invalid --> pay_fine
+    
+    subgraph FINES["FINES SYSTEM"]
+        check_fine2[Check Fines]
 
-        payment_valid -- Yes --> pay_result{Payment Successful?}
-        pay_result -- Yes --> return_overdue[[Return Overdue Media]]
-        pay_result -- No --> cancel_pay[[Payment Cancelled]]
+        check_fine2 --> check_issue{Any issued media?}
+        check_issue -- No --> no_issue[Show 'No Media Issued']
+        check_issue -- Yes --> calc_fine[Calculate Fines]
 
-        return_overdue --> fines_cleared[[Clear All Fines]]
+        calc_fine --> fine_amount{Any fines?}
+        fine_amount -- No --> no_fine[Show 'No Fines']
+        fine_amount -- Yes --> due_display[Show Fine Amount]
 
-        fines_cleared --> return_fine[[Return to Main Menu]]
-        cancel_pay --> return_fine
-        no_issue --> return_fine
-        no_fine --> return_fine
-        due_display --> return_fine
-        return_fine --> home
+        pay_fine2[Pay Fines] --> pay_prompt[Enter Payment Info]
+        pay_prompt --> payment_valid{Payment info valid?}
+
+        payment_valid -- No --> payment_invalid[Invalid Payment Info]
+
+        payment_valid -- Yes --> pay_result{Payment successful?}
+        pay_result -- Yes --> return_overdue[Return Overdue Media] --> fines_cleared[Clear All Fines]
+        pay_result -- No --> cancel_pay[Payment Cancelled]
     end
 
-%% ========= LOGOUT =========
-    logout --> WELCOME
 
 
 ```
