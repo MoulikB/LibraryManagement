@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Library {
 
-    private String name;
+    private final String name;
     private final List<MediaInterface> mediaAvailable;
     private final Map map;
     private final List<Resource> resources;
@@ -87,16 +87,6 @@ public class Library {
         return name;
     }
 
-    /** Mutate name of library
-     *
-     * @param name new name of the library (must not be null or empty)
-     */
-    public void setName(String name) {
-        Preconditions.checkArgument(name != null && !name.isEmpty(), "Library name cannot be null or empty");
-        checkInvariants();
-        this.name = name;
-        checkInvariants();
-    }
 
     /** Access the map object
      *
@@ -143,7 +133,6 @@ public class Library {
         checkInvariants();
         return resourceFound;
     }
-
 
     /**
      * Find and return a media item by ID.

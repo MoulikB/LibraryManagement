@@ -25,48 +25,51 @@ Our domain model is a UML class diagram drawn using Mermaid.
 
 ```mermaid
 classDiagram
-%% ===== Core Library =====
+
+%% ===== Library =====
     class Library {
-        -name: String
-        -description: String
-        -mediaAvailable: ArrayList<MediaInterface>
-        -map: Map
-        -resources: ArrayList<Resource>
+        -name String
+        -mediaAvailable List~MediaInterface~
+        -map Map
+        -resources List~Resource~
         +Library(name)
-        +addDescription(description) void
-        +addMedia(media: MediaInterface) void
-        +showMedia(mediaID: int) MediaInterface
-        +removeMedia(mediaID: int) void
-        +printMap() void
-        +getResources() ArrayList<Resource>
-        +addResource(resource: Resource) void
-        +showResource(resourceName: String) void
-        +getName() String
-        +toString() String
+        +addMedia(media)
+        +getMediaAvailable List~MediaInterface~
+        +getResource(resourceName) Resource
+        +addResource(resource)
+        +showMedia(mediaID) MediaInterface
+        +getName String
+        +setName(name)
     }
 
     class Map {
-        -map: char[][]
-        +Map(library: Library)
+        -map char[][]
+        +Map(map)
+        +getMap char[][]
     }
 
-    Library "1" *-- "1" Map : layout  %% composition (Map exists for one Library)
-    Library "1"  --o "0..*" Resource : resources  %% aggregation
-    Library "1" --o "0..*" MediaInterface : catalog  %% aggregation
+    Library *-- Map
+    Library -- MediaInterface
+    Library -- Resource
 
-%% ===== Media hierarchy =====
+
+%% ===== Media =====
     class MediaInterface {
         <<interface>>
-        +getMediaType() String
-        +getCreator() String
-        +getMediaGenre() MediaGenres
-        +borrowMedia() boolean
-        +returnMedia() void
-        +getTitle() String
-        +getMediaID() int
-        +addCopies() void
-        +addReview(review: Review) void
-        +getReviews() ArrayList<Review>
+        +getMediaType String
+        +getCreator String
+        +getMediaGenre MediaGenres
+        +borrowMedia(user)
+        +returnMedia
+        +getTitle String
+        +getMediaID int
+        +addCopies
+        +addReview(review)
+        +getReviews List~Review~
+        +issueUser(user)
+        +addWaitlist(user)
+        +getWaitlist List~User~
+        +removeFromWaitlist(user)
     }
 
     class MediaGenres {
@@ -81,425 +84,268 @@ classDiagram
     }
 
     class Book {
-        -title: String
-        -author: String
-        -publisher: String
-        -mediaID: int
-        -library: Library
-        -genre: MediaGenres
-        -totalCopies: int
-        -issuedDays: int
-        -reviews: List<Review>
-        -currentlyIssuedTo: List<User>
-        -waitlist: List<User>
-        +Book(title: String, author: String, publisher: String, genre: MediaGenres, isbn: int, library: Library)
-        +checkInvariants() void
-        +getMediaType() String
-        +getCreator() String
-        +getMediaGenre() MediaGenres
-        +borrowMedia(user: User) void
-        +returnMedia() void
-        +getTitle() String
-        +getAvailableCopies() int
-        +getLibrary() Library
-        +getMediaID() int
-        +addCopies() void
-        +setLibrary(library: Library) void
-        +mediaExists(media: MediaInterface) boolean
-        +addReview(review: Review) void
-        +getReviews() List<Review>
-        +issueUser(user: User) boolean
-        +addWaitlist(user: User) void
-        +getWaitlist() List<User>
-        +removeFromWaitlist(user: User) void
+        -title String
+        -author String
+        -publisher String
+        -mediaID int
+        -library Library
+        -genre MediaGenres
+        -totalCopies int
+        -issuedDays int
+        -reviews List~Review~
+        -waitlist List~User~
+        +Book(title, author, publisher, genre, isbn, library)
+        +borrowMedia(user)
+        +returnMedia
+        +getMediaType String
+        +getCreator String
+        +getMediaGenre MediaGenres
+        +getTitle String
+        +getAvailableCopies int
+        +getLibrary Library
+        +getMediaID int
+        +addCopies
+        +setLibrary(library)
+        +addReview(review)
+        +getReviews List~Review~
+        +issueUser(user)
+        +addWaitlist(user)
+        +getWaitlist List~User~
+        +removeFromWaitlist(user)
+        +getIssuedDay int
+        +setIssuedDay(num)
     }
 
     class Movie {
-        -title: String
-        -director: String
-        -mediaID: int
-        -library: Library
-        -genre: MediaGenres
-        -issuedDays: int
-        -totalCopies: int
-        -reviews: List<Review>
-        -currentlyIssuedTo: List<User>
-        -waitlist: List<User>
-        +Movie(title: String, director: String, mediaID: int, library: Library, genre: MediaGenres)
-        +checkInvariants() void
-        +getMediaType() String
-        +getCreator() String
-        +getMediaGenre() MediaGenres
-        +borrowMedia(user: User) void
-        +returnMedia() void
-        +getTitle() String
-        +getAvailableCopies() int
-        +getLibrary() Library
-        +getMediaID() int
-        +addCopies() void
-        +mediaExists(media: MediaInterface) boolean
-        +addReview(review: Review) void
-        +getReviews() List<Review>
-        +issueUser(user: User) boolean
-        +addWaitlist(user: User) void
-        +getWaitlist() List<User>
-        +removeFromWaitlist(user: User) void
+        -title String
+        -director String
+        -mediaID int
+        -library Library
+        -genre MediaGenres
+        -issuedDays int
+        -totalCopies int
+        -reviews List~Review~
+        -waitlist List~User~
+        +Movie(title, director, mediaID, library, genre)
+        +borrowMedia(user)
+        +returnMedia
+        +getMediaType String
+        +getCreator String
+        +getMediaGenre MediaGenres
+        +getTitle String
+        +getAvailableCopies int
+        +getLibrary Library
+        +getMediaID int
+        +addCopies
+        +addReview(review)
+        +getReviews List~Review~
+        +issueUser(user)
+        +addWaitlist(user)
+        +getWaitlist List~User~
+        +removeFromWaitlist(user)
+        +getIssuedDay int
+        +setIssuedDay(num)
     }
 
+    MediaInterface <|.. Book
+    MediaInterface <|.. Movie
 
-
-
-    MediaInterface <|.. Book : an instance of
-    MediaInterface <|.. Movie : an instance of
-    Book "1" --> "1" Library : belongs to
-    Movie "1" --> "1" Library : belongs to
-    Book "1" --> "1" MediaGenres : describes
-    Movie "1" --> "1" MediaGenres : describes
 
 %% ===== Reviews =====
     class Review {
-        <<record>>
-        +user: User
-        +media: MediaInterface
-        +comment: String
-        +stars: int
-        +toString() : String
+        +user User
+        +media MediaInterface
+        +comment String
+        +stars int
     }
 
-    User "1" -- "0.." Review : writes >
+    User --> Review
+
 
 %% ===== Users =====
     class User {
-        - username: String
-        - password: String
-        - id: int
-        - email: String
-        - phone: String
-        - finesDue: double
-        - reviewsWritten: List<Review>
-        - itemsIssued: List<MediaInterface>
-        + User(username: String, password: String, id: int, email: String, phone: String)
-        + checkInvariants(): void
-        + getID(): int
-        + getUsername(): String
-        + getEmail(): String
-        + getPhone(): String
-        + addReview(review: Review): void
-        + getReviews(): List<Review>
-        + equals(otherUser: User): boolean
-        + getItemsIssued(): List<MediaInterface>
-        + issue(media: MediaInterface): void
-        + calculateFinesDue(): double
-        + checkBooksFines(): void
-        + checkMovieFines(): void
-        + checkBookFines(book: Book): void
-        + checkMovieFines(movie: Movie): void
-        + getPassword(): String
-        + clearFines(): void
+        -username String
+        -password String
+        -id int
+        -email String
+        -phone String
+        -finesDue double
+        -itemsIssued List~MediaInterface~
+        +User(username, password, id, email, phone)
+        +getID int
+        +getUsername String
+        +getEmail String
+        +getPassword String
+        +getItemsIssued List~MediaInterface~
+        +issue(media)
+        +calculateFinesDue double
+        +checkBooksFines
+        +checkMovieFines
+        +checkBookFines(book)
+        +checkMovieFines(movie)
+        +clearFines
     }
-
 
     class UserManagement {
-        -users: ArrayList<User>
-        +UserManagement()
-        +addUser(user: User) void
-        +removeUser(id: int) void
-        +userExists(id: int) User
-        +getUser(id: int) User
-        +getUsers() String
-        +reset() void
+        -USERS List~User~
+        +addUser(user) boolean
+        +getUsers List~User~
+        +userExistsBoolean(username) boolean
+        +incrementID
+        +getNextID int
     }
-    UserManagement "1" --> "0..*" User : manages  %% aggregation
+
+    UserManagement --> User
 
 
-%% ===== Bookable Resources =====
+%% ===== Resources =====
     class Resource {
         <<interface>>
-        +getResourceName() String
-        +isAvailable(timeSlot: String) boolean
-        +addBooking(booking: Booking) void
+        +getResourceName String
+        +getLibrary Library
+        +markUnavailable(slot)
+        +getUnavailableTimeSlots List~TimeSlots~
     }
 
-
     class StudyRoom {
-        -roomNumber: String
-        -bookings: ArrayList<Booking>
-        -library: Library
-        +StudyRoom(roomNumber: String, library: Library)
-        +getResourceName() String
-        +isAvailable(timeSlot: String) boolean
-        +addBooking(booking: Booking) void
-        +getBookings() ArrayList<Booking>
+        -roomName String
+        -library Library
+        -unavailableTimeSlots List~TimeSlots~
+        +StudyRoom(roomName, library)
+        +getResourceName String
+        +getLibrary Library
+        +markUnavailable(slot)
+        +getUnavailableTimeSlots List~TimeSlots~
     }
 
     class Computer {
-        -computerId: String
-        -bookings: ArrayList<Booking>
-        -library: Library
-        +Computer(computerId: String, library: Library)
-        +getResourceName() String
-        +isAvailable(timeSlot: String) boolean
-        +addBooking(booking: Booking) void
-        +getBookings() ArrayList<Booking>
+        -computerId String
+        -library Library
+        -unavailableTimeSlots List~TimeSlots~
+        +Computer(id, library)
+        +getResourceName String
+        +getLibrary Library
+        +markUnavailable(slot)
+        +getUnavailableTimeSlots List~TimeSlots~
     }
-
-    class TimeSlots {
-        <<utility>>
-        +ONE_HOUR_SLOTS: List<String>
-    }
-
-
-%% ===== Resource & Booking Management =====
-    class Booking {
-        - resource: Resource
-        - user: User
-        - timeSlot: TimeSlot
-        + Booking(resource: Resource, user: User, timeSlot: TimeSlot)
-        + getResource(): Resource
-        + getUser(): User
-        + getTimeSlot(): TimeSlot
-    }
-
-    class BookResource {
-        - booking: Booking
-        - static bookings: List~BookResource~
-        + BookResource(booking: Booking)
-        + checkBooking(): void
-    }
-
-    class BorrowMedia {
-        + issueUser(media: MediaInterface, user: User)
-    }
-
-    class Waitlist {
-        + waitlistUser(media: MediaInterface, user: User): void
-    }
-
-    class TimeSlotSearch {
-        - MAX_DAYS_AHEAD: int
-        + viewNextTwoWeeks(resource: Resource): List~String~
-        + viewInRange(resource: Resource, start: LocalDate, end: LocalDate): List~String~
-        + nextXAvailable(resource: Resource, afterTime: LocalTime, x: int): List~String~
-        - parseStartTime(slot: TimeSlots): LocalTime
-    }
-
-    TimeSlotSearch --> Resource : checks
-    TimeSlotSearch --> TimeSlots : uses
-
-
-
-
-    Waitlist "1" --> "1" MediaInterface : manages
-    Waitlist "1" --> "1" User : addsTo
-
-
-
-    BookResource "1" --> "1" Booking : registers
-    BorrowMedia "1" --> "1" MediaInterface : uses
-    BorrowMedia "1" --> "1" User : issuesTo
-    Booking "1" --> "1" Resource : books
-    Booking "1" --> "1" User : madeBy
-
-
-
 
     Resource <|.. StudyRoom
     Resource <|.. Computer
-    Booking "1" --> "1" Resource : books
-    StudyRoom "1" <-- "0..*" Booking : maintains
-    Computer "1" <-- "0..*" Booking : maintains
-    StudyRoom "1" <-- "1" Library : located at
-    Computer "1" <-- "1" Library : located at
 
-%% ===== User Interface (KioskUI) Layer =====
-    class KioskUI {
-        - library: Library
-        - user: User
-        + showWelcomeScreen(library: Library): User
-        + showUserMenu(library: Library, user: User): boolean
-        - incrementIssuedDaysForAllUsers(): void
-        - browseMedia(library: Library): void
-        - borrowMedia(library: Library, user: User): void
-        - returnMedia(library: Library, user: User): void
-        - viewResources(library: Library): void
-        - bookResource(library: Library, user: User): void
-        - handleBooking(resource: Resource, user: User, date: LocalDate): void
-        - handleFutureBooking(resource: Resource, user: User): void
-        - showNextXAfterTime(resource: Resource): void
-        - showRangeAvailability(resource: Resource): void
-        - findPathOnMap(library: Library): void
-        - findMediaOnMap(library: Library): void
-        - checkFines(user: User): void
-        - payFine(user: User): void
-        - clearFines(user: User): void
-        - promptMenu(options: String[]): int
+
+%% ===== Booking =====
+    class Booking {
+        -resource Resource
+        -user User
+        -timeSlot TimeSlots
+        +Booking(resource, user, timeSlot)
+        +getResource Resource
+        +getUser User
+        +getTimeSlot TimeSlots
     }
 
-    class LogInUI {
-        + promptLogin(): User
+    class BookResource {
+        -booking Booking
+        -bookings List~BookResource~
+        +BookResource(booking)
+        +checkBooking
     }
 
-    class RegisterUserUI {
-        + promptRegister(): User
+    BookResource --> Booking
+
+
+%% ===== Waitlist / Borrow =====
+    class BorrowMedia {
+        +BorrowMedia(user, media)
     }
 
-    KioskUI --> Library : uses
-    KioskUI --> User : activeUser
-    KioskUI --> BorrowMedia : uses
-    KioskUI --> Waitlist : uses
-    KioskUI --> BookResource : uses
-    KioskUI --> LogInUI : uses
-    KioskUI --> RegisterUserUI : uses
-    KioskUI --> Resource : books
-    KioskUI --> PathFinder : navigates
-    KioskUI --> PrintMap : prints
-    KioskUI --> PrintMedia : displays
-    KioskUI --> PrintResource : lists
-    KioskUI --> TimeSlotSearch : checks
-    LogInUI --> UserManagement : validates
-    RegisterUserUI --> UserManagement : registers
-
-%% ===== Pathfinding Subsystem =====
-    class PathFinder {
-        - PATH_CHAR: char
-        - FLOOR_CHAR: char
-        - START_CHAR: char
-        - library: Library
-        - map: char[][]
-        + PathFinder(library: Library)
-        + runForTarget(targetChar: char): boolean
-        - dfsAndMarkPath(start: Coordinate, target: Coordinate): boolean
-        - inBounds(r: int, c: int, rows: int, cols: int): boolean
-        - isWalkable(r: int, c: int, rows: int, cols: int, visited: boolean[][], target: Coordinate): boolean
-        - findChar(ch: char): Coordinate
-        + clearPath(): void
-        + printMap(): void
+    class Waitlist {
+        +Waitlist(media, user)
     }
 
-    class Coordinate {
-        - x: int
-        - y: int
-        + Coordinate(x: int, y: int)
-        + getX(): int
-        + getY(): int
-        + equals(other: Coordinate): boolean
-    }
-
-    class Stack {
-        <<interface>>
-        + push(item: T): void
-        + pop(): Object
-        + size(): int
-        + isEmpty(): boolean
-        + peek(): Object
-    }
-
-    class LinkedListStack {
-        - top: Node<T>
-        - size: int
-        + push(item: T): void
-        + pop(): T
-        + size(): int
-        + isEmpty(): boolean
-        + peek(): T
-    }
-
-    class EmptyStackException {
-        + EmptyStackException(message: String)
-    }
-
-    PathFinder --> Library : uses
-    PathFinder --> Coordinate : uses
-    PathFinder --> LinkedListStack : uses
-    LinkedListStack --> Stack : implements
-    LinkedListStack --> EmptyStackException : throws
+    BorrowMedia --> MediaInterface
+    BorrowMedia --> User
+    Waitlist --> MediaInterface
+    Waitlist --> User
 
 
-
-    class Kiosk {
-        - user : User
-        - library : Library
-        + main(args : String[]) void
-        - runKiosk() void
-        - logout() void
-    }
-
-    Kiosk --> User
-    Kiosk --> Library
-    Kiosk --> UI
-    Kiosk --> LibraryBuilder
-
-    class RegisterUserUI {
-        + promptRegister() User
-    }
-
-    RegisterUserUI --> RegisterUser
-    RegisterUserUI --> InputValidation
-    RegisterUserUI --> User
-    class LogInUI {
-        + promptLogin() User
-    }
-
-    LogInUI --> LogIn
-    LogInUI --> InputValidation
-    LogInUI --> User
-
+%% ===== TimeSlotSearch =====
     class TimeSlotSearch {
-        - MAX_DAYS_AHEAD : int
-        + viewNextTwoWeeks(resource : Resource) List<String>
-        + viewInRange(resource : Resource, start : LocalDate, end : LocalDate) List<String>
-        + nextXAvailable(resource : Resource, afterTime : LocalTime, x : int) List<String>
-        - parseStartTime(slot : TimeSlots) LocalTime
+        -MAX_DAYS_AHEAD int
+        +viewNextTwoWeeks(resource) List~String~
+        +viewInRange(resource, start, end) List~String~
+        +nextXAvailable(resource, afterTime, x) List~String~
+    }
+
+    class TimeSlots {
+        <<enumeration>>
     }
 
     TimeSlotSearch --> Resource
     TimeSlotSearch --> TimeSlots
 
-    class LibraryBuilder {
-        + initializeLibrary() Library
-        - addMedia(library : Library) void
-        - addResources(library : Library) void
-    }
 
-    LibraryBuilder --> Library
-    LibraryBuilder --> Book
-    LibraryBuilder --> Movie
-    LibraryBuilder --> StudyRoom
-    LibraryBuilder --> Computer
-    LibraryBuilder --> MediaGenres
-
-    class BookResource {
-        + booking : Booking
-        + bookings : ArrayList<BookResource>
-        + BookResource(booking : Booking)
-        + checkBooking() void
-    }
-    BookResource --> Booking
-    BookResource --> BookingConflictException
-
-    class BorrowMedia {
-        + issueUser(media : MediaInterface, user : User) void
-    }
-
-    BorrowMedia --> MediaInterface
-    BorrowMedia --> User
-    BorrowMedia --> UnavailableMediaException
-    BorrowMedia --> OverdueMediaException
-
-    class Waitlist {
-        + waitlistUser(media : MediaInterface, user : User) void
-    }
-
-    Waitlist --> MediaInterface
-    Waitlist --> User
+%% ===== Pathfinding =====
     class Coordinate {
-        - x : int
-        - y : int
-        + Coordinate(x : int, y : int)
-        + getX() int
-        + getY() int
-        + equals(other : Coordinate) boolean
+        -x int
+        -y int
+        +Coordinate(x, y)
+        +getX int
+        +getY int
     }
+
+    class LinkedListStack {
+        -top Node
+        -size int
+        +push(item)
+        +pop
+        +size int
+        +isEmpty boolean
+        +peek
+    }
+
+    class EmptyStackException {
+    }
+
+    class PathFinder {
+        -map char[][]
+        +PathFinder(library)
+        +runForTarget(targetChar)
+        +clearPath
+        +getMap char[][]
+    }
+
+    PathFinder --> Coordinate
+    PathFinder --> LinkedListStack
+
+
+%% ===== UI Layer =====
+    class KioskUI {
+        +showWelcomeScreen(library) User
+        +showUserMenu(library, user) boolean
+    }
+
+    class LogInUI {
+        +promptLogin(userManagement) User
+    }
+
+    class RegisterUserUI {
+        +promptRegister(userManagement) User
+    }
+
+    KioskUI --> Library
+    KioskUI --> User
+    KioskUI --> BorrowMedia
+    KioskUI --> Waitlist
+    KioskUI --> BookResource
+    KioskUI --> PathFinder
+    KioskUI --> PrintMap
+    KioskUI --> PrintMedia
+    KioskUI --> PrintResource
+    KioskUI --> TimeSlotSearch
+    LogInUI --> UserManagement
+    RegisterUserUI --> UserManagement
+
 
 
 
