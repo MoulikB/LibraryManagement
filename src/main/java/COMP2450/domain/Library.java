@@ -30,7 +30,23 @@ public class Library {
         this.name = name;
         this.mediaAvailable = new ArrayList<>();
         this.resources = new ArrayList<>();
-        map = new Map();
+        map = new Map(new char[][]{ // Map is currently fixed to this character array, could be edited to allow various other types
+                "+---------------------------------------+".toCharArray(),
+                "| L                                    D|".toCharArray(),
+                "| L                                     |".toCharArray(),
+                "| H             C            A          |".toCharArray(),
+                "| R             T            F          |".toCharArray(),
+                "| N             P            3          |".toCharArray(),
+                "|                                       |".toCharArray(),
+                "|                                       |".toCharArray(),
+                "|                                       |".toCharArray(),
+                "|               K                       |".toCharArray(),
+                "|                                       |".toCharArray(),
+                "|                  |~~~~~~~|            |".toCharArray(),
+                "|                  | Desk  |            |".toCharArray(),
+                "|                  |_______|            |".toCharArray(),
+                "+---------------------------------------+".toCharArray()
+        });
         checkInvariants();
     }
 

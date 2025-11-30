@@ -16,24 +16,10 @@ public class Map {
      Constructor : Creates map, we are using a default map
 
      */
-    public Map() {
-        map = new char[][]{
-                "+---------------------------------------+".toCharArray(),
-                "| L                                    D|".toCharArray(),
-                "| L                                     |".toCharArray(),
-                "| H             C            A          |".toCharArray(),
-                "| R             T            F          |".toCharArray(),
-                "| N             P            3          |".toCharArray(),
-                "|                                       |".toCharArray(),
-                "|                                       |".toCharArray(),
-                "|                                       |".toCharArray(),
-                "|               K                       |".toCharArray(),  // K on open floor
-                "|                                       |".toCharArray(),
-                "|                  |~~~~~~~|            |".toCharArray(),
-                "|                  | Desk  |            |".toCharArray(),
-                "|                  |_______|            |".toCharArray(),
-                "+---------------------------------------+".toCharArray()
-        };
+    public Map(char[][] map) {
+        Preconditions.checkNotNull(map);
+        Preconditions.checkArgument(map.length > 0 && map[0].length > 0, "Map cannot be empty");
+        this.map = map;
     }
 
     /**
