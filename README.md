@@ -210,16 +210,6 @@ classDiagram
     }
     UserManagement "1" --> "0..*" User : manages  %% aggregation
 
-%% ===== Libraries collection =====
-    class LibraryManagement {
-        +libraries: ArrayList<Library>
-        +addLIbrary(library: Library) void
-        +getLibraries() ArrayList<Library>
-        +findLibrary(name: String) Library
-        +reset() void }
-
-
-    LibraryManagement "1" --> "0..*" Library : catalogs
 
 %% ===== Bookable Resources =====
     class Resource {
@@ -567,9 +557,6 @@ classDiagram
 <li>users != null</li>\n    
 <li>loop: all user IDs are unique</li>\n</ul>"
 
-    note for LibraryManagement "Invariant properties:\n<ul>\n    
-<li>libraries != null</li>\n    
-<li>loop: all libraries have unique names</li>\n</ul>"
 
     note for StudyRoom "Invariant properties:\n<ul>\n    
 <li>roomNumber != null</li>\n    
