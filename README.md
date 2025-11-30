@@ -351,81 +351,133 @@ classDiagram
 
 
 %% ===== Invariant properties  =====
-    note for LogInUI "Invariant properties:\n- Username and password must not be blank or null "
-    note for BookResource "Invariant properties:\n- booking != null for all instances.\n- No two bookings share the same resource/time slot."
-    note for Kiosk "Invariant properties:\n- library != null after initialization\n- user == null or valid User\n"
-    note for LibraryBuilder "Invariant properties:\n- Returned Library is never null.\n- All media/resources added are valid.\n"
-    note for BorrowMedia "Invariant properties:\n- media != null and user != null."
-    note for Coordinate "Invariant properties:\n- x, y immutable after construction.\n- x >= 0 and y >= 0"
-    note for Library "Invariant properties:\n<ul>\n    
-<li>name != null</li>\n    
-<li>name.length() > 0</li>\n    
-<li>description != null</li>\n    
-<li>mediaAvailable != null</li>\n    
-<li>resources != null</li>\n    
-<li>map != null</li>\n    
-<li>loop: all mediaAvailable items are unique (no duplicate object references)</li>\n    
-<li>loop: all resources have unique names</li>\n</ul>"
 
-    note for Map "Invariant properties:\n<ul>\n    
-<li>map != null</li>\n    
-<li>library != null</li>\n</ul>"
+    note for LogInUI "
+Invariant properties:
+- Username and password must not be null or blank when attempting login
+"
 
-    note for Book "Invariant properties:\n<ul>\n    
-<li>title != null</li>\n   
-<li>author != null</li>\n    
-<li>publisher != null</li>\n    
-<li>library != null</li>\n    
-<li>genre != null</li>\n    
-<li>totalCopies >= 0</li>\n</ul>"
+    note for BookResource "
+Invariant properties:
+- booking != null
+- No two bookings share the same resource + timeSlot
+"
 
-    note for Movie "Invariant properties:\n<ul>\n    
-<li>title != null</li>\n    
-<li>director != null</li>\n    
-<li>library != null</li>\n    
-<li>genre != null</li>\n   
- <li>totalCopies >= 0</li>\n</ul>"
+    note for Kiosk "
+Invariant properties:
+- library != null after initialization
+- user is either null (logged out) or a valid User
+"
 
-    note for Review "Invariant properties:\n<ul>\n    
-<li>user != null</li>\n    
-<li>media != null</li>\n    
-<li>comment != null</li>\n    
-<li>stars >= 1 && stars <= 10</li>\n</ul>"
+    note for LibraryBuilder "
+Invariant properties:
+- Returned Library is never null
+- All media and resources added are valid and non-null
+"
 
-    note for User "Invariant properties:\n<ul>\n    
-<li>username != null</li>\n    
-<li>username.length() > 0</li>\n    
-<li>id > 0</li>\n   
-<li>finesDue >= 0</li>\n    
-<li>itemsIssued != null</li>\n    
-<li>loop: all issued item IDs are valid</li>\n</ul>"
+    note for BorrowMedia "
+Invariant properties:
+- media != null
+- user != null
+"
 
-    note for UserManagement "Invariant properties:\n<ul>\n    
-<li>users != null</li>\n    
-<li>loop: all user IDs are unique</li>\n</ul>"
+    note for Coordinate "
+Invariant properties:
+- x >= 0
+- y >= 0
+- x and y never change after construction
+"
 
+    note for Library "
+Invariant properties:
+- name != null and name length > 0
+- mediaAvailable != null
+- resources != null
+- map != null
+- All media items stored are non-null
+- All resources stored are non-null and have unique names
+"
 
-    note for StudyRoom "Invariant properties:\n<ul>\n    
-<li>roomNumber != null</li>\n    
-<li>bookings != null</li>\n    
-<li>library != null</li>\n   
-<li>loop: each timeSlot appears at most once in bookings</li>\n</ul>"
+    note for Map "
+Invariant properties:
+- map != null
+- map has at least one row and one column
+"
 
-    note for Computer "Invariant properties:\n<ul>\n    
-<li>computerId != null</li>\n    
-<li>bookings != null</li>\n    
-<li>library != null</li>\n    
-<li>loop: each timeSlot appears at most once in bookings</li>\n</ul>"
+    note for Book "
+Invariant properties:
+- title != null
+- author != null
+- publisher != null
+- genre != null
+- library != null
+- totalCopies >= 0
+- waitlist != null
+- reviews != null
+"
 
-    note for Booking "Invariant properties:\n<ul>\n    
-<li>resource != null</li>\n    
-<li>memberName != null && memberName.length() > 0</li>\n    
-<li>timeSlot != null</li>\n    
-<li>timeSlot ∈ TimeSlots.ONE_HOUR_SLOTS</li>\n</ul>"
+    note for Movie "
+Invariant properties:
+- title != null
+- director != null
+- genre != null
+- library != null
+- totalCopies >= 0
+- waitlist != null
+- reviews != null
+"
 
-    note for TimeSlots "Invariant properties:\n<ul>\n    
-<li>ONE_HOUR_SLOTS != null</li>\n    
-<li>loop: all time slots are valid and unique</li>\n</ul>"
+    note for Review "
+Invariant properties:
+- user != null
+- media != null
+- comment != null
+- 1 <= stars <= 10
+"
+
+    note for User "
+Invariant properties:
+- username != null and not empty
+- password != null and not empty
+- id > 0
+- email != null and not empty
+- phone != null and not empty
+- finesDue >= 0
+- itemsIssued != null
+"
+
+    note for UserManagement "
+Invariant properties:
+- USERS != null
+- All usernames stored are unique
+"
+
+    note for StudyRoom "
+Invariant properties:
+- roomName != null and not empty
+- library != null
+- unavailableTimeSlots != null
+"
+
+    note for Computer "
+Invariant properties:
+- computerId != null and not empty
+- library != null
+- unavailableTimeSlots != null
+"
+
+    note for Booking "
+Invariant properties:
+- resource != null
+- user != null
+- timeSlot != null
+"
+
+    note for TimeSlots "
+Invariant properties:
+- each enum value has a non-null, non-empty label
+"
+
 
 ``` 
 
