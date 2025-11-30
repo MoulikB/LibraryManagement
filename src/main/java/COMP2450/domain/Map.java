@@ -41,6 +41,8 @@ public class Map {
      * cannot mutate internal state.
      */
     public char[][] getMap() {
+        Preconditions.checkNotNull(map, "Map cannot be null");
+        Preconditions.checkArgument(map.length>0, "Map has not been initialized");
         char[][] copy = new char[map.length][];
         for (int i = 0; i < map.length; i++) {
             copy[i] = map[i].clone();

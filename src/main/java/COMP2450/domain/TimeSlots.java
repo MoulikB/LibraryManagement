@@ -21,6 +21,8 @@ public enum TimeSlots {
     private final String label;
 
     TimeSlots(String label) {
+        Preconditions.checkNotNull(label, "label cannot be null");
+        Preconditions.checkArgument(!label.isEmpty(), "label cannot be empty");
         this.label = label;
     }
 
@@ -28,28 +30,16 @@ public enum TimeSlots {
      * @return A human-readable label for this time slot (e.g., "09:00–10:00").
      */
     public String getLabel() {
+        Preconditions.checkNotNull(label, "label cannot be null");
+        Preconditions.checkArgument(!label.isEmpty(), "label cannot be empty");
         return label;
     }
 
     @Override
     public String toString() {
+        Preconditions.checkNotNull(label, "label cannot be null");
+        Preconditions.checkArgument(!label.isEmpty(), "label cannot be empty");
         return label;
     }
 
-    /**
-     * Converts a string to the matching TimeSlots value, ignoring case and spacing.
-     * @param input A string label or enum name (can not be null)
-     * @return The matching TimeSlots constant, or null if none match.
-     */
-    public TimeSlots fromString(String input) {
-        Preconditions.checkArgument(input != null && !input.isEmpty(), "Input cannot be null or empty");
-        TimeSlots outputSlot = null;
-        for (TimeSlots slot : TimeSlots.values()) {
-            if (slot.name().equalsIgnoreCase(input.trim())
-                    || slot.label.equalsIgnoreCase(input.trim())) {
-                outputSlot = slot;
-            }
-        }
-        return outputSlot;
-    }
 }

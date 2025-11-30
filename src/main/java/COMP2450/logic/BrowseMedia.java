@@ -11,13 +11,13 @@ import com.google.common.base.Preconditions;
  */
 public class BrowseMedia {
 
+    /** Reference to the active library instance. */
+    private final Library library;
+
     public BrowseMedia(Library library) {
         Preconditions.checkNotNull(library, "Library cannot be null");
         this.library = library;
     }
-
-    /** Shared reference to the active library instance. */
-    private Library library;
 
     /**
      * Displays all media items available in the current library.

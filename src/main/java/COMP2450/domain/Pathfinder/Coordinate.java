@@ -41,14 +41,4 @@ public class Coordinate {
         return y;
     }
 
-    /**
-     * Checks if this coordinate is equal to another coordinate.
-     * Two coordinates are equal if they have the same x and y values.
-     *
-     * @param other the coordinate to compare to
-     * @return true if both coordinates have the same x and y values, false otherwise
-     */
-    public boolean equals(Coordinate other) {
-        return this.x == other.x && this.y == other.y;
-    }
 }

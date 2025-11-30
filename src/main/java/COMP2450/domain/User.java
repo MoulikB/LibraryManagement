@@ -5,7 +5,7 @@ import COMP2450.domain.Media.MediaInterface;
 import COMP2450.domain.Media.Movie;
 import com.google.common.base.Preconditions;
 
-/**
+/*
  * User
  * A registered library member with a unique ID, username, fines,
  * issued items, and a history of written reviews.
@@ -20,7 +20,6 @@ public class User {
     private final int id;
     private final String email;
     private final String phone;
-    private final List<Review> reviewsWritten;
 
     private double finesDue;  // how much is owed (if any)
     private final List<MediaInterface> itemsIssued = new ArrayList<>(); // media IDs issued
@@ -46,7 +45,6 @@ public class User {
         this.email = email;
         this.phone = phone;
         checkInvariants();
-        reviewsWritten = new ArrayList<>();
     }
 
     /**
@@ -84,32 +82,6 @@ public class User {
         return this.email;
     }
 
-    /** Get the user's phone
-     *
-     * @return phone
-     */
-    public String getPhone() {
-        return this.phone;
-    }
-
-    /** Add a review
-     *
-     * @param review the reviews that belong to this user
-     */
-    public void addReview(Review review) {
-        Preconditions.checkNotNull(review);
-        checkInvariants();
-        reviewsWritten.add(review);
-        checkInvariants();
-    }
-
-    /** Return lists of reviews
-     *
-     * @return list of reviews
-     */
-    public List<Review> getReviews() {
-        return reviewsWritten;
-    }
 
     /**
      * Compare two users for equality.

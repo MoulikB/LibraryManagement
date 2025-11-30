@@ -24,9 +24,8 @@ public class Movie implements MediaInterface {
     private final MediaGenres genre;
     private int issuedDays = 1;
     private int totalCopies = 0;
-    private List<Review> reviews = new ArrayList<>();
-    private List<User> currentlyIssuedTo = new ArrayList<>();
-    private List<User> waitlist = new ArrayList<>();
+    private final List<Review> reviews = new ArrayList<>();
+    private final List<User> waitlist = new ArrayList<>();
 
 
     /**
@@ -93,7 +92,6 @@ public class Movie implements MediaInterface {
     public void borrowMedia(User user) {
         checkInvariants();
         this.totalCopies--;
-        currentlyIssuedTo.add(user);
         checkInvariants();
     }
 

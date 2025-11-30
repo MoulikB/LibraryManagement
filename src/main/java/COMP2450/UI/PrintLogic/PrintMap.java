@@ -1,6 +1,5 @@
 package COMP2450.UI.PrintLogic;
 
-import COMP2450.domain.Map;
 import com.google.common.base.Preconditions;
 
 /**
@@ -8,20 +7,7 @@ import com.google.common.base.Preconditions;
  *
  **/
 public class PrintMap {
-    /**
-     * Method responsible for printing map and its legends.
-     * @param inputMap the map being provided (cannot be null)
-     *
-     **/
-    public static void printMap(Map inputMap) {
-        Preconditions.checkNotNull(inputMap);
 
-        printMap(inputMap.getMap());
-
-        printLegend();
-
-        Preconditions.checkNotNull(inputMap);
-    }
 
     public static void printLegend() {
         System.out.println("\nLegend:");

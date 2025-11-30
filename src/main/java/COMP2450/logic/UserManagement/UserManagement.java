@@ -8,12 +8,12 @@ import java.util.List;
 
 /**
  * UserManagement
- * Manages the system’s users, allowing creation, removal, lookup,
+ * Manages the system’s USERS, allowing creation, removal, lookup,
  * and listing of all registered members.
  */
 
 public class UserManagement {
-    private static List<User> users = new ArrayList<>();
+    private static final List<User> USERS = new ArrayList<>();
     private static int nextID = 1;
 
     /**
@@ -27,42 +27,21 @@ public class UserManagement {
         boolean output = false;
         boolean exists = userExistsBoolean(user.getUsername());
         if (!exists) {
-            users.add(user);
+            USERS.add(user);
             output = true; // user successfully added
         }
         return output; // user already existed
     }
 
-
     /**
      * Check the invariants for our domain model object and throw an error if violated
      */
     public static void checkInvariants() {
-        Preconditions.checkNotNull(users);
-    }
-
-    /**
-     * Get a user by ID. Returns the user or null if not found.
-     * @param username the username we are checking for (can't be null or empty)
-     * @return user with corresponding id
-     */
-    public static User getUser(String username) {
-        User userFound = null;
-        Preconditions.checkArgument(username != null && !username.isEmpty(), "Invalid ID");
-        checkInvariants();
-        int i = 0;
-        while (i < users.size() && userFound == null) {
-            if (users.get(i).getUsername().equals(username)) {
-                userFound = users.get(i);
-            }
-            i++;
-        }
-        checkInvariants();
-        return userFound;
+        Preconditions.checkNotNull(USERS);
     }
 
     public static List<User> getUsers() {
-        return users;
+        return USERS;
     }
 
     /**
@@ -75,57 +54,14 @@ public class UserManagement {
         Preconditions.checkArgument(username != null && !username.isEmpty(), "Invalid ID");
         boolean userExists = false;
         int i = 0;
-        while (!userExists && i < users.size()) {
-            if (users.get(i).getUsername().equals(username)) {
+        while (!userExists && i < USERS.size()) {
+            if (USERS.get(i).getUsername().equals(username)) {
                 userExists = true;
             }
             i++;
         }
         checkInvariants();
         return userExists;
-    }
-
-    /**
-     * Find a user by ID and return it (or null if not found).
-     * @param username the username we are checking for (can't be null or empty)
-     * @return return user if it exists
-     */
-    public static User userExists(String username) {
-        checkInvariants();
-        Preconditions.checkArgument(username != null && !username.isEmpty(), "Invalid ID");
-        User userAlreadyExists = null;
-        int index = 0;
-        while (userAlreadyExists == null && index < users.size()) {
-            if (users.get(index).getUsername().equals(username)) {
-                userAlreadyExists = users.get(index);
-            }
-            index++;
-        }
-        checkInvariants();
-        return (userAlreadyExists);
-    }
-
-    /**
-     * Remove a user by ID.
-     * @param username the username we are checking for (can't be null or empty)
-     * @return if user was removed
-     */
-    public static boolean removeUser(String username) {
-        checkInvariants();
-        Preconditions.checkArgument(username != null && !username.isEmpty(), "Invalid ID");
-        User userExists = userExists(username);
-        if (userExists!=null) {
-            users.remove(userExists);
-        }
-        checkInvariants();
-        return userExists != null;
-    }
-
-    /**
-     * Clear the list of users (reset to empty).
-     */
-    public static void reset() {
-        users = new ArrayList<>();
     }
 
     public static void incrementID() {

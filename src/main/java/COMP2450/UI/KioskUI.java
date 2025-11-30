@@ -335,7 +335,7 @@ public class KioskUI {
         } else {
 
             try {
-                BorrowMedia issueMedia = new BorrowMedia(user,media);
+                new BorrowMedia(user,media);
                 System.out.println("✅ Media borrowed successfully!");
             } catch (OverdueMediaException e) {
                 System.out.println("⚠️  You have overdue items. Please return them first.");

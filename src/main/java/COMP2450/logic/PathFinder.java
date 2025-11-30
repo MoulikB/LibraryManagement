@@ -15,7 +15,6 @@ public class PathFinder {
 
     private final char PATH_CHAR  = '+';
     private final char FLOOR_CHAR = ' ';
-    private final char START_CHAR = 'K';
 
     private final char[][] map;
 
@@ -39,6 +38,7 @@ public class PathFinder {
      */
     public void runForTarget(char targetChar) throws IllegalArgumentException {
 
+        char START_CHAR = 'K';
         Coordinate start  = findChar(START_CHAR);
         Coordinate target = findChar(targetChar);
 

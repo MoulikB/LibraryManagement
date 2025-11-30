@@ -23,10 +23,9 @@ public class Kiosk {
     }
 
     private static void runKiosk() {
-        boolean running = true;
 
         // To ensure if someone logs out we never exit the program
-        while (running) {
+        while (true) {
             if (user == null) {
                 user = KioskUI.showWelcomeScreen(library);
             } else {
