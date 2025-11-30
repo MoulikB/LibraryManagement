@@ -13,9 +13,9 @@ import com.google.common.base.Preconditions;
  */
 public class PathFinder {
 
-    private static final char PATH_CHAR  = '+';
-    private static final char FLOOR_CHAR = ' ';
-    private static final char START_CHAR = 'K';
+    private final char PATH_CHAR  = '+';
+    private final char FLOOR_CHAR = ' ';
+    private final char START_CHAR = 'K';
 
     private final char[][] map;
 

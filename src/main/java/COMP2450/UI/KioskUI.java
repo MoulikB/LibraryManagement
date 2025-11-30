@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class KioskUI {
@@ -26,7 +27,9 @@ public class KioskUI {
         System.out.println("2. Register");
         System.out.print("Enter your choice: ");
 
-        int option = InputValidation.getIntInput();
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
+        int option = inputValidation.getIntInput();
         User user = null;
 
         if (option == 1) {
@@ -127,7 +130,9 @@ public class KioskUI {
         Preconditions.checkNotNull(library, "library cannot be null");
         System.out.println("\n=== Find Media on Map ===");
         System.out.print("Enter the media ID: ");
-        int id = InputValidation.getIntInput();
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
+        int id = inputValidation.getIntInput();
 
         var foundMedia = library.showMedia(id);
 
@@ -179,18 +184,20 @@ public class KioskUI {
 
             System.out.printf("⚠️ You currently owe: $%.2f%n", amount);
             System.out.print("Would you like to pay now? (Y/N): ");
-            String response = InputValidation.getStringInput().trim();
+            InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
+            String response = inputValidation.getStringInput().trim();
 
             if (response.equalsIgnoreCase("Y")) {
                 System.out.print("(Can you the grader pretend this is a very complex SHA-256 online gateway where i am taking your card info and not just a simple entry where you can enter any 16 digits? thank you) ");
                 System.out.print("Enter 16-digit Credit/Debit card number: ");
 
-                String cardNumber = InputValidation.getStringInput().trim();
+                String cardNumber = inputValidation.getStringInput().trim();
 
                 while (cardNumber.length() != 16) {
                     System.out.println("Invalid please try again.");
                     System.out.print("Enter 16-digit card number: ");
-                    cardNumber = InputValidation.getStringInput().trim();
+                    cardNumber = inputValidation.getStringInput().trim();
                     try {
                         Integer.parseInt(cardNumber);
                     } catch (NumberFormatException e) {
@@ -288,6 +295,7 @@ public class KioskUI {
         while (stayInMenu) {
             int choice = promptMenu(choices);
             BrowseMedia browseMedia = new BrowseMedia(library);
+            InputValidation inputValidation = new InputValidation(new Scanner(System.in));
 
             switch (choice) {
                 case 1 -> browseMedia.showAllMedia();
@@ -295,15 +303,15 @@ public class KioskUI {
                 case 3 -> browseMedia.showAllBooks();
                 case 4 -> {
                     System.out.print("Enter director name: ");
-                    browseMedia.printByDirector(InputValidation.getStringInput());
+                    browseMedia.printByDirector(inputValidation.getStringInput());
                 }
                 case 5 -> {
                     System.out.print("Enter author name: ");
-                    browseMedia.printByAuthor(InputValidation.getStringInput());
+                    browseMedia.printByAuthor(inputValidation.getStringInput());
                 }
                 case 6 -> {
                     System.out.print("Enter media title: ");
-                    browseMedia.searchMedia(InputValidation.getStringInput());
+                    browseMedia.searchMedia(inputValidation.getStringInput());
                 }
                 case 7 -> stayInMenu = false;
                 default -> System.out.println("Invalid choice.");
@@ -316,7 +324,9 @@ public class KioskUI {
         Preconditions.checkNotNull(user, "user cannot be null");
 
         System.out.print("Enter media ID to borrow: ");
-        int mediaID = InputValidation.getIntInput();
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
+        int mediaID = inputValidation.getIntInput();
         MediaInterface media = library.showMedia(mediaID);
 
         if (media == null) {
@@ -332,8 +342,8 @@ public class KioskUI {
             } catch (UnavailableMediaException e) {
                 System.out.print("No copies available. Join waitlist? (Y/N): ");
                 try {
-                    if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
-                        Waitlist wl = new Waitlist(media,user);
+                    if (inputValidation.getStringInput().equalsIgnoreCase("Y")) {
+                        new Waitlist(media,user);
                         System.out.println("📋 Added to waitlist.");
                     } else {
                         System.out.println("Okay. Returning to menu.");
@@ -354,7 +364,9 @@ public class KioskUI {
         }
 
         System.out.print("\nEnter media ID to return: ");
-        int mediaID = InputValidation.getIntInput();
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
+        int mediaID = inputValidation.getIntInput();
         MediaInterface media = library.showMedia(mediaID);
 
         if (media == null || !user.getItemsIssued().contains(media)) {
@@ -365,11 +377,11 @@ public class KioskUI {
             System.out.println("✅ Media returned successfully.");
             System.out.println("Would you like to leave a review? [Y/N]");
 
-            if (InputValidation.getStringInput().equalsIgnoreCase("Y")) {
+            if (inputValidation.getStringInput().equalsIgnoreCase("Y")) {
                 System.out.println("Enter a small comment: ");
-                String comment = InputValidation.getStringInput();
+                String comment = inputValidation.getStringInput();
                 System.out.println("Enter a star rating out of 10: ");
-                int rating = InputValidation.getIntInput();
+                int rating = inputValidation.getIntInput();
 
                 new Review(user, media, comment, rating);
                 System.out.println("Review has been successfully added.");
@@ -388,8 +400,10 @@ public class KioskUI {
         Preconditions.checkNotNull(library, "library cannot be null");
         Preconditions.checkNotNull(user, "user cannot be null");
 
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
         System.out.print("Enter resource name to view or book: ");
-        String resourceName = InputValidation.getStringInput();
+        String resourceName = inputValidation.getStringInput();
         Resource resource = library.getResource(resourceName);
         if (resource == null) {
             System.out.println("❌ Resource not found.");
@@ -427,12 +441,14 @@ public class KioskUI {
         Preconditions.checkNotNull(user, "user cannot be null");
         Preconditions.checkNotNull(date, "date cannot be null");
 
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
         TimeSlots[] slots = TimeSlots.values();
         System.out.println("\n📅 " + date + " — Available slots:");
         PrintResource.printBookingAdjusted(resource);
 
         System.out.print("Select a time slot number: ");
-        int slotChoice = InputValidation.getIntInput() - 1;
+        int slotChoice = inputValidation.getIntInput() - 1;
 
         if (slotChoice < 0 || slotChoice >= slots.length) {
             System.out.println("Invalid slot number.");
@@ -452,8 +468,11 @@ public class KioskUI {
         Preconditions.checkNotNull(resource, "resource cannot be null");
         Preconditions.checkNotNull(user, "user cannot be null");
 
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
         System.out.print("Enter booking date (YYYY-MM-DD): ");
-        String input = InputValidation.getStringInput();
+
+        String input = inputValidation.getStringInput();
 
         try {
             LocalDate chosenDate = LocalDate.parse(input);
@@ -465,7 +484,7 @@ public class KioskUI {
 
                 PrintResource.printBookingAdjusted(resource);
                 System.out.print("Select a slot number: ");
-                int slotChoice = InputValidation.getIntInput() - 1;
+                int slotChoice = inputValidation.getIntInput() - 1;
                 TimeSlots[] slots = TimeSlots.values();
 
                 if (slotChoice < 0 || slotChoice >= slots.length) {
@@ -486,10 +505,12 @@ public class KioskUI {
     private static void showNextXAfterTime(Resource resource) {
         Preconditions.checkNotNull(resource, "resource cannot be null");
 
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
         System.out.print("Enter start time (HH:mm): ");
-        String timeInput = InputValidation.getStringInput();
+        String timeInput = inputValidation.getStringInput();
         System.out.print("How many available slots to show? ");
-        int count = InputValidation.getIntInput();
+        int count = inputValidation.getIntInput();
 
         try {
             var slots = TimeSlotSearch.nextXAvailable(resource, LocalTime.parse(timeInput), count);
@@ -503,10 +524,12 @@ public class KioskUI {
     private static void showRangeAvailability(Resource resource) {
         Preconditions.checkNotNull(resource, "resource cannot be null");
 
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
         System.out.print("Enter start date (YYYY-MM-DD): ");
-        String startInput = InputValidation.getStringInput();
+        String startInput = inputValidation.getStringInput();
         System.out.print("Enter end date (YYYY-MM-DD): ");
-        String endInput = InputValidation.getStringInput();
+        String endInput = inputValidation.getStringInput();
 
         try {
             var start = LocalDate.parse(startInput);
@@ -526,6 +549,8 @@ public class KioskUI {
     private static void findPathOnMap(Library library) {
         Preconditions.checkNotNull(library, "library cannot be null");
 
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
         System.out.println("\n=== Library Path Finder ===");
         PathFinder pathFinder = new PathFinder(library);
         pathFinder.clearPath();
@@ -536,7 +561,7 @@ public class KioskUI {
 
         System.out.println();
 
-        String input = InputValidation.getStringInput().trim().toUpperCase();
+        String input = inputValidation.getStringInput().trim().toUpperCase();
         if (input.isEmpty()) {
             System.out.println("❌ Input cannot be empty.");
         } else {
@@ -552,6 +577,9 @@ public class KioskUI {
     }
 
     private static int promptMenu(String[] options) {
+
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
         Preconditions.checkNotNull(options, "options cannot be null");
         Preconditions.checkArgument(options.length > 0, "options cannot be empty");
 
@@ -560,6 +588,6 @@ public class KioskUI {
             System.out.println((i + 1) + ". " + options[i]);
         }
         System.out.print("Enter choice: ");
-        return InputValidation.getIntInput();
+        return inputValidation.getIntInput();
     }
 }

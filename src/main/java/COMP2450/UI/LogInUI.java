@@ -3,6 +3,8 @@ package COMP2450.UI;
 import COMP2450.domain.User;
 import COMP2450.logic.UserManagement.LogIn;
 
+import java.util.Scanner;
+
 /**
  * LoginUI
  * Handles all user-facing interactions during the login process.
@@ -20,15 +22,17 @@ public class LogInUI {
     public User promptLogin() {
         System.out.println("\n=== User Login ===");
 
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
         User result = null;
         boolean keepTrying = true;
 
         while (keepTrying && result == null) {
             System.out.print("Enter your username: ");
-            String username = InputValidation.getStringInput();
+            String username = inputValidation.getStringInput();
 
             System.out.print("Enter your password: ");
-            String password = InputValidation.getStringInput();
+            String password = inputValidation.getStringInput();
 
             if (username.isBlank() || password.isBlank()) {
                 System.out.println("❌ Username or password cannot be empty. Try again.\n");
@@ -40,7 +44,7 @@ public class LogInUI {
             if (result == null) {
                 System.out.println("❌ Invalid username or password.");
                 System.out.print("Would you like to try again? [Y/N]: ");
-                String retry = InputValidation.getStringInput();
+                String retry = inputValidation.getStringInput();
                 if (!retry.equalsIgnoreCase("Y")) {
                     keepTrying = false;
                 }

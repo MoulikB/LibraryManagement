@@ -10,14 +10,18 @@ import java.util.Scanner;
 public class InputValidation {
 
 
-    private final static Scanner scnr = new Scanner(System.in);
+    private final Scanner scnr;
+
+    public InputValidation(Scanner scnr) {
+        this.scnr = scnr;
+    }
 
     /**
      * Reads a full line of user input as a String.
      *
      * @return the line of text entered by the user
      */
-    public static String getStringInput() {
+    public String getStringInput() {
         String input;
         input = scnr.nextLine();
         while (input.isEmpty()) {
@@ -32,7 +36,7 @@ public class InputValidation {
      *
      * @return the integer entered by the user
      */
-    public static int getIntInput() {
+    public int getIntInput() {
         while (true) {
             String s = scnr.nextLine().trim();
             try {

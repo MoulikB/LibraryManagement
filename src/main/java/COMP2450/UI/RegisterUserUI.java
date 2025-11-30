@@ -3,6 +3,8 @@ package COMP2450.UI;
 import COMP2450.domain.User;
 import COMP2450.logic.UserManagement.RegisterUser;
 
+import java.util.Scanner;
+
 /**
  * RegisterUserUI
  * Handles all user-facing console interaction for registration.
@@ -16,31 +18,34 @@ public class RegisterUserUI {
      * @return the registered User, or null if registration failed
      */
     public static User promptRegister() {
+
+        InputValidation inputValidation = new InputValidation(new Scanner(System.in));
+
         System.out.println("\n=== User Registration ===");
         System.out.print("Enter your username: ");
-        String username = InputValidation.getStringInput();
+        String username = inputValidation.getStringInput();
 
         System.out.print("Enter your password: ");
-        String password = InputValidation.getStringInput();
+        String password = inputValidation.getStringInput();
 
         System.out.print("Enter your email address ( Ex. Grader@umanitoba.ca ) :  ");
-        String email = InputValidation.getStringInput();
+        String email = inputValidation.getStringInput();
 
         while (!isValidEmail(email)) {
             System.out.println("Invalid email address. Make sure you follow the above format. ");
             System.out.print("Enter your email address ( Ex. Grader@umanitoba.ca ) :  ");
-            email = InputValidation.getStringInput();
+            email = inputValidation.getStringInput();
         }
 
 
 
         System.out.print("Enter your phone number Ex. 0123456789 : ");
-        String phone = InputValidation.getStringInput();
+        String phone = inputValidation.getStringInput();
 
         while (!isValidPhoneNumber(phone)) {
             System.out.println("Invalid phone number. Has to be 10 digits without any other characters like : 0123456789");
             System.out.print("Enter your phone number Ex. 0123456789 : ");
-            phone = InputValidation.getStringInput();
+            phone = inputValidation.getStringInput();
         }
         RegisterUser registerUser = new RegisterUser();
         User newUser = registerUser.createUser(username, password, email, phone);
