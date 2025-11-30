@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 /**
  * Utility class for safely receiving validated user input from the console.
- * This class provides methods to read strings and integers using a shared Scanner instance.
+ * This class provides methods to read strings and integers using a Scanner instance.
  * It ensures that integer inputs are validated before being returned.
  */
 public class InputValidation {
