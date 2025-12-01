@@ -77,6 +77,47 @@ public class Computer implements Resource {
         return unavailableTimeSlots;
     }
 
+    public static class ComputerBuilder {
+        private String computerId;
+        private Library library;
+        private final List<TimeSlots> unavailable = new ArrayList<>();
+
+        public ComputerBuilder computerId(String id) {
+            Preconditions.checkArgument(id != null && !id.isEmpty(), "computerId cannot be null or empty");
+            this.computerId = id;
+            return this;
+        }
+
+        public ComputerBuilder library(Library lib) {
+            Preconditions.checkNotNull(lib, "library cannot be null");
+            this.library = lib;
+            return this;
+        }
+
+        public ComputerBuilder addUnavailable(TimeSlots slot) {
+            Preconditions.checkNotNull(slot, "Time slot cannot be null");
+            this.unavailable.add(slot);
+            return this;
+        }
+
+        public Computer build() {
+            Preconditions.checkArgument(computerId != null && !computerId.isEmpty(),
+                    "computerId must be set before building");
+            Preconditions.checkNotNull(library, "library must be set before building");
+
+            // Build the Computer normally
+            Computer c = new Computer(computerId, library);
+
+            // Add unavailable time slots AFTER the object exists
+            for (TimeSlots t : unavailable) {
+                c.markUnavailable(t);
+            }
+
+            return c;
+        }
+    }
+
+
 
 
 }

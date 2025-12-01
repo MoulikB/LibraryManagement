@@ -154,6 +154,37 @@ public class Library {
         checkInvariants();
         return media;
     }
+
+    public static class LibraryBuilder {
+        private String name;
+        private final List<MediaInterface> media = new ArrayList<>();
+        private final List<Resource> resources = new ArrayList<>();
+
+        public LibraryBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public LibraryBuilder withMedia(MediaInterface m) {
+            media.add(m);
+            return this;
+        }
+
+        public LibraryBuilder withResource(Resource r) {
+            resources.add(r);
+            return this;
+        }
+
+        public Library build() {
+            Library lib = new Library(name);
+            for (MediaInterface m : media) lib.addMedia(m);
+            for (Resource r : resources) lib.addResource(r);
+            return lib;
+        }
+    }
 }
+
+
+
 
     

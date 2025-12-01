@@ -229,4 +229,94 @@ public class Movie implements MediaInterface {
 
     }
 
+    public static class MovieBuilder {
+        private String title;
+        private String director;
+        private Integer mediaId;
+        private Library library;
+        private MediaGenres genre;
+
+        private int totalCopies = 0;
+        private int issuedDays = 1;
+
+        private final List<Review> reviews = new ArrayList<>();
+        private final List<User> waitlist = new ArrayList<>();
+
+        public MovieBuilder title(String t) {
+            Preconditions.checkArgument(t != null && !t.isEmpty());
+            this.title = t;
+            return this;
+        }
+
+        public MovieBuilder director(String d) {
+            Preconditions.checkArgument(d != null && !d.isEmpty());
+            this.director = d;
+            return this;
+        }
+
+        public MovieBuilder mediaId(int id) {
+            Preconditions.checkArgument(id > 0);
+            this.mediaId = id;
+            return this;
+        }
+
+        public MovieBuilder library(Library lib) {
+            Preconditions.checkNotNull(lib);
+            this.library = lib;
+            return this;
+        }
+
+        public MovieBuilder genre(MediaGenres g) {
+            Preconditions.checkNotNull(g);
+            this.genre = g;
+            return this;
+        }
+
+        public MovieBuilder totalCopies(int copies) {
+            Preconditions.checkArgument(copies >= 0);
+            this.totalCopies = copies;
+            return this;
+        }
+
+        public MovieBuilder issuedDays(int days) {
+            Preconditions.checkArgument(days >= 1);
+            this.issuedDays = days;
+            return this;
+        }
+
+        public MovieBuilder addReview(Review r) {
+            Preconditions.checkNotNull(r);
+            reviews.add(r);
+            return this;
+        }
+
+        public MovieBuilder addWaitlistUser(User u) {
+            Preconditions.checkNotNull(u);
+            waitlist.add(u);
+            return this;
+        }
+
+        public Movie build() {
+            Preconditions.checkArgument(title != null);
+            Preconditions.checkArgument(director != null);
+            Preconditions.checkNotNull(library);
+            Preconditions.checkNotNull(genre);
+            Preconditions.checkNotNull(mediaId);
+
+            Movie m = new Movie(title, director, mediaId, library, genre);
+
+            while (m.getAvailableCopies() < totalCopies) {
+                m.addCopies();
+            }
+
+            for (Review r : reviews) m.addReview(r);
+            for (User u : waitlist) m.addWaitlist(u);
+
+            m.setIssuedDay(issuedDays);
+
+            return m;
+        }
+    }
+
+
 }

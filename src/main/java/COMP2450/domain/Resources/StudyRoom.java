@@ -72,5 +72,43 @@ public class StudyRoom implements Resource {
         return unavailableTimeSlots;
     }
 
+    public static class StudyRoomBuilder {
+        private String roomName;
+        private Library library;
+        private final List<TimeSlots> unavailable = new ArrayList<>();
+
+        public StudyRoomBuilder roomName(String name) {
+            Preconditions.checkArgument(name != null && !name.isEmpty(), "Room name cannot be null or empty");
+            this.roomName = name;
+            return this;
+        }
+
+        public StudyRoomBuilder library(Library lib) {
+            Preconditions.checkNotNull(lib, "library cannot be null");
+            this.library = lib;
+            return this;
+        }
+
+        public StudyRoomBuilder addUnavailable(TimeSlots slot) {
+            Preconditions.checkNotNull(slot, "Time slot cannot be null");
+            unavailable.add(slot);
+            return this;
+        }
+
+        public StudyRoom build() {
+            Preconditions.checkArgument(roomName != null && !roomName.isEmpty(),
+                    "roomName must be set before building");
+            Preconditions.checkNotNull(library, "library must be set before building");
+
+            StudyRoom s = new StudyRoom(roomName, library);
+
+            for (TimeSlots t : unavailable) {
+                s.markUnavailable(t);
+            }
+
+            return s;
+        }
+    }
+
 
 }

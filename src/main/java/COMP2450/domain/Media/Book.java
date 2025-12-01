@@ -245,4 +245,105 @@ public class Book implements MediaInterface {
         issuedDays = num;
         checkInvariants();
     }
+
+    public static class BookBuilder {
+        private String title;
+        private String author;
+        private String publisher;
+        private MediaGenres genre;
+        private Integer isbn;
+        private Library library;
+
+        private int totalCopies = 0;
+        private int issuedDays = 1;
+
+        // reviews and waitlist only saved if you want (optional)
+        private final List<Review> reviews = new ArrayList<>();
+        private final List<User> waitlist = new ArrayList<>();
+
+        public BookBuilder title(String t) {
+            Preconditions.checkArgument(t != null && !t.isEmpty());
+            this.title = t;
+            return this;
+        }
+
+        public BookBuilder author(String a) {
+            Preconditions.checkArgument(a != null && !a.isEmpty());
+            this.author = a;
+            return this;
+        }
+
+        public BookBuilder publisher(String p) {
+            Preconditions.checkArgument(p != null && !p.isEmpty());
+            this.publisher = p;
+            return this;
+        }
+
+        public BookBuilder genre(MediaGenres g) {
+            Preconditions.checkNotNull(g);
+            this.genre = g;
+            return this;
+        }
+
+        public BookBuilder isbn(int id) {
+            Preconditions.checkArgument(id >= 0);
+            this.isbn = id;
+            return this;
+        }
+
+        public BookBuilder library(Library lib) {
+            Preconditions.checkNotNull(lib);
+            this.library = lib;
+            return this;
+        }
+
+        public BookBuilder totalCopies(int copies) {
+            Preconditions.checkArgument(copies >= 0);
+            this.totalCopies = copies;
+            return this;
+        }
+
+        public BookBuilder issuedDays(int days) {
+            Preconditions.checkArgument(days >= 1);
+            this.issuedDays = days;
+            return this;
+        }
+
+        public BookBuilder addReview(Review r) {
+            Preconditions.checkNotNull(r);
+            reviews.add(r);
+            return this;
+        }
+
+        public BookBuilder addWaitlistUser(User u) {
+            Preconditions.checkNotNull(u);
+            waitlist.add(u);
+            return this;
+        }
+
+        public Book build() {
+            Preconditions.checkArgument(title != null);
+            Preconditions.checkArgument(author != null);
+            Preconditions.checkArgument(publisher != null);
+            Preconditions.checkNotNull(genre);
+            Preconditions.checkNotNull(isbn);
+            Preconditions.checkNotNull(library);
+
+            Book b = new Book(title, author, publisher, genre, isbn, library);
+
+            // Restore state
+            for (Review r : reviews) b.addReview(r);
+            for (User u : waitlist) b.addWaitlist(u);
+
+            // Set copies
+            while (b.getAvailableCopies() < totalCopies) {
+                b.addCopies();
+            }
+
+            b.setIssuedDay(issuedDays);
+
+            return b;
+        }
+    }
+
 }

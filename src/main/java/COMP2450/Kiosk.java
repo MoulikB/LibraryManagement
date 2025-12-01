@@ -3,7 +3,7 @@ package COMP2450;
 import COMP2450.UI.KioskUI;
 import COMP2450.domain.Library;
 import COMP2450.domain.User;
-import COMP2450.logic.LibraryBuilder;
+import COMP2450.logic.TestLibraryBuilder;
 import com.google.common.base.Preconditions;
 
 /**
@@ -18,7 +18,7 @@ public class Kiosk {
     private static Library library;
 
     public static void main(String[] args) {
-        library = LibraryBuilder.initializeLibrary();
+        library = TestLibraryBuilder.initializeLibrary();
         Preconditions.checkNotNull(library);
         runKiosk();
         Preconditions.checkNotNull(library);
