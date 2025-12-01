@@ -19,9 +19,118 @@ To run this use the Kiosk.java
 1. Winnipeg library : <https://www.winnipeg.ca/recreation-leisure/libraries>
 2. University Of Manitoba Library : <https://umanitoba.ca/libraries/>
 
+## Testing a stack
+The following table describes the test data used in `TestStack` to exercise the
+`Stack<T>` interface against the provided implementations (`BadStack1` …
+`BadStack5`).
+
+| Method     | Test data                                                                 | Expected outcome                                                                                 |
+|-----------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| `push()`  | Start with an empty stack, call `push(1)`, `push(2)`, `push(3)`           | Values are stored in  order so that subsequent `pop()` calls can return `3`, then `2`, then `1`. |
+| `pop()`   | After `push(1)`, `push(2)`, `push(3)`, call `pop()` three times           | First `pop()` returns `3`, second returns `2`, third returns `1`; stack ends up empty.           |
+| `peek()`  | From an empty stack, call `push(99)`, then `peek()`, then `pop()`         | `peek()` returns `99` without removing it; `pop()` immediately after still returns `99`.         |
+| `isEmpty()` | On a fresh stack, before any pushes                                     | `isEmpty()` returns `true` (stack reports empty).                                                |
+| `isEmpty()` | After calling `push(8)` on a previously empty stack                     | `isEmpty()` returns `false` (stack reports non-empty).                                           |
+| `isEmpty()` | After `push(8)` followed by `pop()`                                     | `isEmpty()` returns `true` again (stack reports empty after removing the only element).          |
+| `size()`  | On a fresh stack, before any pushes                                       | `size()` returns `0`.                                                                            |
+| `size()`  | After `push(1)` followed by `push(2)`                                     | `size()` returns `2`.                                                                            |
+| `size()`  | After pushing `1` and `2`, then calling `pop()` once                      | `size()` returns `1`.                                                                            |
+
+---
+
+# Bugs found in instructor-provided stack implementations
+
+My test harness was used to test the provided classes:
+
+- `BadStack1`
+- `BadStack2`
+- `BadStack3`
+- `BadStack4`
+- `BadStack5`
+
+Only one of them is correct.  
+Here are the bugs my test suite discovered:
+
+---
+
+## **BadStack1**
+Completely broken implementation.
+
+**Bugs:**
+* Crashes during `push()`
+* Crashes during `peek()`
+* `isEmpty()` gives inconsistent results
+* `size()` is wrong in all situations (initial, after push, after pop)
+* General instability — internal structure appears uninitialized
+
+---
+
+## **BadStack2**
+Stores values but violates several basic stack rules.
+
+**Bugs:**
+* **LIFO violated** (pop returns items in the wrong order)
+* `isEmpty()` returns incorrect values (fresh stack not empty, empty-after-pop not empty)
+* `size()` incorrect at multiple stages (initial, after pushes, after pop)
+* `peek()` was correct — the only method that passed
+
+---
+
+## **BadStack3**
+Mostly good, but size tracking is broken.
+
+**Bugs:**
+* `push()` and `pop()` behave correctly (LIFO works)
+* `peek()` behaves correctly
+* `isEmpty()` is correct
+* **size does not update properly** after pushes or pops
+
+Likely missing increment/decrement of size counter.
+
+---
+
+## **BadStack4**
+Almost correct except for `peek()`.
+
+**Bugs:**
+* `peek()` crashes every time
+* `push/pop`, `isEmpty`, and `size` are all correct
+
+Most likely uses invalid index access inside peek.
+
+---
+
+## **BadStack5**
+**This is the correct implementation.**
+
+* All tests passed
+* LIFO correct
+* `peek()` non-destructive and correct
+* `isEmpty()` correct
+* `size()` correct in all cases
+
+---
+
+# Test Harness
+
+All tests in the project are run by executing:
+
+```
+
+src/test/java/COMP2450/TestHarness.java
+
+```
+
+The harness:
+* Runs all test suites (including stack tests)
+* Collects pass/fail counts
+* Prints a summary to the console
+
+
 ## Diagram
 
-Our domain model is a UML class diagram drawn using Mermaid.
+Our domain model is a UML class diagram drawn using Mermaid. Below is a flowchart detailing the flowchart diagram for
+the Kiosk classes and different flows of interaction in the project.
 
 ```mermaid
 classDiagram

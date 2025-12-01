@@ -1,5 +1,6 @@
 package COMP2450.domain.Pathfinder;
 
+import ca.umanitoba.cs.comp2450.stack.Stack;
 import com.google.common.base.Preconditions;
 
 public class LinkedListStack<T> implements Stack<T> {
