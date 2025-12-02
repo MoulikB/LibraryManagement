@@ -309,8 +309,13 @@ public class Movie implements MediaInterface {
                 m.addCopies();
             }
 
-            for (Review r : reviews) m.addReview(r);
-            for (User u : waitlist) m.addWaitlist(u);
+            for (Review r : reviews) {
+                m.addReview(r);
+            }
+
+            for (User u : waitlist) {
+                m.addWaitlist(u);
+            }
 
             m.setIssuedDay(issuedDays);
 

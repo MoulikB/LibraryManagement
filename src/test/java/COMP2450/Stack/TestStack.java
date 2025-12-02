@@ -1,5 +1,6 @@
 package COMP2450.Stack;
 
+import COMP2450.ColourOutput;
 import COMP2450.TestResults;
 import ca.umanitoba.cs.comp2450.stack.impl.BadStack1;
 import ca.umanitoba.cs.comp2450.stack.impl.BadStack2;
@@ -14,6 +15,10 @@ public class TestStack {
     private int successes = 0;
     private int failures = 0;
 
+    /**
+     * Run tests on every stack one by one
+     */
+
     public TestResults runTests() {
         testImplementation("BadStack1", new BadStack1<>());
         testImplementation("BadStack2", new BadStack2<>());
@@ -23,6 +28,9 @@ public class TestStack {
         return new TestResults(successes, failures);
     }
 
+    /**
+     * Run tests on push,pop,peek,isEmpty,size
+     */
     private void testImplementation(String name, Stack<Integer> s) {
         testPushPop(name, s);
         testPeek(name, s);
@@ -30,6 +38,9 @@ public class TestStack {
         testSize(name, s);
     }
 
+    /**
+     * Tests push and pop on the implementation
+     */
     private void testPushPop(String name, Stack<Integer> s) {
         try {
             s.push(1);
@@ -52,6 +63,9 @@ public class TestStack {
         }
     }
 
+    /**
+     * Tests peek on the implementation
+     */
     private void testPeek(String name, Stack<Integer> s) {
         try {
             s.push(99);
@@ -69,6 +83,9 @@ public class TestStack {
         }
     }
 
+    /**
+     * Tests isEmpty on the implementation
+     */
     private void testIsEmpty(String name, Stack<Integer> s) {
         try {
             if (!s.isEmpty()) {
@@ -90,6 +107,9 @@ public class TestStack {
         }
     }
 
+    /**
+     * Tests size on the implementation
+     */
     private void testSize(String name, Stack<Integer> s) {
         try {
             if (s.size() != 0) {
@@ -112,13 +132,19 @@ public class TestStack {
         }
     }
 
+    /**
+     * Tells us if the current test passed
+     */
     private void pass(String m) {
         successes++;
-        System.out.println("PASS: " + m);
+        ColourOutput.pass("PASS: " + m);
     }
 
+    /**
+     * Tells us if the current test failed
+     */
     private void fail(String m) {
         failures++;
-        System.out.println("FAIL: " + m);
+        ColourOutput.fail("FAIL: " + m);
     }
 }

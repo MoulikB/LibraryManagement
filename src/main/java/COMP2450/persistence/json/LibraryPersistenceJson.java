@@ -28,10 +28,9 @@ public class LibraryPersistenceJson implements LibraryPersistence {
         this.storage = storage;
     }
 
-    // ============================================================
     // SAVE
-    // ============================================================
 
+    @Override
     public Library save(Library library) {
         Preconditions.checkNotNull(library, "Library cannot be null");
 
@@ -50,13 +49,11 @@ public class LibraryPersistenceJson implements LibraryPersistence {
         return library;
     }
 
-    // ============================================================
     // LOAD
-    // ============================================================
 
     @Override
     public Library load(String name) throws NotFoundException {
-        Preconditions.checkNotNull(name);
+        Preconditions.checkNotNull(name, "Library name cannot be null");
 
         if (!Files.exists(storage)) {
             throw new NotFoundException();
@@ -66,26 +63,40 @@ public class LibraryPersistenceJson implements LibraryPersistence {
 
             JsonObject root = reader.readObject();
 
+            Preconditions.checkArgument(root.containsKey("name"), "Library JSON missing field: name");
+
             String storedName = root.getString("name");
 
             if (!storedName.equals(name)) {
                 throw new NotFoundException();
             }
 
-            // Build library
-            Library.LibraryBuilder builder = new Library.LibraryBuilder().name(storedName);
+            Library.LibraryBuilder builder =
+                    new Library.LibraryBuilder().name(storedName);
 
-            // Load media
-            for (JsonValue v : root.getJsonArray("media")) {
-                JsonObject mediaJson = v.asJsonObject();
-                MediaInterface media = mediaFromJson(mediaJson, builder.build());
+            // Media
+            JsonArray mediaArray = root.getJsonArray("media");
+            Preconditions.checkNotNull(mediaArray, "Missing media array in JSON");
+
+            Library tempLib = builder.build(); // temp for linking
+
+            for (JsonValue v : mediaArray) {
+                Preconditions.checkArgument(v.getValueType() == JsonValue.ValueType.OBJECT,
+                        "Media entry is not a JSON object");
+
+                MediaInterface media = mediaFromJson(v.asJsonObject(), tempLib);
                 builder.withMedia(media);
             }
 
-            // Load resources
-            for (JsonValue v : root.getJsonArray("resources")) {
-                JsonObject resJson = v.asJsonObject();
-                Resource r = resourceFromJson(resJson, builder.build());
+            // Resources
+            JsonArray resourceArray = root.getJsonArray("resources");
+            Preconditions.checkNotNull(resourceArray, "Missing resources array in JSON");
+
+            for (JsonValue v : resourceArray) {
+                Preconditions.checkArgument(v.getValueType() == JsonValue.ValueType.OBJECT,
+                        "Resource entry is not a JSON object");
+
+                Resource r = resourceFromJson(v.asJsonObject(), tempLib);
                 builder.withResource(r);
             }
 
@@ -96,20 +107,22 @@ public class LibraryPersistenceJson implements LibraryPersistence {
         }
     }
 
-    // ============================================================
-    // MEDIA (Book, Movie)
-    // ============================================================
+    // MEDIA
 
     private JsonArray mediaToJson(List<MediaInterface> mediaList) {
+        Preconditions.checkNotNull(mediaList, "Media list cannot be null");
+
         JsonArrayBuilder arr = Json.createArrayBuilder();
 
         for (MediaInterface m : mediaList) {
+            Preconditions.checkNotNull(m, "Media item is null");
+
             if (m instanceof Book b) {
                 arr.add(Json.createObjectBuilder()
                         .add("mediaType", "Book")
                         .add("title", b.getTitle())
                         .add("author", b.getCreator())
-                        .add("publisher", b.getLibrary().getName()) // skipped publisher fix if needed
+                        .add("publisher", b.getLibrary().getName())
                         .add("genre", b.getMediaGenre().toString())
                         .add("isbn", b.getMediaID())
                         .add("availableCopies", b.getAvailableCopies())
@@ -131,41 +144,52 @@ public class LibraryPersistenceJson implements LibraryPersistence {
     }
 
     private MediaInterface mediaFromJson(JsonObject json, Library library) {
+        Preconditions.checkNotNull(json, "Media JSON cannot be null");
+        Preconditions.checkNotNull(library, "Library cannot be null");
+        Preconditions.checkArgument(json.containsKey("mediaType"), "mediaType missing in JSON");
 
         String type = json.getString("mediaType");
 
         return switch (type) {
-            case "Book" -> new Book.BookBuilder()
-                    .title(json.getString("title"))
-                    .author(json.getString("author"))
-                    .publisher(json.getString("publisher"))
-                    .genre(MediaGenres.valueOf(json.getString("genre")))
-                    .isbn(json.getInt("isbn"))
-                    .library(library)
-                    .totalCopies(json.getInt("availableCopies"))
-                    .issuedDays(json.getInt("issuedDays"))
-                    .build();
-            case "Movie" -> new Movie.MovieBuilder()
-                    .title(json.getString("title"))
-                    .director(json.getString("director"))
-                    .mediaID(json.getInt("id"))
-                    .genre(MediaGenres.valueOf(json.getString("genre")))
-                    .library(library)
-                    .totalCopies(json.getInt("availableCopies"))
-                    .issuedDays(json.getInt("issuedDays"))
-                    .build();
+            case "Book" -> {
+                Preconditions.checkArgument(json.containsKey("isbn"), "Book missing isbn");
+                yield new Book.BookBuilder()
+                        .title(json.getString("title"))
+                        .author(json.getString("author"))
+                        .publisher(json.getString("publisher"))
+                        .genre(MediaGenres.valueOf(json.getString("genre")))
+                        .isbn(json.getInt("isbn"))
+                        .library(library)
+                        .totalCopies(json.getInt("availableCopies"))
+                        .issuedDays(json.getInt("issuedDays"))
+                        .build();
+            }
+            case "Movie" -> {
+                Preconditions.checkArgument(json.containsKey("id"), "Movie missing id");
+                yield new Movie.MovieBuilder()
+                        .title(json.getString("title"))
+                        .director(json.getString("director"))
+                        .mediaID(json.getInt("id"))
+                        .genre(MediaGenres.valueOf(json.getString("genre")))
+                        .library(library)
+                        .totalCopies(json.getInt("availableCopies"))
+                        .issuedDays(json.getInt("issuedDays"))
+                        .build();
+            }
             default -> throw new RuntimeException("Unknown media type: " + type);
         };
     }
 
-    // ============================================================
-    // RESOURCES (Computer, StudyRoom)
-    // ============================================================
+    // RESOURCES
 
     private JsonArray resourcesToJson(List<Resource> list) {
+        Preconditions.checkNotNull(list, "Resources list cannot be null");
+
         JsonArrayBuilder arr = Json.createArrayBuilder();
 
         for (Resource r : list) {
+            Preconditions.checkNotNull(r, "Resource cannot be null");
+
             if (r instanceof Computer c) {
                 arr.add(Json.createObjectBuilder()
                         .add("resourceType", "Computer")
@@ -180,17 +204,17 @@ public class LibraryPersistenceJson implements LibraryPersistence {
                 );
             }
         }
-
         return arr.build();
     }
 
     private Resource resourceFromJson(JsonObject json, Library library) {
+        Preconditions.checkNotNull(json, "Resource JSON cannot be null");
+        Preconditions.checkArgument(json.containsKey("resourceType"), "resourceType missing in JSON");
 
         String type = json.getString("resourceType");
 
         switch (type) {
-
-            case "Computer": {
+            case "Computer" -> {
                 Computer.ComputerBuilder builder = new Computer.ComputerBuilder()
                         .computerId(json.getString("name"))
                         .library(library);
@@ -198,11 +222,10 @@ public class LibraryPersistenceJson implements LibraryPersistence {
                 for (JsonValue v : json.getJsonArray("unavailable")) {
                     builder.addUnavailable(timeSlotFromJson((JsonString) v));
                 }
-
                 return builder.build();
             }
 
-            case "StudyRoom": {
+            case "StudyRoom" -> {
                 StudyRoom.StudyRoomBuilder builder = new StudyRoom.StudyRoomBuilder()
                         .roomName(json.getString("name"))
                         .library(library);
@@ -210,30 +233,29 @@ public class LibraryPersistenceJson implements LibraryPersistence {
                 for (JsonValue v : json.getJsonArray("unavailable")) {
                     builder.addUnavailable(timeSlotFromJson((JsonString) v));
                 }
-
                 return builder.build();
             }
 
-            default:
-                throw new RuntimeException("Unknown resource type: " + type);
+            default -> throw new RuntimeException("Unknown resource type: " + type);
         }
     }
 
-    // ============================================================
+
     // TIMESLOTS
-    // ============================================================
 
     private JsonArray timeSlotsToJson(List<TimeSlots> slots) {
+        Preconditions.checkNotNull(slots, "TimeSlot list cannot be null");
+
         JsonArrayBuilder arr = Json.createArrayBuilder();
         for (TimeSlots t : slots) {
-            arr.add(t.name());  // Save enum name
+            Preconditions.checkNotNull(t, "TimeSlot entry cannot be null");
+            arr.add(t.name());
         }
         return arr.build();
     }
 
-
     private TimeSlots timeSlotFromJson(JsonString json) {
+        Preconditions.checkNotNull(json, "TimeSlot JSON cannot be null");
         return TimeSlots.valueOf(json.getString());
     }
-
 }

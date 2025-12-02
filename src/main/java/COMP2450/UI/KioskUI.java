@@ -404,6 +404,7 @@ public class KioskUI {
         } else {
 
             media.returnMedia();
+            user.getItemsIssued().remove(media);
             persistence.save(library);
             userPersistence.saveUsers(USER_MANAGEMENT.getUsers());
             System.out.println("✅ Media returned successfully.");

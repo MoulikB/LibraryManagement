@@ -24,29 +24,29 @@ public class Kiosk {
     private static Library library;
 
     public static void main(String[] args) {
-        LibraryPersistence libaryPersistence = new LibraryPersistenceJson(Path.of("library.json"));
+        LibraryPersistence libraryPersistence = new LibraryPersistenceJson(Path.of("library.json"));
         UserPersistence userPersistence = new UserPersistenceJson(Path.of("users.json"));
-        KioskUI.loadPersistence(userPersistence.loadUsers());
+
 
 
 
         library = LibraryLoader.loadOrCreateLibrary();
-
+        KioskUI.loadPersistence(userPersistence.loadUsers(library));
         Preconditions.checkNotNull(library);
-        runKiosk(libaryPersistence , userPersistence);
+        runKiosk(libraryPersistence , userPersistence);
         Preconditions.checkNotNull(library);
     }
 
 
 
-    private static void runKiosk(LibraryPersistence libaryPersistence , UserPersistence userPersistence) {
+    private static void runKiosk(LibraryPersistence libraryPersistence , UserPersistence userPersistence) {
 
         // To ensure if someone logs out we never exit the program
         while (true) {
             if (user == null) {
-                user = KioskUI.showWelcomeScreen(library , libaryPersistence , userPersistence );
+                user = KioskUI.showWelcomeScreen(library , libraryPersistence , userPersistence );
             } else {
-                boolean stayInMenu = KioskUI.showUserMenu(library, user ,  libaryPersistence ,  userPersistence);
+                boolean stayInMenu = KioskUI.showUserMenu(library, user ,  libraryPersistence ,  userPersistence);
                 if (!stayInMenu) {
                     logout();
                 }

@@ -332,8 +332,12 @@ public class Book implements MediaInterface {
             Book b = new Book(title, author, publisher, genre, isbn, library);
 
             // Restore state
-            for (Review r : reviews) b.addReview(r);
-            for (User u : waitlist) b.addWaitlist(u);
+            for (Review r : reviews) {
+                b.addReview(r);
+            }
+            for (User u : waitlist) {
+                b.addWaitlist(u);
+            }
 
             // Set copies
             while (b.getAvailableCopies() < totalCopies) {

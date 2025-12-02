@@ -24,7 +24,7 @@ public class PrintResource {
         System.out.println("Available Time Slots:");
 
         for (var slotValue : TimeSlots.values()) {
-            System.out.println(slotValue);
+            System.out.println(slotValue.getLabel());
         }
 
         Preconditions.checkNotNull(resource);

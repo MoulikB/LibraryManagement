@@ -15,6 +15,10 @@ date: 30 September 2025
 
   `src.COMP2450.Domain.DomainTestHarness` and `src.COMP2450.Stack.StackTestHarness`
 
+### Changes 
+I added builder classes to some of my domain model objects, so I can persist them more easily.
+Making it easier to add them to a Json file and load them from the same.
+
 # Domain model
 This repository contains a domain model and an initial implementation of our Library System.
 It maintains a simple library and user database management and manages users, media (books and movies) along with resources (computers and study rooms) and a booking system for said resources.
