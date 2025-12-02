@@ -197,6 +197,14 @@ public class User {
     }
 
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setItemsIssued(List<MediaInterface> relinked) {
+        itemsIssued.clear();
+        itemsIssued.addAll(relinked);
+    }
 }
 
 

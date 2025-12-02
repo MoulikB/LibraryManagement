@@ -5,6 +5,16 @@ author: Moulik Bhatia (bhatiam3@myumanitoba.ca)
 date: 30 September 2025
 ---
 
+# Running
+
+* The functional application can be started by running the `main` method in  
+  `main.java.COMP2450.Kiosk` (which uses `KioskUI` to drive the console interface).
+
+* All tests (stack tests + library system tests) can be run by running the  
+  `main` method in:
+
+  `src.COMP2450.Domain.DomainTestHarness` and `src.COMP2450.Stack.StackTestHarness`
+
 # Domain model
 This repository contains a domain model and an initial implementation of our Library System.
 It maintains a simple library and user database management and manages users, media (books and movies) along with resources (computers and study rooms) and a booking system for said resources.
@@ -126,6 +136,36 @@ The harness:
 * Collects pass/fail counts
 * Prints a summary to the console
 
+# Testing the library system
+
+## Test harness
+
+All library-related tests are run using a simple custom test harness inspired by 2450-emon
+
+* The entry point is the `main` method in:
+
+  `COMP2450.tests.TestHarness`
+
+The harness:
+
+* Runs all test suites featured in Phase 2:
+    * `TestLibrary` (basic library behaviour)
+    * `TestMedia` (books/movies, borrow and return)
+    * `TestBorrowing` (overdue logic)
+    * `TestResources` (resource booking + conflicts)
+    * `TestWaitlist` (waitlist management)
+* Aggregates total successes and failures
+* Prints a summary like:
+
+  ```text
+  PASS: Library created successfully
+  PASS: addMedia() works
+  PASS: addResource() works
+  ...
+  ======= FINAL RESULTS =======
+  Total tests: 11
+  Successes:   11
+  Failures:    0
 
 ## Diagram
 

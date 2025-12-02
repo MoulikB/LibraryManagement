@@ -1,5 +1,6 @@
-package COMP2450;
+package COMP2450.Stack;
 
+import COMP2450.TestResults;
 import ca.umanitoba.cs.comp2450.stack.impl.BadStack1;
 import ca.umanitoba.cs.comp2450.stack.impl.BadStack2;
 import ca.umanitoba.cs.comp2450.stack.impl.BadStack3;

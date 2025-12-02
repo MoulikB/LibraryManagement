@@ -232,7 +232,7 @@ public class Movie implements MediaInterface {
     public static class MovieBuilder {
         private String title;
         private String director;
-        private Integer mediaId;
+        private Integer mediaID;
         private Library library;
         private MediaGenres genre;
 
@@ -254,9 +254,9 @@ public class Movie implements MediaInterface {
             return this;
         }
 
-        public MovieBuilder mediaId(int id) {
+        public MovieBuilder mediaID(int id) {
             Preconditions.checkArgument(id > 0);
-            this.mediaId = id;
+            this.mediaID = id;
             return this;
         }
 
@@ -301,9 +301,9 @@ public class Movie implements MediaInterface {
             Preconditions.checkArgument(director != null);
             Preconditions.checkNotNull(library);
             Preconditions.checkNotNull(genre);
-            Preconditions.checkNotNull(mediaId);
+            Preconditions.checkNotNull(mediaID);
 
-            Movie m = new Movie(title, director, mediaId, library, genre);
+            Movie m = new Movie(title, director, mediaID, library, genre);
 
             while (m.getAvailableCopies() < totalCopies) {
                 m.addCopies();

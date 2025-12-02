@@ -1,4 +1,4 @@
-package COMP2450.persistence;
+package COMP2450.persistence.json;
 
 import COMP2450.domain.Library;
 import COMP2450.domain.Media.Book;
@@ -10,6 +10,7 @@ import COMP2450.domain.Resources.Resource;
 import COMP2450.domain.Resources.StudyRoom;
 import COMP2450.domain.TimeSlots;
 
+import COMP2450.persistence.LibraryPersistence;
 import com.google.common.base.Preconditions;
 
 import javax.json.*;
@@ -31,7 +32,6 @@ public class LibraryPersistenceJson implements LibraryPersistence {
     // SAVE
     // ============================================================
 
-    @Override
     public Library save(Library library) {
         Preconditions.checkNotNull(library, "Library cannot be null");
 
@@ -148,7 +148,7 @@ public class LibraryPersistenceJson implements LibraryPersistence {
             case "Movie" -> new Movie.MovieBuilder()
                     .title(json.getString("title"))
                     .director(json.getString("director"))
-                    .mediaId(json.getInt("id"))
+                    .mediaID(json.getInt("id"))
                     .genre(MediaGenres.valueOf(json.getString("genre")))
                     .library(library)
                     .totalCopies(json.getInt("availableCopies"))

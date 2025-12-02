@@ -63,6 +63,12 @@ public class UserManagement {
         return userExists;
     }
 
+    public void load(List<User> users) {
+        this.users.clear();
+        this.users.addAll(users);
+    }
+
+
     public static void incrementID() {
         nextID++;
     }

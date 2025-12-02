@@ -1,6 +1,8 @@
-package COMP2450;
+package COMP2450.Stack;
 
-public class TestHarness {
+import COMP2450.TestResults;
+
+public class StackTestHarness {
     private static int successes;
     private static int failures;
 

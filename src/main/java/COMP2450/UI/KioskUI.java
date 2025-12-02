@@ -1,13 +1,17 @@
 package COMP2450.UI;
 
 import COMP2450.domain.*;
+import COMP2450.domain.Media.Book;
 import COMP2450.domain.Media.MediaInterface;
+import COMP2450.domain.Media.Movie;
 import COMP2450.domain.Resources.Resource;
 import COMP2450.logic.*;
 import COMP2450.logic.Borrow.*;
 import COMP2450.UI.PrintLogic.*;
 import COMP2450.Exceptions.*;
 import COMP2450.logic.UserManagement.UserManagement;
+import COMP2450.persistence.LibraryPersistence;
+import COMP2450.persistence.UserPersistence;
 import com.google.common.base.Preconditions;
 
 import java.time.LocalDate;
@@ -22,8 +26,10 @@ public class KioskUI {
     private static final UserManagement USER_MANAGEMENT = new UserManagement();
 
     // Handles the first screen (Login/Register)
-    public static User showWelcomeScreen(Library library) {
+    public static User showWelcomeScreen(Library library ,
+        LibraryPersistence persistence ,UserPersistence userPersistence ) {
         Preconditions.checkNotNull(library, "library cannot be null");
+        relinkMedia(library);
         System.out.println("\n=== Welcome to the Library " + library.getName() + " Kiosk ===");
         System.out.println("1. Log In");
         System.out.println("2. Register");
@@ -39,6 +45,8 @@ public class KioskUI {
             user = logOn.promptLogin(USER_MANAGEMENT);
         } else if (option == 2) {
             user = RegisterUserUI.promptRegister(USER_MANAGEMENT);
+            persistence.save(library);
+            userPersistence.saveUsers(USER_MANAGEMENT.getUsers());
         } else {
             System.out.println("Invalid option. Try again.");
         }
@@ -51,8 +59,25 @@ public class KioskUI {
         return user;
     }
 
+    private static void relinkMedia(Library library) {
+        for (User u : USER_MANAGEMENT.getUsers()) {
+            List<MediaInterface> relinked = new ArrayList<>();
+
+            for (MediaInterface m : u.getItemsIssued()) {
+                MediaInterface libVersion = library.showMedia(m.getMediaID());
+                if (libVersion != null) {
+                    relinked.add(libVersion);
+                }
+            }
+
+            u.setItemsIssued(relinked);
+        }
+
+    }
+
     // Displays the main menu once a user is logged in
-    public static boolean showUserMenu(Library library, User user) {
+    public static boolean showUserMenu(Library library, User user ,
+        LibraryPersistence libraryPersistence , UserPersistence userPersistence ) {
         Preconditions.checkNotNull(library, "library cannot be null");
         Preconditions.checkNotNull(user, "user cannot be null");
         boolean stayInMenu = true;
@@ -76,10 +101,10 @@ public class KioskUI {
 
             switch (choice) {
                 case 1 -> browseMedia(library);
-                case 2 -> borrowMedia(library, user);
-                case 3 -> returnMedia(library, user);
+                case 2 -> borrowMedia(library, user , libraryPersistence , userPersistence);
+                case 3 -> returnMedia(library, user , libraryPersistence , userPersistence);
                 case 4 -> viewResources(library);
-                case 5 -> bookResource(library, user);
+                case 5 -> bookResource(library, user , libraryPersistence , userPersistence );
                 case 6 -> findPathOnMap(library);
                 case 7 -> findMediaOnMap(library);
                 case 8 -> checkFines(user);
@@ -110,10 +135,10 @@ public class KioskUI {
             var issuedItems = user.getItemsIssued();
             for (var media : issuedItems) {
                 if (media.getMediaType().equalsIgnoreCase("Book")) {
-                    COMP2450.domain.Media.Book book = (COMP2450.domain.Media.Book) media;
+                    Book book = (Book) media;
                     book.setIssuedDay(book.getIssuedDay() + 1);
                 } else if (media.getMediaType().equalsIgnoreCase("Movie")) {
-                    COMP2450.domain.Media.Movie movie = (COMP2450.domain.Media.Movie) media;
+                    Movie movie = (Movie) media;
                     movie.setIssuedDay(movie.getIssuedDay()+ 1 );
                 }
             }
@@ -242,6 +267,7 @@ public class KioskUI {
             for (var media : toReturn) {
                 media.returnMedia();
                 user.getItemsIssued().remove(media);
+
             }
 
             if (toReturn.isEmpty()) {
@@ -321,7 +347,7 @@ public class KioskUI {
         }
     }
 
-    private static void borrowMedia(Library library, User user) {
+    private static void borrowMedia(Library library, User user , LibraryPersistence persistence , UserPersistence userPersistence ) {
         Preconditions.checkNotNull(library, "library cannot be null");
         Preconditions.checkNotNull(user, "user cannot be null");
 
@@ -338,6 +364,8 @@ public class KioskUI {
 
             try {
                 new BorrowMedia(user,media);
+                persistence.save(library);
+                userPersistence.saveUsers(USER_MANAGEMENT.getUsers());
                 System.out.println("✅ Media borrowed successfully!");
             } catch (OverdueMediaException e) {
                 System.out.println("⚠️  You have overdue items. Please return them first.");
@@ -357,7 +385,7 @@ public class KioskUI {
         }
     }
 
-    private static void returnMedia(Library library, User user) {
+    private static void returnMedia(Library library, User user , LibraryPersistence persistence , UserPersistence userPersistence ) {
         Preconditions.checkNotNull(library, "library cannot be null");
         Preconditions.checkNotNull(user, "user cannot be null");
         System.out.print("This is the media you have borrowed: ");
@@ -376,6 +404,8 @@ public class KioskUI {
         } else {
 
             media.returnMedia();
+            persistence.save(library);
+            userPersistence.saveUsers(USER_MANAGEMENT.getUsers());
             System.out.println("✅ Media returned successfully.");
             System.out.println("Would you like to leave a review? [Y/N]");
 
@@ -386,6 +416,8 @@ public class KioskUI {
                 int rating = inputValidation.getIntInput();
 
                 media.addReview(new Review(user, media, comment, rating));
+                persistence.save(library);
+                userPersistence.saveUsers(USER_MANAGEMENT.getUsers());
                 System.out.println("Review has been successfully added.");
             }
         }
@@ -398,7 +430,7 @@ public class KioskUI {
         System.out.println("=============================");
     }
 
-    private static void bookResource(Library library, User user) {
+    private static void bookResource(Library library, User user , LibraryPersistence persistence , UserPersistence userPersistence ) {
         Preconditions.checkNotNull(library, "library cannot be null");
         Preconditions.checkNotNull(user, "user cannot be null");
 
@@ -424,8 +456,8 @@ public class KioskUI {
                     int choice = promptMenu(choices);
 
                     switch (choice) {
-                        case 1 -> handleBooking(resource, user, LocalDate.now());
-                        case 2 -> handleFutureBooking(resource, user);
+                        case 1 -> handleBooking(resource, user, LocalDate.now() ,persistence , library , userPersistence);
+                        case 2 -> handleFutureBooking(resource, user , library, persistence , userPersistence );
                         case 3 -> System.out.println(TimeSlotSearch.viewNextTwoWeeks(resource));
                         case 4 -> showNextXAfterTime(resource);
                         case 5 -> showRangeAvailability(resource);
@@ -435,10 +467,11 @@ public class KioskUI {
                         default -> System.out.println("Invalid choice. Try again.");
                     }
                 }
+
             }
     }
 
-    private static void handleBooking(Resource resource, User user, LocalDate date) {
+    private static void handleBooking(Resource resource, User user, LocalDate date ,LibraryPersistence persistence , Library library, UserPersistence userPersistence) {
         Preconditions.checkNotNull(resource, "resource cannot be null");
         Preconditions.checkNotNull(user, "user cannot be null");
         Preconditions.checkNotNull(date, "date cannot be null");
@@ -460,13 +493,15 @@ public class KioskUI {
                 new BookResource(new Booking(resource, user, slots[slotChoice]));
                 System.out.println("✅ Booked " + resource.getResourceName() +
                         " on " + date + " for " + slots[slotChoice]);
+                persistence.save(library);
+                userPersistence.saveUsers(USER_MANAGEMENT.getUsers());
             } catch (BookingConflictException e) {
                 System.out.println("⚠️ Booking conflict: Already booked by another user.");
             }
         }
     }
 
-    private static void handleFutureBooking(Resource resource, User user) {
+    private static void handleFutureBooking(Resource resource, User user , Library library, LibraryPersistence persistence , UserPersistence userPersistence) {
         Preconditions.checkNotNull(resource, "resource cannot be null");
         Preconditions.checkNotNull(user, "user cannot be null");
 
@@ -497,6 +532,8 @@ public class KioskUI {
                     new BookResource(new Booking(resource, user, slots[slotChoice]));
                     System.out.println("✅ Booked " + resource.getResourceName() +
                             " on " + chosenDate + " for " + slots[slotChoice]);
+                    persistence.save(library);
+                    userPersistence.saveUsers(USER_MANAGEMENT.getUsers());
                 }
             }
         } catch (Exception e) {
@@ -591,5 +628,9 @@ public class KioskUI {
         }
         System.out.print("Enter choice: ");
         return inputValidation.getIntInput();
+    }
+
+    public static void loadPersistence(List< User > users) {
+        USER_MANAGEMENT.load(users);
     }
 }

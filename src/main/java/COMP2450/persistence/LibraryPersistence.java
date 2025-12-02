@@ -1,5 +1,6 @@
 package COMP2450.persistence;
 import COMP2450.domain.Library;
+import COMP2450.persistence.json.NotFoundException;
 
 public interface LibraryPersistence {
 

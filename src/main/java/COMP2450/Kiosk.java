@@ -1,10 +1,16 @@
 package COMP2450;
 
 import COMP2450.UI.KioskUI;
+import COMP2450.UI.LibraryLoader;
 import COMP2450.domain.Library;
 import COMP2450.domain.User;
-import COMP2450.logic.TestLibraryBuilder;
+import COMP2450.persistence.LibraryPersistence;
+import COMP2450.persistence.UserPersistence;
+import COMP2450.persistence.json.LibraryPersistenceJson;
+import COMP2450.persistence.json.UserPersistenceJson;
 import com.google.common.base.Preconditions;
+
+import java.nio.file.Path;
 
 /**
  * Kiosk
@@ -18,20 +24,29 @@ public class Kiosk {
     private static Library library;
 
     public static void main(String[] args) {
-        library = TestLibraryBuilder.initializeLibrary();
+        LibraryPersistence libaryPersistence = new LibraryPersistenceJson(Path.of("library.json"));
+        UserPersistence userPersistence = new UserPersistenceJson(Path.of("users.json"));
+        KioskUI.loadPersistence(userPersistence.loadUsers());
+
+
+
+        library = LibraryLoader.loadOrCreateLibrary();
+
         Preconditions.checkNotNull(library);
-        runKiosk();
+        runKiosk(libaryPersistence , userPersistence);
         Preconditions.checkNotNull(library);
     }
 
-    private static void runKiosk() {
+
+
+    private static void runKiosk(LibraryPersistence libaryPersistence , UserPersistence userPersistence) {
 
         // To ensure if someone logs out we never exit the program
         while (true) {
             if (user == null) {
-                user = KioskUI.showWelcomeScreen(library);
+                user = KioskUI.showWelcomeScreen(library , libaryPersistence , userPersistence );
             } else {
-                boolean stayInMenu = KioskUI.showUserMenu(library, user);
+                boolean stayInMenu = KioskUI.showUserMenu(library, user ,  libaryPersistence ,  userPersistence);
                 if (!stayInMenu) {
                     logout();
                 }
